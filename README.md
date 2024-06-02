@@ -1,1 +1,1 @@
-### Argentum Online 0.1.0
+### Argentum Online 0.6.70

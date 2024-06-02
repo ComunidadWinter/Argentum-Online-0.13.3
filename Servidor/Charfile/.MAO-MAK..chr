@@ -1,0 +1,157 @@
+[FLAGS]
+Muerto=0
+Escondido=0
+Hambre=0
+Sed=1
+Desnudo=0
+Ban=0
+Envenenado=0
+Paralizado=0
+
+[ATRIBUTOS]
+AT1=16
+AT2=16
+AT3=12
+AT4=11
+AT5=10
+
+[SKILLS]
+SK1=999
+SK2=999
+SK3=999
+SK4=999
+SK5=999
+SK6=999
+SK7=999
+SK8=999
+SK9=999
+SK10=999
+SK11=999
+SK12=999
+SK13=999
+SK14=999
+SK15=999
+SK16=999
+SK17=999
+SK18=999
+SK19=999
+SK20=999
+SK21=999
+
+[CONTACTO]
+Email=1
+
+[INIT]
+Genero=Hombre
+Raza=Elfo Oscuro
+Hogar=Nix
+Clase=Druida
+Password=1
+Desc=
+Heading= 3
+Head= 2
+Body= 46
+Arma= 1
+Escudo= 1
+LastIP=200.45.239.101
+Position=35-64-72
+
+[STATS]
+GLD= 0
+BANCO= 0
+MET= 1
+MaxHP= 999
+MinHP= 424
+FIT= 1
+MaxSTA= 500
+MinSTA= 204
+MaxMAN= 999
+MinMAN= 919
+MaxHIT= 999
+MinHIT= 999
+MaxAGU= 100
+MinAGU= 0
+MaxHAM= 100
+MinHAM= 0
+SkillPtsLibres= 0
+EXP= 1050
+ELV= 45
+ELU= 30000000
+
+[MUERTES]
+UserMuertes=10
+CrimMuertes=0
+NpcsMuertes=0
+
+[Inventory]
+CantidadItems=8
+Obj1=87-1-0
+Obj2=91-1-0
+Obj3=140-1-0
+Obj4=95-1-0
+Obj5=99-1-0
+Obj6=15-6-0
+Obj7=195-1-0
+Obj8=196-1-1
+Obj9=0-0-0
+Obj10=0-0-0
+Obj11=0-0-0
+Obj12=0-0-0
+Obj13=0-0-0
+Obj14=0-0-0
+Obj15=0-0-0
+Obj16=0-0-0
+Obj17=0-0-0
+Obj18=0-0-0
+Obj19=0-0-0
+Obj20=0-0-0
+WeaponEqpSlot= 0
+ArmourEqpSlot= 8
+CascoEqpSlot= 0
+EscudoEqpSlot= 0
+
+[REP]
+Asesino=750
+Bandido=0
+Burguesia=0
+Ladrones=950
+Nobles=220
+Plebe=0
+Promedio=-247
+
+[HECHIZOS]
+H1=1
+H2=2
+H3=3
+H4=4
+H5=5
+H6=6
+H7=7
+H8=8
+H9=9
+H10=10
+H11=11
+H12=12
+H13=13
+H14=14
+H15=15
+H16=16
+H17=17
+H18=18
+H19=19
+H20=20
+H21=21
+H22=22
+H23=23
+H24=0
+H25=0
+H26=0
+H27=0
+H28=0
+H29=0
+H30=0
+H31=0
+H32=0
+H33=0
+H34=0
+H35=0

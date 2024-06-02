@@ -1,0 +1,157 @@
+[FLAGS]
+Muerto=0
+Escondido=0
+Hambre=0
+Sed=0
+Desnudo=0
+Ban=0
+Envenenado=0
+Paralizado=0
+
+[ATRIBUTOS]
+AT1=20
+AT2=20
+AT3=20
+AT4=20
+AT5=20
+
+[SKILLS]
+SK1=156
+SK2=185
+SK3=156
+SK4=158
+SK5=163
+SK6=106
+SK7=174
+SK8=156
+SK9=156
+SK10=156
+SK11=98
+SK12=62
+SK13=95
+SK14=84
+SK15=53
+SK16=56
+SK17=56
+SK18=51
+SK19=53
+SK20=57
+SK21=53
+
+[CONTACTO]
+Email=acro3@starmedia.com
+
+[INIT]
+Genero=Mujer
+Raza=Humano
+Hogar=Nix
+Clase=Paladin
+Password=DR_NO1
+Desc=soy Diosa
+Heading= 2
+Head= 70
+Body= 45
+Arma= 1
+Escudo= 1
+LastIP=127.0.0.1
+Position=59-90-37
+
+[STATS]
+GLD= 973552
+BANCO= 2000000
+MET= 1
+MaxHP= 999
+MinHP= 983
+FIT= 1
+MaxSTA= 999
+MinSTA= 729
+MaxMAN= 999
+MinMAN= 964
+MaxHIT= 99
+MinHIT= 99
+MaxAGU= 100
+MinAGU= 70
+MaxHAM= 100
+MinHAM= 60
+SkillPtsLibres= 0
+EXP= 3317
+ELV= 11
+ELU= 12442
+
+[MUERTES]
+UserMuertes=0
+CrimMuertes=0
+NpcsMuertes=260
+
+[Inventory]
+CantidadItems=18
+Obj1=195-2-1
+Obj2=174-1-0
+Obj3=199-18-0
+Obj4=166-4-0
+Obj5=64-20-0
+Obj6=26-3-0
+Obj7=164-6-0
+Obj8=129-5-1
+Obj9=15-5-0
+Obj10=2-3-0
+Obj11=161-92-0
+Obj12=38-38-0
+Obj13=238-5-0
+Obj14=24-95-0
+Obj15=12-286-0
+Obj16=1-70-0
+Obj17=43-197-0
+Obj18=240-2-0
+Obj19=54-1-0
+Obj20=73-1-0
+WeaponEqpSlot= 8
+ArmourEqpSlot= 1
+CascoEqpSlot= 0
+EscudoEqpSlot= 0
+
+[REP]
+Asesino=0
+Bandido=0
+Burguesia=0
+Ladrones=0
+Nobles=128000
+Plebe=1090
+Promedio=21515
+
+[HECHIZOS]
+H1=2
+H2=5
+H3=4
+H4=9
+H5=10
+H6=7
+H7=8
+H8=15
+H9=14
+H10=6
+H11=11
+H12=1
+H13=3
+H14=12
+H15=13
+H16=0
+H17=0
+H18=0
+H19=0
+H20=0
+H21=0
+H22=0
+H23=0
+H24=0
+H25=0
+H26=0
+H27=0
+H28=0
+H29=0
+H30=0
+H31=0
+H32=0
+H33=0
+H34=0
+H35=0

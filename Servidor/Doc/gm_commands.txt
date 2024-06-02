@@ -1,0 +1,70 @@
+				*COMANDOS DE GM*
+
+
+/REVIVIR NICK
+Revive el personaje de nickname nick, en caso de querer autorevivirse escribir /REVIVIR YO.
+
+
+/NENE NROMAPA
+Devuelve el numero de enemigos en el mapa numero NROMAPA.
+
+/TELEP NICK MAPA X Y
+Teleporta el usuario de nickname NICK, al mapa numero MAPA, coordenadas X e Y. En caso de autotelep escribir YO ne vez de el propio NICK.
+
+/REINICIAR
+Por favor, mucho cuidado con este comando ya que reinicia el server. Esto provoca que se cierren todas las conexiones activas y se vuelve a cargar los mapas. Se pierde el estado en el que se encontraba el mundo antes de reiniciar.
+
+/SMSG texto
+Mensaje de Broadcast, muestra un Menssage Box a todos los usuarios conectados.
+
+/UMSG texto
+Mensaje de Broadcast URGENTE, muestra un Menssage Box a todos los usuarios conectados.
+
+/RMSG texto
+Mensaje broadcast, muestra la cadena texto en el textbox de mensajes del sever de cada cliente.
+
+/DONDE NICK
+Devuelve la posicion donde se encuentra el usuario de nickname igual a NICK.
+
+/IRA NICK
+Telep el GM donde se encuentra el usuario de nickname igual a NICK.
+
+/SUM NICK
+Trae el usuario de nickname igual a NICK a donde se encuentra el GM.
+
+/GMSG TEXTO
+Mensaje broadcast de GM.
+
+/ECHAR NICK
+Echa al usuario de nickname igual a nick.
+
+/MOD NICK ORO 1000
+Modifica el oro que posee el usuario de nickname igual a NICK, en este caso le asigna 1000.
+
+/MOD NICK EXP 1000
+Modifica la experiencia que posee el usuario de nickname igual a NICK, en este caso le asigna 1000.
+
+/INFO NICK
+Le envia las estadisticas del usuario con nickname igual a NICK al GM.
+
+/INV NICK
+Muestra el inventario del usuario NICK al GM. ;-)
+
+/BAN NICK
+Suspende la entrada al usuario nick hasta que se /UNBAN nick.
+
+/SEGUIR
+Activa o desactiva el modo follow del npc elegido(Para elegir hacer click sobre el npc).
+
+/PERDON nick
+Vuelve ciudadano al usuario nick
+
+/CONDEN
+Vuelve criminal al usuario nick
+
+Pablo Ignacio Márquez
+www.argentum-online.com.ar
+pablomarquez@argentum-online.com.ar
+gulfas_morgolock@hotmail.com
+
+

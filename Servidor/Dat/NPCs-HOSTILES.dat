@@ -1,0 +1,664 @@
+'NPCs Hostiles
+[INIT]
+NumNPCs=32
+
+[NPC500] 'Murcielago
+Name=Murcielago
+Head=0
+Body=9
+Heading=3
+Movement=3
+Attackable=1
+Comercia=0
+Hostile=1
+Alineacion=2
+ReSpawn=0
+GiveEXP=5
+GiveGLD=1
+MinHP=10
+MaxHP=10
+MaxHIT=1
+MinHIT=1
+DEF=0
+NROITEMS=0
+
+
+[NPC501] 'Lobo
+Name=Lobo
+Head=0
+Body=10
+Heading=3
+Movement=3
+Alineacion=2
+Attackable=1
+Comercia=0
+Hostile=1
+GiveEXP=75
+GiveGLD=20
+MinHP=75
+MaxHP=75
+MaxHIT=18
+MinHIT=1
+DEF=20
+NROITEMS=0
+
+[NPC502] 'Zombie
+Name=Zombie
+Head=0
+Body=11
+Heading=3
+Movement=3
+Alineacion=2
+Attackable=1
+Comercia=0
+Hostile=1
+GiveEXP=220
+GiveGLD=150
+MinHP=200
+MaxHP=200
+MaxHIT=12
+MinHIT=4
+DEF=30
+NROITEMS=0
+
+[NPC503] 'Esqueleto
+Name=Esqueleto
+Head=0
+Body=12
+Heading=3
+Movement=3
+Alineacion=2
+Attackable=1
+Comercia=0
+Hostile=1
+GiveEXP=50
+GiveGLD=50
+MinHP=50
+MaxHP=50
+MaxHIT=8
+MinHIT=1
+DEF=10
+NROITEMS=0
+
+[NPC504] 'Serpiente cobra
+Name=Serpiente
+Head=0
+Body=13
+Heading=3
+Movement=3
+Alineacion=2
+Attackable=1
+Comercia=0
+Hostile=1
+GiveEXP=20
+GiveGLD=2
+MinHP=12
+MaxHP=12
+MaxHIT=1
+MinHIT=1
+DEF=0
+NROITEMS=0
+
+[NPC505] 'Goblin
+Name=Goblin
+Head=0
+Body=14
+Heading=3
+Movement=3
+Alineacion=2
+Attackable=1
+Comercia=0
+Hostile=1
+GiveEXP=75
+GiveGLD=60
+MinHP=50
+MaxHP=50
+MaxHIT=6
+MinHIT=4
+DEF=15
+NROITEMS=0
+
+
+[NPC506] 'Gallo
+Name=Gallo salvaje
+Desc=
+Head=0
+Body=5
+Heading=3
+Movement=3
+Attackable=1
+Comercia=0
+Hostile=1
+GiveEXP=10
+GiveGLD=0
+MinHP=15
+MaxHP=15
+MaxHIT=1
+MinHIT=1
+DEF=0
+Alineacion=2
+ReSpawn=0
+NROITEMS=1
+Obj1=26-1
+
+[NPC507] 'Zombie
+Name=Lord Zombie
+Head=0
+Body=11
+Heading=3
+Movement=3
+Alineacion=2
+Attackable=1
+Comercia=0
+Hostile=1
+GiveEXP=350
+GiveGLD=65
+MinHP=300
+MaxHP=300
+MaxHIT=25
+MinHIT=10
+DEF=35
+NROITEMS=0
+
+[NPC508] 'Esqueleto
+Name=Esqueleto Guerrero
+Head=0
+Body=12
+Heading=3
+Movement=3
+Alineacion=2
+Attackable=1
+Comercia=0
+Hostile=1
+GiveEXP=150
+GiveGLD=20
+MinHP=150
+MaxHP=150
+MaxHIT=18
+MinHIT=8
+DEF=10
+
+[NPC509] 'dragon
+Name=Dragon rojo
+Head=0
+Body=41
+Heading=3
+Movement=3
+Alineacion=2
+Attackable=1
+Comercia=0
+Hostile=1
+GolpeExacto=1
+GiveEXP=10000
+GiveGLD=5000
+MinHP=600
+MaxHP=600
+MaxHIT=100
+MinHIT=100
+DEF=200
+
+[NPC510] 'Araña gigante
+Name=Araña gigante
+Head=0
+Body=42
+Heading=3
+Movement=3
+Alineacion=2
+Attackable=1
+Comercia=0
+Hostile=1
+GiveEXP=500
+GiveGLD=100
+MinHP=200
+MaxHP=200
+MaxHIT=100
+MinHIT=75
+DEF=100
+Veneno=1
+
+'<------------------ RESPAWN EN EL MISMO LUGAR ------------------->
+[NPC511] 'Murcielago
+Name=Murcielago
+Info=RESPAWN EN EL MISMO LUGAR
+Head=0
+Body=9
+Heading=3
+Movement=3
+Attackable=1
+Comercia=0
+Hostile=1
+Alineacion=2
+ReSpawn=0
+GiveEXP=5
+GiveGLD=0
+MinHP=10
+MaxHP=10
+MaxHIT=1
+MinHIT=1
+DEF=0
+NROITEMS=0
+PosOrig=1
+
+
+[NPC512] 'Lobo
+Name=Lobo
+Info=RESPAWN EN EL MISMO LUGAR
+Head=0
+Body=10
+Heading=3
+Movement=3
+Alineacion=2
+Attackable=1
+Comercia=0
+Hostile=1
+GiveEXP=75
+GiveGLD=0
+MinHP=75
+MaxHP=75
+MaxHIT=18
+MinHIT=1
+DEF=20
+NROITEMS=0
+PosOrig=1
+
+[NPC513] 'Zombie
+Name=Zombie
+Info=RESPAWN EN EL MISMO LUGAR
+Head=0
+Body=11
+Heading=3
+Movement=3
+Alineacion=2
+Attackable=1
+Comercia=0
+Hostile=1
+GiveEXP=220
+GiveGLD=15
+MinHP=200
+MaxHP=200
+MaxHIT=12
+MinHIT=4
+DEF=30
+NROITEMS=0
+PosOrig=1
+
+[NPC514] 'Esqueleto
+Name=Esqueleto
+Info=RESPAWN EN EL MISMO LUGAR
+Head=0
+Body=12
+Heading=3
+Movement=3
+Alineacion=2
+Attackable=1
+Comercia=0
+Hostile=1
+GiveEXP=50
+GiveGLD=5
+MinHP=50
+MaxHP=50
+MaxHIT=8
+MinHIT=1
+DEF=10
+NROITEMS=0
+PosOrig=1
+
+[NPC515] 'Serpiente cobra
+Name=Serpiente
+Info=RESPAWN EN EL MISMO LUGAR
+Head=0
+Body=13
+Heading=3
+Movement=3
+Alineacion=2
+Attackable=1
+Comercia=0
+Hostile=1
+GiveEXP=15
+GiveGLD=0
+MinHP=12
+MaxHP=12
+MaxHIT=1
+MinHIT=1
+DEF=0
+NROITEMS=0
+PosOrig=1
+
+[NPC516] 'Goblin
+Name=Goblin
+Info=RESPAWN EN EL MISMO LUGAR
+Head=0
+Body=14
+Heading=3
+Movement=3
+Alineacion=2
+Attackable=1
+Comercia=0
+Hostile=1
+GiveEXP=75
+GiveGLD=10
+MinHP=50
+MaxHP=50
+MaxHIT=6
+MinHIT=4
+DEF=15
+NROITEMS=0
+PosOrig=1
+
+[NPC517] 'Gallo
+Name=Gallo salvaje
+Info=RESPAWN EN EL MISMO LUGAR
+Desc=
+Head=0
+Body=5
+Heading=3
+Movement=3
+Attackable=1
+Comercia=0
+Hostile=1
+GiveEXP=10
+GiveGLD=0
+MinHP=15
+MaxHP=15
+MaxHIT=1
+MinHIT=1
+DEF=0
+Alineacion=2
+ReSpawn=0
+NROITEMS=1
+Obj1=26-1
+PosOrig=1
+
+[NPC518] 'Zombie
+Name=Lord Zombie
+Info=RESPAWN EN EL MISMO LUGAR
+Head=0
+Body=11
+Heading=3
+Movement=3
+Alineacion=2
+Attackable=1
+Comercia=0
+Hostile=1
+GiveEXP=350
+GiveGLD=65
+MinHP=300
+MaxHP=300
+MaxHIT=25
+MinHIT=10
+DEF=35
+NROITEMS=0
+PosOrig=1
+
+[NPC519] 'Esqueleto
+Name=Esqueleto Guerrero
+Info=RESPAWN EN EL MISMO LUGAR
+Head=0
+Body=12
+Heading=3
+Movement=3
+Alineacion=2
+Attackable=1
+Comercia=0
+Hostile=1
+GiveEXP=150
+GiveGLD=20
+MinHP=150
+MaxHP=150
+MaxHIT=18
+MinHIT=8
+DEF=10
+PosOrig=1
+'<------------------ RESPAWN EN EL MISMO LUGAR ------------------->
+
+[NPC520] 'dragon
+Name=Dragon rojo
+Info=No Respawn
+ReSpawn=1
+Head=0
+Body=41
+Heading=3
+Movement=3
+Alineacion=2
+Attackable=1
+Comercia=0
+Hostile=1
+GiveEXP=10000
+GiveGLD=5000
+MinHP=6000
+MaxHP=6000
+MaxHIT=1000
+MinHIT=1000
+DEF=200
+
+[NPC521] 'Araña gigante
+Name=Araña gigante
+Info=No Respawn
+ReSpawn=1
+Head=0
+Body=42
+Heading=3
+Movement=3
+Alineacion=2
+Attackable=1
+Comercia=0
+Hostile=1
+GiveEXP=500
+GiveGLD=100
+MinHP=2000
+MaxHP=2000
+MaxHIT=100
+MinHIT=75
+DEF=100
+Veneno=1
+
+[NPC522] 'Orco
+Name=Orco
+Info=No Respawn
+ReSpawn=1
+Head=0
+Body=43
+Heading=3
+Movement=3
+Alineacion=2
+Attackable=1
+Comercia=0
+Hostile=1
+GiveEXP=500
+GiveGLD=100
+MinHP=600
+MaxHP=600
+MaxHIT=200
+MinHIT=75
+DEF=100
+
+[NPC523] 'Orco
+Name=Orco
+Info=Respawn
+Head=0
+Body=43
+Heading=3
+Movement=3
+Alineacion=2
+Attackable=1
+Comercia=0
+Hostile=1
+GiveEXP=500
+GiveGLD=100
+MinHP=600
+MaxHP=600
+MaxHIT=200
+MinHIT=75
+DEF=100
+
+[NPC524] 'Orco
+Name=Jefe Orco
+Info=Jefe orco del fuerte --- No Respawn
+ReSpawn=1
+Head=0
+Body=43
+Heading=3
+Movement=3
+Alineacion=2
+Attackable=1
+Comercia=0
+Hostile=1
+GiveEXP=500
+GiveGLD=100
+MinHP=600
+MaxHP=600
+MaxHIT=200
+MinHIT=75
+Nroitems=1
+Obj1=183-1-0
+DEF=100
+
+
+[NPC525] 'Orco
+Name=Jefe Orco
+Info=Jefe orco del dungeon malaheing --- No Respawn
+ReSpawn=1
+Head=0
+Body=43
+Heading=3
+Movement=3
+Alineacion=2
+Attackable=1
+Comercia=0
+Hostile=1
+GiveEXP=500
+GiveGLD=100
+MinHP=600
+MaxHP=600
+MaxHIT=200
+MinHIT=75
+Nroitems=1
+Obj1=178-1-0
+DEF=100
+
+[NPC526] 'Araña gigante
+Name=Araña gigante
+Info=Llave dungeon malaheing- No Respawn
+ReSpawn=1
+Head=0
+Body=42
+Heading=3
+Movement=3
+Alineacion=2
+Attackable=1
+Comercia=0
+Hostile=1
+GiveEXP=500
+GiveGLD=100
+MinHP=2000
+MaxHP=2000
+MaxHIT=100
+MinHIT=75
+DEF=100
+Nroitems=1
+Obj1=174-1-0
+Veneno=1
+
+[NPC527] 'dragon
+Name=Dragon rojo
+Info=Llave dungeon malaheing -- No Respawn
+ReSpawn=1
+Head=0
+Body=41
+Heading=3
+Movement=3
+Alineacion=2
+Attackable=1
+Comercia=0
+Hostile=1
+GiveEXP=10000
+GiveGLD=5000
+MinHP=6000
+MaxHP=6000
+MaxHIT=1000
+MinHIT=1000
+DEF=200
+Nroitems=1
+Obj1=182-1-0
+
+
+[NPC528] 'Araña gigante
+Name=Araña gigante
+Info=Respawn mismo lugar
+ReSpawn=1
+Head=0
+Body=42
+Heading=3
+Movement=3
+Alineacion=2
+Attackable=1
+Comercia=0
+Hostile=1
+GiveEXP=500
+GiveGLD=100
+MinHP=2000
+MaxHP=2000
+MaxHIT=100
+MinHIT=75
+DEF=100
+Veneno=1
+PosOrig=1
+
+[NPC529] 'Escorpion
+Name=Escorpion
+Head=0
+Body=51
+Heading=3
+Movement=3
+Attackable=1
+Comercia=0
+Hostile=1
+Alineacion=2
+ReSpawn=0
+GiveEXP=6
+GiveGLD=0
+MinHP=12
+MaxHP=12
+MaxHIT=3
+MinHIT=1
+Veneno=1
+
+
+[NPC530] 'Bandido
+Name=Bandido
+Head=2
+Body=47
+Heading=3
+Movement=3
+Attackable=1
+Comercia=0
+Hostile=1
+Alineacion=2
+ReSpawn=0
+GiveEXP=100
+GiveGLD=0
+MinHP=200
+MaxHP=200
+MaxHIT=39
+MinHIT=15
+
+[NPC531] 'Caballero klox
+Name=Asesino
+Head=201
+Body=48
+Heading=3
+Movement=3
+Attackable=1
+Comercia=0
+Hostile=1
+Alineacion=2
+ReSpawn=0
+GiveEXP=300
+GiveGLD=0
+MinHP=700
+MaxHP=700
+MaxHIT=139
+MinHIT=15
+Nroitems=1
+Obj1=237-1-0
+
