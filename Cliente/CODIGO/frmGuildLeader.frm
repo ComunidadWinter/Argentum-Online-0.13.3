@@ -240,7 +240,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-'Argentum Online 0.9.0.9
+'Argentum Online 0.11.6
 '
 'Copyright (C) 2002 Márquez Pablo Ignacio
 'Copyright (C) 2002 Otto Perez
@@ -248,18 +248,16 @@ Attribute VB_Exposed = False
 'Copyright (C) 2002 Matías Fernando Pequeño
 '
 'This program is free software; you can redistribute it and/or modify
-'it under the terms of the GNU General Public License as published by
-'the Free Software Foundation; either version 2 of the License, or
-'any later version.
+'it under the terms of the Affero General Public License;
+'either version 1 of the License, or any later version.
 '
 'This program is distributed in the hope that it will be useful,
 'but WITHOUT ANY WARRANTY; without even the implied warranty of
 'MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'GNU General Public License for more details.
+'Affero General Public License for more details.
 '
-'You should have received a copy of the GNU General Public License
-'along with this program; if not, write to the Free Software
-'Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+'You should have received a copy of the Affero General Public License
+'along with this program; if not, you can find it at http://www.affero.org/oagpl.html
 '
 'Argentum Online is based on Baronsoft's VB6 Online RPG
 'You can contact the original creator of ORE at aaron@baronsoft.com
@@ -276,54 +274,50 @@ Attribute VB_Exposed = False
 
 Option Explicit
 
+Private Const MAX_NEWS_LENGTH As Integer = 512
+
 Private Sub cmdElecciones_Click()
-    Call SendData("ABREELEC")
+    Call WriteGuildOpenElections
     Unload Me
 End Sub
 
 Private Sub Command1_Click()
+    If solicitudes.listIndex = -1 Then Exit Sub
+    
+    frmCharInfo.frmType = CharInfoFrmType.frmMembershipRequests
+    Call WriteGuildMemberInfo(solicitudes.List(solicitudes.listIndex))
 
-frmCharInfo.frmsolicitudes = True
-Call SendData("1HRINFO<" & solicitudes.List(solicitudes.ListIndex))
-
-'Unload Me
-
+    'Unload Me
 End Sub
 
 Private Sub Command2_Click()
+    If members.listIndex = -1 Then Exit Sub
+    
+    frmCharInfo.frmType = CharInfoFrmType.frmMembers
+    Call WriteGuildMemberInfo(members.List(members.listIndex))
 
-frmCharInfo.frmmiembros = True
-Call SendData("1HRINFO<" & members.List(members.ListIndex))
-
-'Unload Me
-
+    'Unload Me
 End Sub
 
 Private Sub Command3_Click()
+    Dim k As String
 
-Dim k$
-
-k$ = Replace(txtguildnews, vbCrLf, "º")
-
-Call SendData("ACTGNEWS" & k$)
-
+    k = Replace(txtguildnews, vbCrLf, "º")
+    
+    Call WriteGuildUpdateNews(k)
 End Sub
 
 Private Sub Command4_Click()
+    frmGuildBrief.EsLeader = True
+    Call WriteGuildRequestDetails(guildslist.List(guildslist.listIndex))
 
-frmGuildBrief.EsLeader = True
-Call SendData("CLANDETAILS" & guildslist.List(guildslist.ListIndex))
-
-'Unload Me
-
+    'Unload Me
 End Sub
 
 Private Sub Command5_Click()
-
-Call frmGuildDetails.Show(vbModal, frmGuildLeader)
-
-'Unload Me
-
+    Call frmGuildDetails.Show(vbModal, frmGuildLeader)
+    
+    'Unload Me
 End Sub
 
 Private Sub Command6_Click()
@@ -332,55 +326,18 @@ Call frmGuildURL.Show(vbModeless, frmGuildLeader)
 End Sub
 
 Private Sub Command7_Click()
-Call SendData("ENVPROPP")
+    Call WriteGuildPeacePropList
 End Sub
 Private Sub Command9_Click()
-Call SendData("ENVALPRO")
+    Call WriteGuildAlliancePropList
 End Sub
-
 
 Private Sub Command8_Click()
-Unload Me
-frmMain.SetFocus
+    Unload Me
+    frmMain.SetFocus
 End Sub
 
-
-Public Sub ParseLeaderInfo(ByVal Data As String)
-
-If Me.Visible Then Exit Sub
-
-Dim r%, T%
-
-r% = Val(ReadField(1, Data, Asc("¬")))
-
-For T% = 1 To r%
-    guildslist.AddItem ReadField(1 + T%, Data, Asc("¬"))
-Next T%
-
-r% = Val(ReadField(T% + 1, Data, Asc("¬")))
-Miembros.Caption = "El clan cuenta con " & r% & " miembros."
-
-Dim k%
-
-For k% = 1 To r%
-    members.AddItem ReadField(T% + 1 + k%, Data, Asc("¬"))
-Next k%
-
-txtguildnews = Replace(ReadField(T% + k% + 1, Data, Asc("¬")), "º", vbCrLf)
-
-T% = T% + k% + 2
-
-r% = Val(ReadField(T%, Data, Asc("¬")))
-
-For k% = 1 To r%
-    solicitudes.AddItem ReadField(T% + k%, Data, Asc("¬"))
-Next k%
-
-Me.Show , frmMain
-
-End Sub
-
-
-Private Sub Form_Deactivate()
-'Me.SetFocus
+Private Sub txtguildnews_Change()
+    If Len(txtguildnews.Text) > MAX_NEWS_LENGTH Then _
+        txtguildnews.Text = Left$(txtguildnews.Text, MAX_NEWS_LENGTH)
 End Sub

@@ -29,7 +29,7 @@ Attribute VB_Exposed = False
 'This program is distributed in the hope that it will be useful,
 'but WITHOUT ANY WARRANTY; without even the implied warranty of
 'MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'GNU General Public License for more details.
+'Affero General Public License for more details.
 '
 'You should have received a copy of the GNU General Public License
 'along with this program; if not, write to the Free Software
@@ -61,8 +61,6 @@ Private surfaceCount As Long
 Private DirectDraw As DirectDraw7
 
 Private useVideoMemory As Boolean
-
-Private Declare Sub CopyMemory Lib "kernel32" Alias "RtlMoveMemory" (ByRef dest As Any, ByRef source As Any, ByVal byteCount As Long)
 
 Private Sub Class_Initialize()
 '**************************************************************
@@ -207,7 +205,7 @@ Private Function BinarySearch(ByVal fileIndex As Long) As Long
     
     'Not found, return the negation of the position where it should be
     '(all higher values are to the right of the list and lower values are to the left)
-    BinarySearch = Not mid
+    BinarySearch = Not min
 End Function
 
 Private Sub LoadSurface(ByVal GrhPath As String, ByVal fileIndex As Long, ByVal listIndex As Long)
@@ -256,7 +254,7 @@ Exit Sub
 
 ErrHandler:
     MsgBox "Un error inesperado ocurrió al intentar cargar el gráfico " & filePath & ". " & vbCrLf & _
-            "El código de error es " & CStr(Err.Number) & vbCrLf & "Copia este mensaje y notifica a los administradores.", _
+            "El código de error es " & CStr(Err.Number) & " - " & Err.Description & vbCrLf & "Copia este mensaje y notifica a los administradores.", _
             vbOKOnly Or vbCritical Or vbExclamation, "Error"
         End
 End Sub

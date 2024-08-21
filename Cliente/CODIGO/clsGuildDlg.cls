@@ -13,20 +13,55 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
-Private p_CANTIDADDIALOGOS As Byte
 Private Const p_SEGUNDOS = 7
+
+Private p_CANTIDADDIALOGOS As Byte
+
 Private Type t_GuildDlg
     Texto As String
     Segundos As Byte
 End Type
+
 Private p_Dialogos() As t_GuildDlg
 Private p_Activo As Boolean
 
+Private usedFont As StdFont
+
 Public Property Let CantidadDialogos(ByVal v As Byte)
     If v > 0 Then
-    ReDim Preserve p_Dialogos(1 To v) As t_GuildDlg
+        ReDim Preserve p_Dialogos(1 To v) As t_GuildDlg
     End If
     p_CANTIDADDIALOGOS = v
+End Property
+
+''
+' Removes all dialogs from screen.
+
+Public Sub RemoveDialogs()
+'***************************************************
+'Author: Juan Martín Sotuyo Dodero (Maraxus)
+'Last Modification: 04/02/07
+'Removes all dialogs
+'***************************************************
+    Dim i As Long
+    
+    For i = 1 To p_CANTIDADDIALOGOS
+        p_Dialogos(i).Texto = vbNullString
+    Next i
+End Sub
+
+''
+' Retrieves the number of dialogs to be displayed on screen.
+'
+' @return   The number of dialogs to be displayed on screen.
+
+Public Property Get CantidadDialogos() As Byte
+'***************************************************
+'Author: Juan Martín Sotuyo Dodero (Maraxus)
+'Last Modification: 04/01/07
+'Retrieves the number of dialogs to be displayed on screen
+'***************************************************
+    CantidadDialogos = p_CANTIDADDIALOGOS
 End Property
 
 Public Property Let Activo(ByVal v As Boolean)
@@ -37,75 +72,127 @@ Public Property Get Activo() As Boolean
     Activo = p_Activo
 End Property
 
-Public Sub Class_Initialize()
+Private Sub Class_Initialize()
     p_CANTIDADDIALOGOS = 5
     ReDim p_Dialogos(1 To p_CANTIDADDIALOGOS) As t_GuildDlg
     p_Activo = True
 End Sub
 
-Public Sub Draw(ByRef C As cDialogos)
-Dim I As Byte
-Dim Y As Long
+Public Sub Draw()
+Dim i As Byte
+Dim y As Long
 
 If Not p_Activo Then Exit Sub
 
-Y = 250
+y = 250
 '500 600 700 800 900
-    For I = 1 To p_CANTIDADDIALOGOS
-        If Trim$(p_Dialogos(I).Texto) <> vbNullString Then
-            If Left$(p_Dialogos(I).Texto, 1) = Chr(3) Then
-                Call C.DrawText(260, Y + (I * 10), Mid(p_Dialogos(I).Texto, 2), vbGreen)
+    For i = 1 To p_CANTIDADDIALOGOS
+        If Trim$(p_Dialogos(i).Texto) <> vbNullString Then
+            If Left$(p_Dialogos(i).Texto, 1) = Chr(3) Then
+                Call Mod_TileEngine.RenderText(260, y + (i * 10), mid(p_Dialogos(i).Texto, 2), vbGreen, usedFont)
             Else
-                Call C.DrawText(260, Y + (I * 10), p_Dialogos(I).Texto, vbYellow)
+                Call Mod_TileEngine.RenderText(260, y + (i * 10), p_Dialogos(i).Texto, vbYellow, usedFont)
             End If
         End If
-    Next I
+    Next i
 End Sub
 
 Public Sub PassTimer()
-Dim I As Byte
+Dim i As Byte
 
-For I = 1 To p_CANTIDADDIALOGOS
-    If p_Dialogos(I).Segundos > 0 Then
-        p_Dialogos(I).Segundos = p_Dialogos(I).Segundos - 1
+For i = 1 To p_CANTIDADDIALOGOS
+    If p_Dialogos(i).Segundos > 0 Then
+        p_Dialogos(i).Segundos = p_Dialogos(i).Segundos - 1
     Else
-        p_Dialogos(I).Texto = vbNullString
+        p_Dialogos(i).Texto = vbNullString
     End If
-Next I
+Next i
     
 End Sub
 
+''
+' Splits dialogs into lines fitting properly the render area and inserts them
+
 Public Sub PushBackText(ByVal s As String)
-Dim I As Byte
+'***************************************************
+'Author: Juan Martín Sotuyo Dodero (Maraxus)
+'Last Modification: 04/07/08
+'Splits dialogs into lines fitting properly the render area and inserts them
+'***************************************************
+    Dim str As String
+    Dim tmp As Integer
+    
+    str = s
+    
+    ' If it's too long to fit, split it
+    Do While frmMain.TextWidth(str) > 500
+        tmp = InStrRev(str, " ")
+        
+        If tmp = 0 Then Exit Do
+        
+        str = Left$(str, tmp - 1)
+    Loop
+    
+    'Show message and continue with the rest
+    Call RealPushBackText(str)
+    
+    If LenB(str) <> LenB(s) Then
+        Call PushBackText(Right$(s, Len(s) - tmp))
+    End If
+End Sub
+
+Private Sub RealPushBackText(ByVal s As String)
+Dim i As Byte
 Dim Vacio As Boolean
-Dim Multiplicador As Integer
-If Left$(s, 1) = Chr(3) Then
-    Multiplicador = 7
-Else
-    Multiplicador = 1
-End If
 
 If p_CANTIDADDIALOGOS > 0 Then
-    I = p_CANTIDADDIALOGOS
+    i = p_CANTIDADDIALOGOS
     Vacio = True
-    While I > 0 And Vacio
-        Vacio = p_Dialogos(I).Texto = vbNullString
-        If Vacio Then I = I - 1
+    While i > 0 And Vacio
+        Vacio = p_Dialogos(i).Texto = vbNullString
+        If Vacio Then i = i - 1
     Wend
-    If I = p_CANTIDADDIALOGOS Then
+    If i = p_CANTIDADDIALOGOS Then
         'hay q scrollear, estamos llenos
-        I = 1
-        While I < p_CANTIDADDIALOGOS
-            p_Dialogos(I) = p_Dialogos(I + 1)
-            I = I + 1
+        i = 1
+        While i < p_CANTIDADDIALOGOS
+            p_Dialogos(i) = p_Dialogos(i + 1)
+            i = i + 1
         Wend
-        p_Dialogos(I).Texto = s
-        p_Dialogos(I).Segundos = p_SEGUNDOS * Multiplicador
+        p_Dialogos(i).Texto = s
+        p_Dialogos(i).Segundos = p_SEGUNDOS
     Else
-        p_Dialogos(I + 1).Texto = s
-        p_Dialogos(I + 1).Segundos = p_SEGUNDOS * Multiplicador
+        p_Dialogos(i + 1).Texto = s
+        p_Dialogos(i + 1).Segundos = p_SEGUNDOS
     End If
 End If
 
 End Sub
 
+''
+' Retrieves the font being used to render dialogs.
+'
+' @return   The font being used to render dialogs.
+
+Public Property Get font() As StdFont
+'**************************************************************
+'Author: Juan Martín Sotuyo Dodero
+'Last Modify Date: 04/27/06
+'Retrieves the font being used to render dialogs.
+'**************************************************************
+    font = usedFont
+End Property
+
+''
+' Sets the font being used to render dialogs.
+'
+' @param    nValue  The new font to be used to render dialogs.
+
+Public Property Let font(ByRef nValue As StdFont)
+'**************************************************************
+'Author: Juan Martín Sotuyo Dodero
+'Last Modify Date: 04/27/06
+'Sets the font being used to render dialogs.
+'**************************************************************
+    Set usedFont = nValue
+End Property

@@ -1,5 +1,5 @@
 Attribute VB_Name = "GameIni"
-'Argentum Online 0.9.0.9
+'Argentum Online 0.11.6
 '
 'Copyright (C) 2002 Márquez Pablo Ignacio
 'Copyright (C) 2002 Otto Perez
@@ -7,18 +7,16 @@ Attribute VB_Name = "GameIni"
 'Copyright (C) 2002 Matías Fernando Pequeño
 '
 'This program is free software; you can redistribute it and/or modify
-'it under the terms of the GNU General Public License as published by
-'the Free Software Foundation; either version 2 of the License, or
-'any later version.
+'it under the terms of the Affero General Public License;
+'either version 1 of the License, or any later version.
 '
 'This program is distributed in the hope that it will be useful,
 'but WITHOUT ANY WARRANTY; without even the implied warranty of
 'MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'GNU General Public License for more details.
+'Affero General Public License for more details.
 '
-'You should have received a copy of the GNU General Public License
-'along with this program; if not, write to the Free Software
-'Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+'You should have received a copy of the Affero General Public License
+'along with this program; if not, you can find it at http://www.affero.org/oagpl.html
 '
 'Argentum Online is based on Baronsoft's VB6 Online RPG
 'You can contact the original creator of ORE at aaron@baronsoft.com
@@ -46,7 +44,7 @@ End Type
 Public Type tGameIni
     Puerto As Long
     Musica As Byte
-    Fx As Byte
+    fX As Byte
     tip As Byte
     Password As String
     Name As String
@@ -64,6 +62,7 @@ Public Type tSetupMods
     bUseVideo   As Boolean
     bNoMusic    As Boolean
     bNoSound    As Boolean
+    bNoRes      As Boolean ' 24/06/2006 - ^[GS]^
 End Type
 
 Public ClientSetup As tSetupMods
@@ -81,7 +80,7 @@ Public Function LeerGameIni() As tGameIni
     Dim N As Integer
     Dim GameIni As tGameIni
     N = FreeFile
-    Open App.Path & "\init\Inicio.con" For Binary As #N
+    Open App.path & "\init\Inicio.con" For Binary As #N
     Get #N, , MiCabecera
     
     Get #N, , GameIni
@@ -95,7 +94,7 @@ On Local Error Resume Next
 
 Dim N As Integer
 N = FreeFile
-Open App.Path & "\init\Inicio.con" For Binary As #N
+Open App.path & "\init\Inicio.con" For Binary As #N
 Put #N, , MiCabecera
 Put #N, , GameIniConfiguration
 Close #N

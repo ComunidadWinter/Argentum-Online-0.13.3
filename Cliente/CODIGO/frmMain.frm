@@ -29,6 +29,7 @@ Begin VB.Form frmMain
    ScaleHeight     =   575
    ScaleMode       =   3  'Pixel
    ScaleWidth      =   794
+   StartUpPosition =   2  'CenterScreen
    Visible         =   0   'False
    Begin SocketWrenchCtrl.Socket Socket1 
       Left            =   6750
@@ -39,10 +40,10 @@ Begin VB.Form frmMain
       _StockProps     =   0
       AutoResolve     =   0   'False
       Backlog         =   1
-      Binary          =   0   'False
+      Binary          =   -1  'True
       Blocking        =   0   'False
       Broadcast       =   0   'False
-      BufferSize      =   2048
+      BufferSize      =   10240
       HostAddress     =   ""
       HostFile        =   ""
       HostName        =   ""
@@ -58,14 +59,52 @@ Begin VB.Form frmMain
       RemoteService   =   ""
       ReuseAddress    =   0   'False
       Route           =   -1  'True
-      Timeout         =   999999
+      Timeout         =   10000
       Type            =   1
       Urgent          =   0   'False
+   End
+   Begin VB.TextBox SendTxt 
+      BackColor       =   &H00000000&
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H000000FF&
+      Height          =   315
+      Left            =   45
+      MaxLength       =   160
+      MultiLine       =   -1  'True
+      TabIndex        =   19
+      TabStop         =   0   'False
+      ToolTipText     =   "Chat"
+      Top             =   1575
+      Visible         =   0   'False
+      Width           =   8160
+   End
+   Begin VB.Timer macrotrabajo 
+      Enabled         =   0   'False
+      Left            =   7080
+      Top             =   2520
+   End
+   Begin VB.PictureBox Picture1 
+      Height          =   135
+      Left            =   11760
+      ScaleHeight     =   75
+      ScaleWidth      =   75
+      TabIndex        =   18
+      Top             =   8520
+      Visible         =   0   'False
+      Width           =   135
    End
    Begin VB.Timer TrainingMacro 
       Enabled         =   0   'False
       Interval        =   3121
-      Left            =   6480
+      Left            =   6600
       Top             =   2520
    End
    Begin VB.TextBox SendCMSTXT 
@@ -84,7 +123,7 @@ Begin VB.Form frmMain
       Left            =   45
       MaxLength       =   160
       MultiLine       =   -1  'True
-      TabIndex        =   16
+      TabIndex        =   15
       TabStop         =   0   'False
       ToolTipText     =   "Chat"
       Top             =   8280
@@ -115,16 +154,6 @@ Begin VB.Form frmMain
       Left            =   3120
       Top             =   2520
    End
-   Begin VB.Timer Trabajo 
-      Enabled         =   0   'False
-      Left            =   4080
-      Top             =   2520
-   End
-   Begin VB.Timer FPS 
-      Interval        =   1000
-      Left            =   5040
-      Top             =   2520
-   End
    Begin InetCtlsObjects.Inet Inet1 
       Left            =   7605
       Top             =   1905
@@ -151,7 +180,7 @@ Begin VB.Form frmMain
       ScaleHeight     =   543
       ScaleMode       =   3  'Pixel
       ScaleWidth      =   239
-      TabIndex        =   2
+      TabIndex        =   1
       Top             =   -60
       Width           =   3585
       Begin VB.CommandButton DespInv 
@@ -170,7 +199,7 @@ Begin VB.Form frmMain
          Left            =   540
          MouseIcon       =   "frmMain.frx":030A
          MousePointer    =   99  'Custom
-         TabIndex        =   10
+         TabIndex        =   9
          Top             =   4800
          Visible         =   0   'False
          Width           =   2430
@@ -191,7 +220,7 @@ Begin VB.Form frmMain
          Left            =   540
          MouseIcon       =   "frmMain.frx":045C
          MousePointer    =   99  'Custom
-         TabIndex        =   9
+         TabIndex        =   8
          Top             =   2160
          Visible         =   0   'False
          Width           =   2430
@@ -218,7 +247,7 @@ Begin VB.Form frmMain
          ScaleHeight     =   160
          ScaleMode       =   3  'Pixel
          ScaleWidth      =   160
-         TabIndex        =   8
+         TabIndex        =   7
          Top             =   2400
          Width           =   2400
       End
@@ -227,7 +256,7 @@ Begin VB.Form frmMain
          ForeColor       =   &H00FFFFFF&
          Height          =   2790
          Left            =   420
-         TabIndex        =   15
+         TabIndex        =   14
          TabStop         =   0   'False
          Top             =   2040
          Visible         =   0   'False
@@ -240,13 +269,13 @@ Begin VB.Form frmMain
          ForeColor       =   &H00FFFF00&
          Height          =   195
          Left            =   1560
-         TabIndex        =   18
+         TabIndex        =   17
          Top             =   450
          Width           =   660
       End
       Begin VB.Image cmdMoverHechi 
          Height          =   375
-         Index           =   0
+         Index           =   1
          Left            =   2940
          MouseIcon       =   "frmMain.frx":05AE
          MousePointer    =   99  'Custom
@@ -256,7 +285,7 @@ Begin VB.Form frmMain
       End
       Begin VB.Image cmdMoverHechi 
          Height          =   375
-         Index           =   1
+         Index           =   0
          Left            =   2940
          MouseIcon       =   "frmMain.frx":0700
          MousePointer    =   99  'Custom
@@ -298,7 +327,7 @@ Begin VB.Form frmMain
          ForeColor       =   &H00FFFFFF&
          Height          =   195
          Left            =   1185
-         TabIndex        =   14
+         TabIndex        =   13
          Top             =   435
          Visible         =   0   'False
          Width           =   120
@@ -310,7 +339,7 @@ Begin VB.Form frmMain
          ForeColor       =   &H00FFFFFF&
          Height          =   195
          Left            =   285
-         TabIndex        =   13
+         TabIndex        =   12
          Top             =   675
          Width           =   345
       End
@@ -351,7 +380,7 @@ Begin VB.Form frmMain
          ForeColor       =   &H000000FF&
          Height          =   195
          Left            =   2595
-         TabIndex        =   12
+         TabIndex        =   11
          Top             =   5970
          Width           =   105
       End
@@ -445,7 +474,7 @@ Begin VB.Form frmMain
          ForeColor       =   &H000000FF&
          Height          =   195
          Left            =   420
-         TabIndex        =   11
+         TabIndex        =   10
          Top             =   180
          Width           =   2625
       End
@@ -464,7 +493,7 @@ Begin VB.Form frmMain
          Left            =   1800
          MouseIcon       =   "frmMain.frx":0EEC
          MousePointer    =   99  'Custom
-         TabIndex        =   7
+         TabIndex        =   6
          Top             =   1290
          Width           =   1605
       End
@@ -483,7 +512,7 @@ Begin VB.Form frmMain
          Left            =   150
          MouseIcon       =   "frmMain.frx":103E
          MousePointer    =   99  'Custom
-         TabIndex        =   6
+         TabIndex        =   5
          Top             =   1305
          Width           =   1605
       End
@@ -508,7 +537,7 @@ Begin VB.Form frmMain
          ForeColor       =   &H000000FF&
          Height          =   120
          Left            =   555
-         TabIndex        =   5
+         TabIndex        =   4
          Top             =   1965
          Width           =   30
       End
@@ -519,7 +548,7 @@ Begin VB.Form frmMain
          ForeColor       =   &H00FFFFFF&
          Height          =   195
          Left            =   765
-         TabIndex        =   4
+         TabIndex        =   3
          Top             =   450
          Width           =   105
       End
@@ -529,44 +558,15 @@ Begin VB.Form frmMain
          ForeColor       =   &H00FFFFFF&
          Height          =   225
          Left            =   285
-         TabIndex        =   3
+         TabIndex        =   2
          Top             =   450
          Width           =   465
       End
    End
-   Begin VB.Timer Attack 
-      Enabled         =   0   'False
-      Left            =   4560
-      Top             =   2520
-   End
-   Begin VB.TextBox SendTxt 
-      BackColor       =   &H00000000&
-      BeginProperty Font 
-         Name            =   "MS Sans Serif"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      ForeColor       =   &H000000FF&
-      Height          =   315
-      Left            =   45
-      MaxLength       =   160
-      MultiLine       =   -1  'True
-      TabIndex        =   0
-      TabStop         =   0   'False
-      ToolTipText     =   "Chat"
-      Top             =   1575
-      Visible         =   0   'False
-      Width           =   8160
-   End
    Begin RichTextLib.RichTextBox RecTxt 
-      CausesValidation=   0   'False
       Height          =   1500
       Left            =   45
-      TabIndex        =   1
+      TabIndex        =   0
       TabStop         =   0   'False
       ToolTipText     =   "Mensajes del servidor"
       Top             =   45
@@ -590,11 +590,21 @@ Begin VB.Form frmMain
          Strikethrough   =   0   'False
       EndProperty
    End
+   Begin VB.Image PicResu 
+      BorderStyle     =   1  'Fixed Single
+      Height          =   510
+      Left            =   9810
+      Picture         =   "frmMain.frx":120E
+      Stretch         =   -1  'True
+      Top             =   8100
+      Visible         =   0   'False
+      Width           =   510
+   End
    Begin VB.Image PicAU 
       BorderStyle     =   1  'Fixed Single
       Height          =   510
       Left            =   9300
-      Picture         =   "frmMain.frx":120E
+      Picture         =   "frmMain.frx":2510
       Stretch         =   -1  'True
       Top             =   8100
       Visible         =   0   'False
@@ -604,7 +614,7 @@ Begin VB.Form frmMain
       BorderStyle     =   1  'Fixed Single
       Height          =   510
       Left            =   8790
-      Picture         =   "frmMain.frx":2480
+      Picture         =   "frmMain.frx":3782
       Stretch         =   -1  'True
       Top             =   8100
       Visible         =   0   'False
@@ -619,7 +629,7 @@ Begin VB.Form frmMain
       ForeColor       =   &H0000FFFF&
       Height          =   255
       Left            =   10680
-      TabIndex        =   17
+      TabIndex        =   16
       Top             =   8250
       Width           =   1035
    End
@@ -627,17 +637,17 @@ Begin VB.Form frmMain
       BorderStyle     =   1  'Fixed Single
       Height          =   510
       Left            =   8280
-      Picture         =   "frmMain.frx":3292
+      Picture         =   "frmMain.frx":4594
       Stretch         =   -1  'True
       Top             =   8100
       Width           =   510
    End
    Begin VB.Shape MainViewShp 
       BorderColor     =   &H00404040&
-      Height          =   6165
-      Left            =   60
+      Height          =   6240
+      Left            =   120
       Top             =   2040
-      Width           =   8205
+      Width           =   8190
    End
    Begin VB.Menu mnuObj 
       Caption         =   "Objeto"
@@ -669,7 +679,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-'Argentum Online 0.9.0.9
+'Argentum Online 0.11.6
 '
 'Copyright (C) 2002 Márquez Pablo Ignacio
 'Copyright (C) 2002 Otto Perez
@@ -677,18 +687,16 @@ Attribute VB_Exposed = False
 'Copyright (C) 2002 Matías Fernando Pequeño
 '
 'This program is free software; you can redistribute it and/or modify
-'it under the terms of the GNU General Public License as published by
-'the Free Software Foundation; either version 2 of the License, or
-'any later version.
+'it under the terms of the Affero General Public License;
+'either version 1 of the License, or any later version.
 '
 'This program is distributed in the hope that it will be useful,
 'but WITHOUT ANY WARRANTY; without even the implied warranty of
 'MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'GNU General Public License for more details.
+'Affero General Public License for more details.
 '
-'You should have received a copy of the GNU General Public License
-'along with this program; if not, write to the Free Software
-'Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+'You should have received a copy of the Affero General Public License
+'along with this program; if not, you can find it at http://www.affero.org/oagpl.html
 '
 'Argentum Online is based on Baronsoft's VB6 Online RPG
 'You can contact the original creator of ORE at aaron@baronsoft.com
@@ -705,55 +713,44 @@ Attribute VB_Exposed = False
 
 Option Explicit
 
-Public ActualSecond As Long
-Public LastSecond As Long
-Public tX As Integer
-Public tY As Integer
+Public tX As Byte
+Public tY As Byte
 Public MouseX As Long
 Public MouseY As Long
 Public MouseBoton As Long
 Public MouseShift As Long
+Private clicX As Long
+Private clicY As Long
 
-Dim gDSB As DirectSoundBuffer
-Dim gD As DSBUFFERDESC
-Dim gW As WAVEFORMATEX
-Dim gFileName As String
-Dim dsE As DirectSoundEnum
-Dim Pos(0) As DSBPOSITIONNOTIFY
 Public IsPlaying As Byte
 
-Dim endEvent As Long
 Dim PuedeMacrear As Boolean
 
-Implements DirectXEvent
-
 Private Sub cmdMoverHechi_Click(index As Integer)
-If hlst.listIndex = -1 Then Exit Sub
+    If hlst.listIndex = -1 Then Exit Sub
+    Dim sTemp As String
 
-Select Case index
-Case 0 'subir
-    If hlst.listIndex = 0 Then Exit Sub
-Case 1 'bajar
-    If hlst.listIndex = hlst.ListCount - 1 Then Exit Sub
-End Select
+    Select Case index
+        Case 1 'subir
+            If hlst.listIndex = 0 Then Exit Sub
+        Case 0 'bajar
+            If hlst.listIndex = hlst.ListCount - 1 Then Exit Sub
+    End Select
 
-Call SendData("DESPHE" & index + 1 & "," & hlst.listIndex + 1)
-
-Select Case index
-Case 0 'subir
-    hlst.listIndex = hlst.listIndex - 1
-Case 1 'bajar
-    hlst.listIndex = hlst.listIndex + 1
-End Select
-
-End Sub
-
-Private Sub DirectXEvent_DXCallback(ByVal eventid As Long)
-
-End Sub
-
-Private Sub CreateEvent()
-     endEvent = DirectX.CreateEvent(Me)
+    Call WriteMoveSpell(index, hlst.listIndex + 1)
+    
+    Select Case index
+        Case 1 'subir
+            sTemp = hlst.List(hlst.listIndex - 1)
+            hlst.List(hlst.listIndex - 1) = hlst.List(hlst.listIndex)
+            hlst.List(hlst.listIndex) = sTemp
+            hlst.listIndex = hlst.listIndex - 1
+        Case 0 'bajar
+            sTemp = hlst.List(hlst.listIndex + 1)
+            hlst.List(hlst.listIndex + 1) = hlst.List(hlst.listIndex)
+            hlst.List(hlst.listIndex) = sTemp
+            hlst.listIndex = hlst.listIndex + 1
+    End Select
 End Sub
 
 Public Sub ActivarMacroHechizos()
@@ -761,7 +758,7 @@ Public Sub ActivarMacroHechizos()
         Call AddtoRichTextBox(frmMain.RecTxt, "Debes tener seleccionado el hechizo para activar el auto-lanzar", 0, 200, 200, False, True, False)
         Exit Sub
     End If
-    TrainingMacro.Interval = 2788
+    TrainingMacro.Interval = INT_MACRO_HECHIS
     TrainingMacro.Enabled = True
     Call AddtoRichTextBox(frmMain.RecTxt, "Auto lanzar hechizos activado", 0, 200, 200, False, True, False)
     PicMH.Visible = True
@@ -770,9 +767,21 @@ End Sub
 Public Sub DesactivarMacroHechizos()
         PicMH.Visible = False
         TrainingMacro.Enabled = False
-        SecuenciaMacroHechizos = 0
         Call AddtoRichTextBox(frmMain.RecTxt, "Auto lanzar hechizos desactivado", 0, 150, 150, False, True, False)
 End Sub
+
+Public Sub ControlSeguroResu(ByVal Mostrar As Boolean)
+If Mostrar Then
+    If Not PicResu.Visible Then
+        PicResu.Visible = True
+    End If
+Else
+    If PicResu.Visible Then
+        PicResu.Visible = False
+    End If
+End If
+End Sub
+
 Public Sub DibujarMH()
 PicMH.Visible = True
 End Sub
@@ -797,33 +806,169 @@ Public Sub DesDibujarSatelite()
 PicAU.Visible = False
 End Sub
 
-Private Sub Form_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub Form_KeyUp(KeyCode As Integer, Shift As Integer)
+#If SeguridadAlkon Then
+    If LOGGING Then Call CheatingDeath.StoreKey(KeyCode, False)
+#End If
+    
+    If (Not SendTxt.Visible) And (Not SendCMSTXT.Visible) Then
+        
+        'Checks if the key is valid
+        If LenB(CustomKeys.ReadableName(KeyCode)) > 0 Then
+            Select Case KeyCode
+                Case CustomKeys.BindedKey(eKeyType.mKeyToggleMusic)
+                    Audio.MusicActivated = Not Audio.MusicActivated
+                
+                Case CustomKeys.BindedKey(eKeyType.mKeyGetObject)
+                    Call AgarrarItem
+                
+                Case CustomKeys.BindedKey(eKeyType.mKeyToggleCombatMode)
+                    Call WriteCombatModeToggle
+                    IScombate = Not IScombate
+                
+                Case CustomKeys.BindedKey(eKeyType.mKeyEquipObject)
+                    Call EquiparItem
+                
+                Case CustomKeys.BindedKey(eKeyType.mKeyToggleNames)
+                    Nombres = Not Nombres
+                
+                Case CustomKeys.BindedKey(eKeyType.mKeyTamAnimal)
+                    Call WriteWork(eSkill.Domar)
+                
+                Case CustomKeys.BindedKey(eKeyType.mKeySteal)
+                    Call WriteWork(eSkill.Robar)
+                            
+                Case CustomKeys.BindedKey(eKeyType.mKeyHide)
+                    Call WriteWork(eSkill.Ocultarse)
+                
+                Case CustomKeys.BindedKey(eKeyType.mKeyDropObject)
+                    Call TirarItem
+                
+                Case CustomKeys.BindedKey(eKeyType.mKeyUseObject)
+                    If macrotrabajo.Enabled Then DesactivarMacroTrabajo
+                        
+                    If MainTimer.Check(TimersIndex.UseItemWithU) Then
+                        Call UsarItem
+                    End If
+                
+                Case CustomKeys.BindedKey(eKeyType.mKeyRequestRefresh)
+                    If MainTimer.Check(TimersIndex.SendRPU) Then
+                        Call WriteRequestPositionUpdate
+                        Beep
+                    End If
+                Case CustomKeys.BindedKey(eKeyType.mKeyToggleSafeMode)
+                    If frmMain.PicSeg.Visible Then
+                        AddtoRichTextBox frmMain.RecTxt, "Escribe /SEG para quitar el seguro", 255, 255, 255, False, False, False
+                    Else
+                        Call WriteSafeToggle
+                    End If
+                Case CustomKeys.BindedKey(eKeyType.mKeyToggleResuscitationSafe)
+                    Call WriteResuscitationToggle
+            End Select
+        Else
+            Select Case KeyCode
+                'Custom messages!
+                Case vbKey0 To vbKey9
+                    If LenB(CustomMessages.Message((KeyCode - 39) Mod 10)) <> 0 Then
+                        Call WriteTalk(CustomMessages.Message((KeyCode - 39) Mod 10))
+                    End If
+            End Select
+        End If
+    End If
+    
+    Select Case KeyCode
+        Case CustomKeys.BindedKey(eKeyType.mKeyTalkWithGuild)
+            If SendTxt.Visible Then Exit Sub
+            
+            If (Not frmComerciar.Visible) And (Not frmComerciarUsu.Visible) And _
+              (Not frmBancoObj.Visible) And (Not frmSkills3.Visible) And _
+              (Not frmMSG.Visible) And (Not frmForo.Visible) And _
+              (Not frmEstadisticas.Visible) And (Not frmCantidad.Visible) Then
+                SendCMSTXT.Visible = True
+                SendCMSTXT.SetFocus
+            End If
+        
+        Case CustomKeys.BindedKey(eKeyType.mKeyTakeScreenShot)
+            Call ScreenCapture
+        
+        Case CustomKeys.BindedKey(eKeyType.mKeyToggleFPS)
+            FPSFLAG = Not FPSFLAG
+            If Not FPSFLAG Then _
+                frmMain.Caption = "Argentum Online" & " v " & App.Major & "." & App.Minor & "." & App.Revision
+        
+        Case CustomKeys.BindedKey(eKeyType.mKeyShowOptions)
+            Call frmOpciones.Show(vbModeless, frmMain)
+        
+        Case CustomKeys.BindedKey(eKeyType.mKeyMeditate)
+            If UserMinMAN = UserMaxMAN Then Exit Sub
+            
+            If Not PuedeMacrear Then
+                AddtoRichTextBox frmMain.RecTxt, "No tan rápido..!", 255, 255, 255, False, False, False
+            Else
+                Call WriteMeditate
+                PuedeMacrear = False
+            End If
+        
+        Case CustomKeys.BindedKey(eKeyType.mKeyCastSpellMacro)
+            If TrainingMacro.Enabled Then
+                DesactivarMacroHechizos
+            Else
+                ActivarMacroHechizos
+            End If
+        
+        Case CustomKeys.BindedKey(eKeyType.mKeyWorkMacro)
+            If macrotrabajo.Enabled Then
+                DesactivarMacroTrabajo
+            Else
+                ActivarMacroTrabajo
+            End If
+        
+        Case CustomKeys.BindedKey(eKeyType.mKeyExitGame)
+            Call WriteQuit
+            
+        Case CustomKeys.BindedKey(eKeyType.mKeyAttack)
+            If Shift <> 0 Then Exit Sub
+            
+            If Not MainTimer.Check(TimersIndex.Arrows, False) Then Exit Sub 'Check if arrows interval has finished.
+            If Not MainTimer.Check(TimersIndex.CastSpell, False) Then 'Check if spells interval has finished.
+                If Not MainTimer.Check(TimersIndex.CastAttack) Then Exit Sub 'Corto intervalo Golpe-Hechizo
+            Else
+                If Not MainTimer.Check(TimersIndex.Attack) Or UserDescansar Or UserMeditar Then Exit Sub
+            End If
+            
+            If TrainingMacro.Enabled Then DesactivarMacroHechizos
+            If macrotrabajo.Enabled Then DesactivarMacroTrabajo
+            Call WriteAttack
+        
+        Case CustomKeys.BindedKey(eKeyType.mKeyTalk)
+            If SendCMSTXT.Visible Then Exit Sub
+            
+            If (Not frmComerciar.Visible) And (Not frmComerciarUsu.Visible) And _
+              (Not frmBancoObj.Visible) And (Not frmSkills3.Visible) And _
+              (Not frmMSG.Visible) And (Not frmForo.Visible) And _
+              (Not frmEstadisticas.Visible) And (Not frmCantidad.Visible) Then
+                SendTxt.Visible = True
+                SendTxt.SetFocus
+            End If
+            
+    End Select
+End Sub
+
+Private Sub Form_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
     MouseBoton = Button
     MouseShift = Shift
 End Sub
 
-Private Sub Form_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
-    MouseBoton = Button
-    MouseShift = Shift
+Private Sub Form_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
+    clicX = x
+    clicY = y
 End Sub
 
 Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
-    If endEvent Then
-        DirectX.DestroyEvent endEvent
-    End If
     If prgRun = True Then
         prgRun = False
         Cancel = 1
     End If
-End Sub
-
-Private Sub FPS_Timer()
-
-If logged And Not frmMain.Visible Then
-    Unload frmConnect
-    frmMain.Show
-End If
-    
 End Sub
 
 
@@ -831,17 +976,53 @@ Private Sub Macro_Timer()
     PuedeMacrear = True
 End Sub
 
+Private Sub macrotrabajo_Timer()
+    If Inventario.SelectedItem = 0 Then
+        DesactivarMacroTrabajo
+        Exit Sub
+    End If
+    
+    'Macros are disabled if not using Argentum!
+    If Not Application.IsAppActive() Then
+        DesactivarMacroTrabajo
+        Exit Sub
+    End If
+    
+    If UsingSkill = eSkill.Pesca Or UsingSkill = eSkill.Talar Or UsingSkill = eSkill.Mineria Or UsingSkill = FundirMetal Or (UsingSkill = eSkill.Herreria And Not frmHerrero.Visible) Then
+        Call WriteWorkLeftClick(tX, tY, UsingSkill)
+        UsingSkill = 0
+    End If
+    
+    'If Inventario.OBJType(Inventario.SelectedItem) = eObjType.otWeapon Then
+     If Not (frmCarp.Visible = True) Then Call UsarItem
+End Sub
+
+Public Sub ActivarMacroTrabajo()
+    macrotrabajo.Interval = INT_MACRO_TRABAJO
+    macrotrabajo.Enabled = True
+    Call AddtoRichTextBox(frmMain.RecTxt, "Macro Trabajo ACTIVADO", 0, 200, 200, False, True, False)
+End Sub
+
+Public Sub DesactivarMacroTrabajo()
+    macrotrabajo.Enabled = False
+    MacroBltIndex = 0
+    UsingSkill = 0
+    MousePointer = vbDefault
+    Call AddtoRichTextBox(frmMain.RecTxt, "Macro Trabajo DESACTIVADO", 0, 200, 200, False, True, False)
+End Sub
+
+
 Private Sub mnuEquipar_Click()
     Call EquiparItem
 End Sub
 
 Private Sub mnuNPCComerciar_Click()
-    SendData "LC" & tX & "," & tY
-    SendData "/COMERCIAR"
+    Call WriteLeftClick(tX, tY)
+    Call WriteCommerceStart
 End Sub
 
 Private Sub mnuNpcDesc_Click()
-    SendData "LC" & tX & "," & tY
+    Call WriteLeftClick(tX, tY)
 End Sub
 
 Private Sub mnuTirar_Click()
@@ -868,7 +1049,17 @@ Private Sub Coord_Click()
     AddtoRichTextBox frmMain.RecTxt, "Estas coordenadas son tu ubicación en el mapa. Utiliza la letra L para corregirla si esta no se corresponde con la del servidor por efecto del Lag.", 255, 255, 255, False, False, False
 End Sub
 
-
+Private Sub SendTxt_KeyUp(KeyCode As Integer, Shift As Integer)
+    'Send text
+    If KeyCode = vbKeyReturn Then
+        If LenB(stxtbuffer) <> 0 Then Call ParseUserCommand(stxtbuffer)
+        
+        stxtbuffer = ""
+        SendTxt.Text = ""
+        KeyCode = 0
+        SendTxt.Visible = False
+    End If
+End Sub
 
 Private Sub SpoofCheck_Timer()
 
@@ -888,26 +1079,10 @@ If IPdelServidor <> ((IPMMSB - 15) & "." & (IPMSB - 15) & "." & (IPLSB - 15) _
 End Sub
 
 Private Sub Second_Timer()
-    ActualSecond = mid(Time, 7, 2)
-    ActualSecond = ActualSecond + 1
-    If ActualSecond = LastSecond Then End
-    LastSecond = ActualSecond
     If Not DialogosClanes Is Nothing Then DialogosClanes.PassTimer
 End Sub
 
 '[END]'
-
-''''''''''''''''''''''''''''''''''''''
-'     TIMERS                         '
-''''''''''''''''''''''''''''''''''''''
-
-Private Sub Trabajo_Timer()
-    'NoPuedeUsar = False
-End Sub
-
-Private Sub Attack_Timer()
-    'UserCanAttack = 1
-End Sub
 
 ''''''''''''''''''''''''''''''''''''''
 '     ITEM CONTROL                   '
@@ -916,27 +1091,29 @@ End Sub
 Private Sub TirarItem()
     If (Inventario.SelectedItem > 0 And Inventario.SelectedItem < MAX_INVENTORY_SLOTS + 1) Or (Inventario.SelectedItem = FLAGORO) Then
         If Inventario.Amount(Inventario.SelectedItem) = 1 Then
-            SendData "TI" & Inventario.SelectedItem & "," & 1
+            Call WriteDrop(Inventario.SelectedItem, 1)
         Else
            If Inventario.Amount(Inventario.SelectedItem) > 1 Then
-            frmCantidad.Show , frmMain
+                frmCantidad.Show , frmMain
            End If
         End If
     End If
 End Sub
 
 Private Sub AgarrarItem()
-    SendData "AG"
+    Call WritePickUp
 End Sub
 
 Private Sub UsarItem()
     If TrainingMacro.Enabled Then DesactivarMacroHechizos
-    If (Inventario.SelectedItem > 0) And (Inventario.SelectedItem < MAX_INVENTORY_SLOTS + 1) Then SendData "USA" & Inventario.SelectedItem
+    
+    If (Inventario.SelectedItem > 0) And (Inventario.SelectedItem < MAX_INVENTORY_SLOTS + 1) Then _
+        Call WriteUseItem(Inventario.SelectedItem)
 End Sub
 
 Private Sub EquiparItem()
     If (Inventario.SelectedItem > 0) And (Inventario.SelectedItem < MAX_INVENTORY_SLOTS + 1) Then _
-        SendData "EQUI" & Inventario.SelectedItem
+        Call WriteEquipItem(Inventario.SelectedItem)
 End Sub
 
 ''''''''''''''''''''''''''''''''''''''
@@ -948,58 +1125,60 @@ Private Sub TrainingMacro_Timer()
         DesactivarMacroHechizos
         Exit Sub
     End If
-    If Comerciando Then Exit Sub
-    Select Case SecuenciaMacroHechizos
-        Case 0
-            If hlst.List(hlst.listIndex) <> "(None)" And UserCanAttack = 1 Then
-                Call SendData("LH" & hlst.listIndex + 1)
-                Call SendData("UK" & Magia)
-                'UserCanAttack = 0
-            End If
-            SecuenciaMacroHechizos = 1
-        Case 1
-            Call ConvertCPtoTP(MainViewShp.Left, MainViewShp.Top, MouseX, MouseY, tX, tY)
-            If (UsingSkill = Magia Or UsingSkill = Proyectiles) And UserCanAttack = 0 Then Exit Sub
-            SendData "WLC" & tX & "," & tY & "," & UsingSkill
-            If UsingSkill = Magia Or UsingSkill = Proyectiles Then UserCanAttack = 0
-            UsingSkill = 0
-            SecuenciaMacroHechizos = 0
-        Case Else
-            DesactivarMacroHechizos
-    End Select
     
+    'Macros are disabled if focus is not on Argentum!
+    If Not Application.IsAppActive() Then
+        DesactivarMacroHechizos
+        Exit Sub
+    End If
+    
+    If Comerciando Then Exit Sub
+    
+    If hlst.List(hlst.listIndex) <> "(None)" And MainTimer.Check(TimersIndex.CastSpell, False) Then
+        Call WriteCastSpell(hlst.listIndex + 1)
+        Call WriteWork(eSkill.Magia)
+    End If
+    
+    Call ConvertCPtoTP(MouseX, MouseY, tX, tY)
+    
+    If UsingSkill = Magia And Not MainTimer.Check(TimersIndex.CastSpell) Then Exit Sub
+    
+    If UsingSkill = Proyectiles And Not MainTimer.Check(TimersIndex.Attack) Then Exit Sub
+    
+    Call WriteWorkLeftClick(tX, tY, UsingSkill)
+    UsingSkill = 0
 End Sub
 
-
 Private Sub cmdLanzar_Click()
-    If hlst.List(hlst.listIndex) <> "(None)" And UserCanAttack = 1 Then
-        Call SendData("LH" & hlst.listIndex + 1)
-        Call SendData("UK" & Magia)
-        UsaMacro = True
-        'UserCanAttack = 0
+    If hlst.List(hlst.listIndex) <> "(None)" And MainTimer.Check(TimersIndex.Work, False) Then
+        If UserEstado = 1 Then
+            With FontTypes(FontTypeNames.FONTTYPE_INFO)
+                Call ShowConsoleMsg("¡¡Estás muerto!!", .red, .green, .blue, .bold, .italic)
+            End With
+        Else
+            Call WriteCastSpell(hlst.listIndex + 1)
+            Call WriteWork(eSkill.Magia)
+            UsaMacro = True
+        End If
     End If
 End Sub
 
-Private Sub CmdLanzar_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub CmdLanzar_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
     UsaMacro = False
     CnTd = 0
 End Sub
 
-
-Private Sub CmdInfo_Click()
-    Call SendData("INFS" & hlst.listIndex + 1)
+Private Sub cmdINFO_Click()
+    If hlst.listIndex <> -1 Then
+        Call WriteSpellInfo(hlst.listIndex + 1)
+    End If
 End Sub
-
-''''''''''''''''''''''''''''''''''''''
-'     OTROS                          '
-''''''''''''''''''''''''''''''''''''''
 
 Private Sub DespInv_Click(index As Integer)
     Inventario.ScrollInventory (index = 0)
 End Sub
 
 Private Sub Form_Click()
-
     If Cartel Then Cartel = False
 
 #If SeguridadAlkon Then
@@ -1007,152 +1186,110 @@ Private Sub Form_Click()
 #End If
 
     If Not Comerciando Then
-        Call ConvertCPtoTP(MainViewShp.Left, MainViewShp.Top, MouseX, MouseY, tX, tY)
-
+        Call ConvertCPtoTP(MouseX, MouseY, tX, tY)
+        
+        If Not InGameArea() Then Exit Sub
+        
         If MouseShift = 0 Then
             If MouseBoton <> vbRightButton Then
                 '[ybarra]
                 If UsaMacro Then
                     CnTd = CnTd + 1
-                        If CnTd = 3 Then
-                            SendData "UMH"
-                            CnTd = 0
-                        End If
+                    If CnTd = 3 Then
+                        Call WriteUseSpellMacro
+                        CnTd = 0
+                    End If
                     UsaMacro = False
                 End If
                 '[/ybarra]
                 If UsingSkill = 0 Then
-                    SendData "LC" & tX & "," & tY
+                    Call WriteLeftClick(tX, tY)
                 Else
-                    frmMain.MousePointer = vbDefault
-                    If (UsingSkill = Magia Or UsingSkill = Proyectiles) And UserCanAttack = 0 Then Exit Sub
+                
                     If TrainingMacro.Enabled Then DesactivarMacroHechizos
-                    SendData "WLC" & tX & "," & tY & "," & UsingSkill
-                    If UsingSkill = Magia Or UsingSkill = Proyectiles Then UserCanAttack = 0
+                    If macrotrabajo.Enabled Then DesactivarMacroTrabajo
+                    
+                    If Not MainTimer.Check(TimersIndex.Arrows, False) Then 'Check if arrows interval has finished.
+                        frmMain.MousePointer = vbDefault
+                        UsingSkill = 0
+                        With FontTypes(FontTypeNames.FONTTYPE_TALK)
+                            Call AddtoRichTextBox(frmMain.RecTxt, "No podés lanzar flechas tan rapido.", .red, .green, .blue, .bold, .italic)
+                        End With
+                        Exit Sub
+                    End If
+                    
+                    'Splitted because VB isn't lazy!
+                    If UsingSkill = Proyectiles Then
+                        If Not MainTimer.Check(TimersIndex.Arrows) Then
+                            frmMain.MousePointer = vbDefault
+                            UsingSkill = 0
+                            With FontTypes(FontTypeNames.FONTTYPE_TALK)
+                                Call AddtoRichTextBox(frmMain.RecTxt, "No podés lanzar flechas tan rapido.", .red, .green, .blue, .bold, .italic)
+                            End With
+                            Exit Sub
+                        End If
+                    End If
+                    
+                    'Splitted because VB isn't lazy!
+                    If UsingSkill = Magia Then
+                        If Not MainTimer.Check(TimersIndex.Attack, False) Then 'Check if attack interval has finished.
+                            If Not MainTimer.Check(TimersIndex.CastAttack) Then 'Corto intervalo de Golpe-Magia
+                                frmMain.MousePointer = vbDefault
+                                UsingSkill = 0
+                                With FontTypes(FontTypeNames.FONTTYPE_TALK)
+                                    Call AddtoRichTextBox(frmMain.RecTxt, "No podés lanzar hechizos tan rapido.", .red, .green, .blue, .bold, .italic)
+                                End With
+                                Exit Sub
+                            End If
+                        Else
+                            If Not MainTimer.Check(TimersIndex.CastSpell) Then 'Check if spells interval has finished.
+                                frmMain.MousePointer = vbDefault
+                                UsingSkill = 0
+                                With FontTypes(FontTypeNames.FONTTYPE_TALK)
+                                    Call AddtoRichTextBox(frmMain.RecTxt, "No podés lanzar hechizos tan rapido.", .red, .green, .blue, .bold, .italic)
+                                End With
+                                Exit Sub
+                            End If
+                        End If
+                    End If
+                    
+                    'Splitted because VB isn't lazy!
+                    If (UsingSkill = Pesca Or UsingSkill = Robar Or UsingSkill = Talar Or UsingSkill = Mineria Or UsingSkill = FundirMetal) Then
+                        If Not MainTimer.Check(TimersIndex.Work) Then
+                            frmMain.MousePointer = vbDefault
+                            UsingSkill = 0
+                            Exit Sub
+                        End If
+                    End If
+                    
+                    If frmMain.MousePointer <> 2 Then Exit Sub 'Parcheo porque a veces tira el hechizo sin tener el cursor (NicoNZ)
+                    
+                    frmMain.MousePointer = vbDefault
+                    Call WriteWorkLeftClick(tX, tY, UsingSkill)
                     UsingSkill = 0
                 End If
             Else
                 Call AbrirMenuViewPort
             End If
         ElseIf (MouseShift And 1) = 1 Then
-            If MouseShift = vbLeftButton Then
-                Call SendData("/TELEP YO " & UserMap & " " & tX & " " & tY)
+            If Not CustomKeys.KeyAssigned(KeyCodeConstants.vbKeyShift) Then
+                If MouseBoton = vbLeftButton Then
+                    Call WriteWarpChar("YO", UserMap, tX, tY)
+                End If
             End If
         End If
     End If
-    
 End Sub
 
 Private Sub Form_DblClick()
-    If Not frmForo.Visible Then
-        SendData "RC" & tX & "," & tY
+'**************************************************************
+'Author: Unknown
+'Last Modify Date: 12/27/2007
+'12/28/2007: ByVal - Chequea que la ventana de comercio y boveda no este abierta al hacer doble clic a un comerciante, sobrecarga la lista de items.
+'**************************************************************
+    If Not frmForo.Visible And Not frmComerciar.Visible And Not frmBancoObj.Visible Then
+        Call WriteDoubleClick(tX, tY)
     End If
-End Sub
-
-Private Sub Form_KeyUp(KeyCode As Integer, Shift As Integer)
-On Error Resume Next
-
-#If SeguridadAlkon Then
-    If LOGGING Then Call CheatingDeath.StoreKey(KeyCode, False)
-#End If
-        
-    If (Not SendTxt.Visible) And (Not SendCMSTXT.Visible) And _
-       ((KeyCode >= 65 And KeyCode <= 90) Or _
-       (KeyCode >= 48 And KeyCode <= 57)) Then
-        
-            Select Case KeyCode
-                Case vbKeyM:
-                    If Not Audio.PlayingMusic Then
-                        Musica = True
-                        Audio.PlayMIDI CStr(currentMidi) & ".mid"
-                    Else
-                        Musica = False
-                        Audio.StopMidi
-                    End If
-                Case vbKeyA:
-                    Call AgarrarItem
-                Case vbKeyC:
-                    Call SendData("TAB")
-                    IScombate = Not IScombate
-                Case vbKeyE:
-                    Call EquiparItem
-                Case vbKeyN:
-                    Nombres = Not Nombres
-                Case vbKeyD
-                    Call SendData("UK" & Domar)
-                Case vbKeyR:
-                    Call SendData("UK" & Robar)
-                Case vbKeyS:
-                    AddtoRichTextBox frmMain.RecTxt, "Para activar o desactivar el seguro utiliza la tecla '*' (asterisco)", 255, 255, 255, False, False, False
-                Case vbKeyO:
-                    Call SendData("UK" & Ocultarse)
-                Case vbKeyT:
-                    Call TirarItem
-                Case vbKeyU:
-                    If Not NoPuedeUsar Then
-                        NoPuedeUsar = True
-                        Call UsarItem
-                    End If
-                Case vbKeyL:
-                    If UserPuedeRefrescar Then
-                        Call SendData("RPU")
-                        UserPuedeRefrescar = False
-                        Beep
-                    End If
-            End Select
-        End If
-        
-        Select Case KeyCode
-            Case vbKeyReturn:
-                If SendCMSTXT.Visible Then Exit Sub
-                If Not frmCantidad.Visible Then
-                    SendTxt.Visible = True
-                    SendTxt.SetFocus
-                End If
-            Case vbKeyDelete:
-                If SendTxt.Visible Then Exit Sub
-                If Not frmCantidad.Visible Then
-                    SendCMSTXT.Visible = True
-                    SendCMSTXT.SetFocus
-                End If
-            Case vbKeyF4:
-                FPSFLAG = Not FPSFLAG
-                If Not FPSFLAG Then _
-                    frmMain.Caption = "Argentum Online" & " v " & App.Major & "." & App.Minor & "." & App.Revision
-            Case vbKeyControl:
-                If (UserCanAttack = 1) And _
-                   (Not UserDescansar) And _
-                   (Not UserMeditar) Then
-                        SendData "AT"
-                        UserCanAttack = 0
-                        
-                        '[ANIM ATAK]
-'                        CharList(UserCharIndex).Arma.WeaponWalk(CharList(UserCharIndex).Heading).Started = 1
-'                        CharList(UserCharIndex).Arma.WeaponAttack = GrhData(CharList(UserCharIndex).Arma.WeaponWalk(CharList(UserCharIndex).Heading).GrhIndex).NumFrames + 1
-                        
-                End If
-            Case vbKeyF5:
-                Call frmOpciones.Show(vbModeless, frmMain)
-            Case vbKeyF6:
-                If Not PuedeMacrear Then
-                    AddtoRichTextBox frmMain.RecTxt, "No tan rápido..!", 255, 255, 255, False, False, False
-                Else
-                    Dim k As String
-                    k = "DIT"
-                    Call SendData("/ME" & k & "AR")
-                    PuedeMacrear = False
-                End If
-            Case vbKeyF7:
-                If TrainingMacro.Enabled Then
-                    DesactivarMacroHechizos
-                Else
-                    ActivarMacroHechizos
-                End If
-            Case vbKeyMultiply:
-                Call SendData("SEG")
-                
-        End Select
-        
 End Sub
 
 Private Sub Form_Load()
@@ -1160,28 +1297,29 @@ Private Sub Form_Load()
     
     frmMain.Caption = "Argentum Online" & " V " & App.Major & "." & _
     App.Minor & "." & App.Revision
-    PanelDer.Picture = LoadPicture(App.Path & _
+    PanelDer.Picture = LoadPicture(App.path & _
     "\Graficos\Principalnuevo_sin_energia.jpg")
     
-    InvEqu.Picture = LoadPicture(App.Path & _
+    InvEqu.Picture = LoadPicture(App.path & _
     "\Graficos\Centronuevoinventario.jpg")
     
    Me.Left = 0
    Me.Top = 0
 End Sub
 
-Private Sub Form_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
-    MouseX = X
-    MouseY = Y
-    
+Private Sub Form_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
+    MouseX = x - MainViewShp.Left
+    MouseY = y - MainViewShp.Top
 End Sub
 
 Private Sub hlst_KeyDown(KeyCode As Integer, Shift As Integer)
        KeyCode = 0
 End Sub
+
 Private Sub hlst_KeyPress(KeyAscii As Integer)
        KeyAscii = 0
 End Sub
+
 Private Sub hlst_KeyUp(KeyCode As Integer, Shift As Integer)
         KeyCode = 0
 End Sub
@@ -1191,17 +1329,18 @@ Private Sub Image1_Click(index As Integer)
 
     Select Case index
         Case 0
-            '[MatuX] : 01 de Abril del 2002
-                Call frmOpciones.Show(vbModeless, frmMain)
-            '[END]
+            Call frmOpciones.Show(vbModeless, frmMain)
+            
         Case 1
             LlegaronAtrib = False
             LlegaronSkills = False
             LlegoFama = False
-            SendData "ATRI"
-            SendData "ESKI"
-            SendData "FEST"
-            SendData "FAMA"
+            Call WriteRequestAtributes
+            Call WriteRequestSkills
+            Call WriteRequestMiniStats
+            Call WriteRequestFame
+            Call FlushBuffer
+            
             Do While Not LlegaronSkills Or Not LlegaronAtrib Or Not LlegoFama
                 DoEvents 'esperamos a que lleguen y mantenemos la interfaz viva
             Loop
@@ -1210,9 +1349,11 @@ Private Sub Image1_Click(index As Integer)
             LlegaronAtrib = False
             LlegaronSkills = False
             LlegoFama = False
+        
         Case 2
-            If Not frmGuildLeader.Visible Then _
-                Call SendData("GLINFO")
+            If frmGuildLeader.Visible Then Unload frmGuildLeader
+            
+            Call WriteRequestGuildLeaderInfo
     End Select
 End Sub
 
@@ -1239,64 +1380,71 @@ End Sub
 Private Sub Label4_Click()
     Call Audio.PlayWave(SND_CLICK)
 
-    InvEqu.Picture = LoadPicture(App.Path & "\Graficos\Centronuevoinventario.jpg")
+    InvEqu.Picture = LoadPicture(App.path & "\Graficos\Centronuevoinventario.jpg")
 
     'DespInv(0).Visible = True
     'DespInv(1).Visible = True
     picInv.Visible = True
 
     hlst.Visible = False
-    cmdInfo.Visible = False
+    cmdINFO.Visible = False
     CmdLanzar.Visible = False
     
     cmdMoverHechi(0).Visible = True
     cmdMoverHechi(1).Visible = True
+    
+    cmdMoverHechi(0).Enabled = False
+    cmdMoverHechi(1).Enabled = False
 End Sub
 
 Private Sub Label7_Click()
     Call Audio.PlayWave(SND_CLICK)
 
-    InvEqu.Picture = LoadPicture(App.Path & "\Graficos\Centronuevohechizos.jpg")
+    InvEqu.Picture = LoadPicture(App.path & "\Graficos\Centronuevohechizos.jpg")
     '%%%%%%OCULTAMOS EL INV&&&&&&&&&&&&
     'DespInv(0).Visible = False
     'DespInv(1).Visible = False
     picInv.Visible = False
     hlst.Visible = True
-    cmdInfo.Visible = True
+    cmdINFO.Visible = True
     CmdLanzar.Visible = True
     
     cmdMoverHechi(0).Visible = True
     cmdMoverHechi(1).Visible = True
+    
+    cmdMoverHechi(0).Enabled = True
+    cmdMoverHechi(1).Enabled = True
 End Sub
 
 Private Sub picInv_DblClick()
     If frmCarp.Visible Or frmHerrero.Visible Then Exit Sub
     
+    If Not MainTimer.Check(TimersIndex.UseItemWithDblClick) Then Exit Sub
+    
+    If macrotrabajo.Enabled Then _
+                     DesactivarMacroTrabajo
+    
     Call UsarItem
 End Sub
 
-Private Sub picInv_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub picInv_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
     Call Audio.PlayWave(SND_CLICK)
 End Sub
 
 Private Sub RecTxt_Change()
-    On Error Resume Next  'el .SetFocus causaba errores al salir y volver a entrar
+On Error Resume Next  'el .SetFocus causaba errores al salir y volver a entrar
+    If Not Application.IsAppActive() Then Exit Sub
+    
     If SendTxt.Visible Then
         SendTxt.SetFocus
     ElseIf Me.SendCMSTXT.Visible Then
         SendCMSTXT.SetFocus
-    Else
-      If (Not frmComerciar.Visible) And _
-         (Not frmSkills3.Visible) And _
-         (Not frmMSG.Visible) And _
-         (Not frmForo.Visible) And _
-         (Not frmEstadisticas.Visible) And _
-         (Not frmCantidad.Visible) And _
-         (picInv.Visible) Then
-            picInv.SetFocus
-      End If
+    ElseIf (Not frmComerciar.Visible) And (Not frmComerciarUsu.Visible) And _
+      (Not frmBancoObj.Visible) And (Not frmSkills3.Visible) And _
+      (Not frmMSG.Visible) And (Not frmForo.Visible) And _
+      (Not frmEstadisticas.Visible) And (Not frmCantidad.Visible) And (picInv.Visible) Then
+        picInv.SetFocus
     End If
-    On Error GoTo 0
 End Sub
 
 Private Sub RecTxt_KeyDown(KeyCode As Integer, Shift As Integer)
@@ -1344,58 +1492,12 @@ Private Sub SendTxt_KeyPress(KeyAscii As Integer)
         KeyAscii = 0
 End Sub
 
-Private Sub SendTxt_KeyUp(KeyCode As Integer, Shift As Integer)
-    'Send text
-    If KeyCode = vbKeyReturn Then
-        If Left$(stxtbuffer, 1) = "/" Then
-            If UCase(Left$(stxtbuffer, 8)) = "/PASSWD " Then
-                    Dim j As String
-#If SeguridadAlkon Then
-                    j = md5.GetMD5String(Right$(stxtbuffer, Len(stxtbuffer) - 8))
-                    Call md5.MD5Reset
-#Else
-                    j = Right$(stxtbuffer, Len(stxtbuffer) - 8)
-#End If
-                    stxtbuffer = "/PASSWD " & j
-            ElseIf UCase$(stxtbuffer) = "/FUNDARCLAN" Then
-                frmEligeAlineacion.Show vbModeless, Me
-                stxtbuffer = ""
-                SendTxt.Text = ""
-                KeyCode = 0
-                SendTxt.Visible = False
-                
-                Exit Sub
-            End If
-            Call SendData(stxtbuffer)
-    
-       'Shout
-        ElseIf Left$(stxtbuffer, 1) = "-" Then
-            Call SendData("-" & Right$(stxtbuffer, Len(stxtbuffer) - 1))
-
-        'Whisper
-        ElseIf Left$(stxtbuffer, 1) = "\" Then
-            Call SendData("\" & Right$(stxtbuffer, Len(stxtbuffer) - 1))
-
-        'Say
-        ElseIf stxtbuffer <> "" Then
-            Call SendData(";" & stxtbuffer)
-
-        End If
-
-        stxtbuffer = ""
-        SendTxt.Text = ""
-        KeyCode = 0
-        SendTxt.Visible = False
-    End If
-End Sub
-
-
 Private Sub SendCMSTXT_KeyUp(KeyCode As Integer, Shift As Integer)
     'Send text
     If KeyCode = vbKeyReturn Then
         'Say
         If stxtbuffercmsg <> "" Then
-            Call SendData("/CMSG " & stxtbuffercmsg)
+            Call ParseUserCommand("/CMSG " & stxtbuffercmsg)
         End If
 
         stxtbuffercmsg = ""
@@ -1405,18 +1507,34 @@ Private Sub SendCMSTXT_KeyUp(KeyCode As Integer, Shift As Integer)
     End If
 End Sub
 
-
 Private Sub SendCMSTXT_KeyPress(KeyAscii As Integer)
     If Not (KeyAscii = vbKeyBack) And _
        Not (KeyAscii >= vbKeySpace And KeyAscii <= 250) Then _
         KeyAscii = 0
 End Sub
 
-
 Private Sub SendCMSTXT_Change()
     If Len(SendCMSTXT.Text) > 160 Then
         stxtbuffercmsg = "Soy un cheater, avisenle a un GM"
     Else
+        'Make sure only valid chars are inserted (with Shift + Insert they can paste illegal chars)
+        Dim i As Long
+        Dim tempstr As String
+        Dim CharAscii As Integer
+        
+        For i = 1 To Len(SendCMSTXT.Text)
+            CharAscii = Asc(mid$(SendCMSTXT.Text, i, 1))
+            If CharAscii >= vbKeySpace And CharAscii <= 250 Then
+                tempstr = tempstr & Chr$(CharAscii)
+            End If
+        Next i
+        
+        If tempstr <> SendCMSTXT.Text Then
+            'We only set it if it's different, otherwise the event will be raised
+            'constantly and the client will crush
+            SendCMSTXT.Text = tempstr
+        End If
+        
         stxtbuffercmsg = SendCMSTXT.Text
     End If
 End Sub
@@ -1428,80 +1546,66 @@ End Sub
 #If UsarWrench = 1 Then
 
 Private Sub Socket1_Connect()
-    Dim ServerIp As String
-    Dim Temporal1 As Long
-    Dim Temporal As Long
     
+    'Clean input and output buffers
+    Call incomingData.ReadASCIIStringFixed(incomingData.length)
+    Call outgoingData.ReadASCIIStringFixed(outgoingData.length)
     
-    ServerIp = Socket1.PeerAddress
-    Temporal = InStr(1, ServerIp, ".")
-    Temporal1 = ((mid$(ServerIp, 1, Temporal - 1) Xor &H65) And &H7F) * 16777216
-    ServerIp = mid$(ServerIp, Temporal + 1, Len(ServerIp))
-    Temporal = InStr(1, ServerIp, ".")
-    Temporal1 = Temporal1 + (mid$(ServerIp, 1, Temporal - 1) Xor &HF6) * 65536
-    ServerIp = mid$(ServerIp, Temporal + 1, Len(ServerIp))
-    Temporal = InStr(1, ServerIp, ".")
-    Temporal1 = Temporal1 + (mid$(ServerIp, 1, Temporal - 1) Xor &H4B) * 256
-    ServerIp = mid$(ServerIp, Temporal + 1, Len(ServerIp)) Xor &H42
-    MixedKey = (Temporal1 + ServerIp)
+#If SeguridadAlkon Then
+    Call ConnectionStablished(Socket1.PeerAddress)
+#End If
     
     Second.Enabled = True
-    
-    'If frmCrearPersonaje.Visible Then
-    If EstadoLogin = E_MODO.CrearNuevoPj Then
-        Call SendData("gIvEmEvAlcOde")
-#If SegudidadAlkon Then
-        Call MI(CualMI).Inicializar(RandomNumber(1, 1000), 10000)
+
+    Select Case EstadoLogin
+        Case E_MODO.CrearNuevoPj
+#If SeguridadAlkon Then
+            Call MI(CualMI).Inicializar(RandomNumber(1, 1000), 10000)
 #End If
-    'ElseIf Not frmRecuperar.Visible Then
-    ElseIf EstadoLogin = E_MODO.Normal Then
-        Call SendData("gIvEmEvAlcOde")
-#If SegudidadAlkon Then
-        Call MI(CualMI).Inicializar(RandomNumber(1, 1000), 10000)
+            Call Login
+        
+        Case E_MODO.Normal
+#If SeguridadAlkon Then
+            Call MI(CualMI).Inicializar(RandomNumber(1, 1000), 10000)
 #End If
-    ElseIf EstadoLogin = E_MODO.Dados Then
-        Call SendData("gIvEmEvAlcOde")
-#If SegudidadAlkon Then
-        Call MI(CualMI).Inicializar(RandomNumber(1, 1000), 10000)
+            Call Login
+        
+        Case E_MODO.Dados
+#If SeguridadAlkon Then
+            Call MI(CualMI).Inicializar(RandomNumber(1, 1000), 10000)
 #End If
-    'Else
-    ElseIf EstadoLogin = E_MODO.RecuperarPass Then
-        Dim cmd As String
-        cmd = "PASSRECO" & frmRecuperar.txtNombre.Text & "~" & frmRecuperar.txtCorreo
-        frmMain.Socket1.Write cmd, Len(cmd)
-    End If
+            frmCrearPersonaje.Show vbModal
+    End Select
 End Sub
 
 Private Sub Socket1_Disconnect()
     Dim i As Long
     
-    LastSecond = 0
     Second.Enabled = False
-    logged = False
     Connected = False
     
     Socket1.Cleanup
     
     frmConnect.MousePointer = vbNormal
     
-    If frmPasswdSinPadrinos.Visible = True Then frmPasswdSinPadrinos.Visible = False
-    frmCrearPersonaje.Visible = False
-    frmConnect.Visible = True
+    If Not frmPasswd.Visible And Not frmCrearPersonaje.Visible Then
+        frmConnect.Visible = True
+    End If
     
     On Local Error Resume Next
     For i = 0 To Forms.Count - 1
-        If Forms(i).Name <> Me.Name And Forms(i).Name <> frmConnect.Name Then
+        If Forms(i).Name <> Me.Name And Forms(i).Name <> frmConnect.Name And Forms(i).Name <> frmOldPersonaje.Name And Forms(i).Name <> frmCrearPersonaje.Name And Forms(i).Name <> frmPasswd.Name Then
             Unload Forms(i)
         End If
     Next i
     On Local Error GoTo 0
     
     frmMain.Visible = False
-
+    
     pausa = False
     UserMeditar = False
     
-#If SegudidadAlkon Then
+#If SeguridadAlkon Then
     LOGGING = False
     LOGSTRING = False
     LastPressed = 0
@@ -1509,9 +1613,10 @@ Private Sub Socket1_Disconnect()
     LastAmount = 0
 #End If
 
-    UserClase = ""
-    UserSexo = ""
-    UserRaza = ""
+    UserClase = 0
+    UserSexo = 0
+    UserRaza = 0
+    UserHogar = 0
     UserEmail = ""
     
     For i = 1 To NUMSKILLS
@@ -1521,12 +1626,11 @@ Private Sub Socket1_Disconnect()
     For i = 1 To NUMATRIBUTOS
         UserAtributos(i) = 0
     Next i
+    
+    macrotrabajo.Enabled = False
 
     SkillPoints = 0
     Alocados = 0
-
-    Dialogos.UltimoDialogo = 0
-    Dialogos.CantidadDialogos = 0
 End Sub
 
 Private Sub Socket1_LastError(ErrorCode As Integer, ErrorString As String, Response As Integer)
@@ -1541,7 +1645,6 @@ Private Sub Socket1_LastError(ErrorCode As Integer, ErrorString As String, Respo
     Call MsgBox(ErrorString, vbApplicationModal + vbInformation + vbOKOnly + vbDefaultButton1, "Error")
     frmConnect.MousePointer = 1
     Response = 0
-    LastSecond = 0
     Second.Enabled = False
 
     frmMain.Socket1.Disconnect
@@ -1549,63 +1652,32 @@ Private Sub Socket1_LastError(ErrorCode As Integer, ErrorString As String, Respo
     If frmOldPersonaje.Visible Then
         frmOldPersonaje.Visible = False
     End If
-
+    
     If Not frmCrearPersonaje.Visible Then
-        If Not frmBorrar.Visible And Not frmRecuperar.Visible Then
-            frmConnect.Show
-        End If
+        frmConnect.Show
     Else
         frmCrearPersonaje.MousePointer = 0
     End If
 End Sub
 
-Private Sub Socket1_Read(DataLength As Integer, IsUrgent As Integer)
-    Dim loopc As Integer
-
+Private Sub Socket1_Read(dataLength As Integer, IsUrgent As Integer)
     Dim RD As String
-    Dim rBuffer(1 To 500) As String
-    Static TempString As String
-
-    Dim CR As Integer
-    Dim tChar As String
-    Dim sChar As Integer
-    Dim Echar As Integer
-    Dim aux$
-    Dim nfile As Integer
+    Dim data() As Byte
     
-    Socket1.Read RD, DataLength
+    Call Socket1.Read(RD, dataLength)
+    data = StrConv(RD, vbFromUnicode)
     
-    'Check for previous broken data and add to current data
-    If TempString <> "" Then
-        RD = TempString & RD
-        TempString = ""
-    End If
-
-    'Check for more than one line
-    sChar = 1
-    For loopc = 1 To Len(RD)
-
-        tChar = mid$(RD, loopc, 1)
-
-        If tChar = ENDC Then
-            CR = CR + 1
-            Echar = loopc - sChar
-            rBuffer(CR) = mid$(RD, sChar, Echar)
-            sChar = loopc + 1
-        End If
-
-    Next loopc
-
-    'Check for broken line and save for next time
-    If Len(RD) - (sChar - 1) <> 0 Then
-        TempString = mid$(RD, sChar, Len(RD))
-    End If
-
+    If RD = vbNullString Then Exit Sub
+    
+#If SeguridadAlkon Then
+    Call DataReceived(data)
+#End If
+    
+    'Put data in the buffer
+    Call incomingData.WriteBlock(data)
+    
     'Send buffer to Handle data
-    For loopc = 1 To CR
-        'Call LogCustom("HandleData: " & rBuffer(loopc))
-        Call HandleData(rBuffer(loopc))
-    Next loopc
+    Call HandleIncomingData
 End Sub
 
 
@@ -1654,8 +1726,7 @@ Case 0 'Inventario
     Case 2 'Tirar
         Call TirarItem
     Case 3 'Usar
-        If Not NoPuedeUsar Then
-            NoPuedeUsar = True
+        If MainTimer.Check(TimersIndex.UseItemWithDblClick) Then
             Call UsarItem
         End If
     Case 3 'equipar
@@ -1665,10 +1736,11 @@ Case 0 'Inventario
 Case 1 'Menu del ViewPort del engine
     Select Case Sel
     Case 0 'Nombre
-        SendData "LC" & tX & "," & tY
+        Call WriteLeftClick(tX, tY)
+        
     Case 1 'Comerciar
-        Call SendData("LC" & tX & "," & tY)
-        Call SendData("/COMERCIAR")
+        Call WriteLeftClick(tX, tY)
+        Call WriteCommerceStart
     End Select
 End Select
 End Sub
@@ -1687,9 +1759,7 @@ Private Sub Winsock1_Close()
     
     Debug.Print "WInsock Close"
     
-    LastSecond = 0
     Second.Enabled = False
-    logged = False
     Connected = False
     
     If Winsock1.State <> sckClosed Then _
@@ -1697,13 +1767,13 @@ Private Sub Winsock1_Close()
     
     frmConnect.MousePointer = vbNormal
     
-    If frmPasswdSinPadrinos.Visible = True Then frmPasswdSinPadrinos.Visible = False
-    frmCrearPersonaje.Visible = False
-    frmConnect.Visible = True
+    If Not frmPasswd.Visible And Not frmCrearPersonaje.Visible Then
+        frmConnect.Visible = True
+    End If
     
     On Local Error Resume Next
     For i = 0 To Forms.Count - 1
-        If Forms(i).Name <> Me.Name And Forms(i).Name <> frmConnect.Name Then
+        If Forms(i).Name <> Me.Name And Forms(i).Name <> frmConnect.Name And Forms(i).Name <> frmOldPersonaje.Name And Forms(i).Name <> frmCrearPersonaje.Name And Forms(i).Name <> frmPasswd.Name Then
             Unload Forms(i)
         End If
     Next i
@@ -1714,9 +1784,10 @@ Private Sub Winsock1_Close()
     pausa = False
     UserMeditar = False
 
-    UserClase = ""
-    UserSexo = ""
-    UserRaza = ""
+    UserClase = 0
+    UserSexo = 0
+    UserRaza = 0
+    UserHogar = 0
     UserEmail = ""
     
     For i = 1 To NUMSKILLS
@@ -1730,107 +1801,75 @@ Private Sub Winsock1_Close()
     SkillPoints = 0
     Alocados = 0
 
-    Dialogos.UltimoDialogo = 0
     Dialogos.CantidadDialogos = 0
 End Sub
 
 Private Sub Winsock1_Connect()
-    Dim ServerIp As String
-    Dim Temporal1 As Long
-    Dim Temporal As Long
-    
     Debug.Print "Winsock Connect"
     
-    ServerIp = Winsock1.RemoteHostIP
-    Temporal = InStr(1, ServerIp, ".")
-    Temporal1 = ((mid$(ServerIp, 1, Temporal - 1) Xor &H65) And &H7F) * 16777216
-    ServerIp = mid$(ServerIp, Temporal + 1, Len(ServerIp))
-    Temporal = InStr(1, ServerIp, ".")
-    Temporal1 = Temporal1 + (mid$(ServerIp, 1, Temporal - 1) Xor &HF6) * 65536
-    ServerIp = mid$(ServerIp, Temporal + 1, Len(ServerIp))
-    Temporal = InStr(1, ServerIp, ".")
-    Temporal1 = Temporal1 + (mid$(ServerIp, 1, Temporal - 1) Xor &H4B) * 256
-    ServerIp = mid$(ServerIp, Temporal + 1, Len(ServerIp)) Xor &H42
-    MixedKey = (Temporal1 + ServerIp)
+    'Clean input and output buffers
+    Call incomingData.ReadASCIIStringFixed(incomingData.length)
+    Call outgoingData.ReadASCIIStringFixed(outgoingData.length)
+    
+#If SeguridadAlkon Then
+    Call ConnectionStablished(Winsock1.RemoteHostIP)
+#End If
     
     Second.Enabled = True
     
-    'If frmCrearPersonaje.Visible Then
-    If EstadoLogin = E_MODO.CrearNuevoPj Then
-        Call SendData("gIvEmEvAlcOde")
-    'ElseIf Not frmRecuperar.Visible Then
-    ElseIf EstadoLogin = E_MODO.Normal Then
-        Call SendData("gIvEmEvAlcOde")
-    ElseIf EstadoLogin = E_MODO.Dados Then
-        Call SendData("gIvEmEvAlcOde")
-    'Else
-    ElseIf EstadoLogin = E_MODO.RecuperarPass Then
-        Dim cmd As String
-        cmd = "PASSRECO" & frmRecuperar.txtNombre.Text & "~" & frmRecuperar.txtCorreo
-        'frmMain.Socket1.Write cmd$, Len(cmd$)
-        'Call SendData(cmd$)
-    End If
+    Select Case EstadoLogin
+        Case E_MODO.CrearNuevoPj
+#If SeguridadAlkon Then
+            Call MI(CualMI).Inicializar(RandomNumber(1, 1000), 10000)
+#End If
+            Call Login
+
+
+        Case E_MODO.Normal
+#If SeguridadAlkon Then
+            Call MI(CualMI).Inicializar(RandomNumber(1, 1000), 10000)
+#End If
+            Call Login
+
+        Case E_MODO.Dados
+#If SeguridadAlkon Then
+            Call MI(CualMI).Inicializar(RandomNumber(1, 1000), 10000)
+#End If
+            frmCrearPersonaje.Show vbModal
+            
+#If SeguridadAlkon Then
+            Call ProtectForm(frmCrearPersonaje)
+#End If
+    End Select
 End Sub
 
 Private Sub Winsock1_DataArrival(ByVal bytesTotal As Long)
-    Dim loopc As Integer
-
     Dim RD As String
-    Dim rBuffer(1 To 500) As String
-    Static TempString As String
-
-    Dim CR As Integer
-    Dim tChar As String
-    Dim sChar As Integer
-    Dim Echar As Integer
-    Dim aux$
-    Dim nfile As Integer
-
-    Debug.Print "Winsock DataArrival"
+    Dim data() As Byte
     
     'Socket1.Read RD, DataLength
     Winsock1.GetData RD
-
-    'Check for previous broken data and add to current data
-    If TempString <> "" Then
-        RD = TempString & RD
-        TempString = ""
-    End If
-
-    'Check for more than one line
-    sChar = 1
-    For loopc = 1 To Len(RD)
-
-        tChar = mid$(RD, loopc, 1)
-
-        If tChar = ENDC Then
-            CR = CR + 1
-            Echar = loopc - sChar
-            rBuffer(CR) = mid$(RD, sChar, Echar)
-            sChar = loopc + 1
-        End If
-
-    Next loopc
-
-    'Check for broken line and save for next time
-    If Len(RD) - (sChar - 1) <> 0 Then
-        TempString = mid$(RD, sChar, Len(RD))
-    End If
-
+    
+    data = StrConv(RD, vbFromUnicode)
+    
+#If SeguridadAlkon Then
+    Call DataReceived(data)
+#End If
+    
+    'Set data in the buffer
+    Call incomingData.WriteBlock(data)
+    
     'Send buffer to Handle data
-    For loopc = 1 To CR
-        Call HandleData(rBuffer(loopc))
-    Next loopc
+    Call HandleIncomingData
 End Sub
 
-Private Sub Winsock1_Error(ByVal Number As Integer, Description As String, ByVal Scode As Long, ByVal source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
+Private Sub Winsock1_Error(ByVal number As Integer, Description As String, ByVal Scode As Long, ByVal source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
     '*********************************************
     'Handle socket errors
     '*********************************************
     
     Call MsgBox(Description, vbApplicationModal + vbInformation + vbOKOnly + vbDefaultButton1, "Error")
     frmConnect.MousePointer = 1
-    LastSecond = 0
     Second.Enabled = False
 
     If Winsock1.State <> sckClosed Then _
@@ -1841,12 +1880,21 @@ Private Sub Winsock1_Error(ByVal Number As Integer, Description As String, ByVal
     End If
 
     If Not frmCrearPersonaje.Visible Then
-        If Not frmBorrar.Visible And Not frmRecuperar.Visible Then
-            frmConnect.Show
-        End If
+        frmConnect.Show
     Else
         frmCrearPersonaje.MousePointer = 0
     End If
 End Sub
-
 #End If
+
+Private Function InGameArea() As Boolean
+'***************************************************
+'Author: NicoNZ
+'Last Modification: 04/07/08
+'Checks if last click was performed within or outside the game area.
+'***************************************************
+    If clicX < MainViewShp.Left Or clicX > MainViewShp.Left + (32 * 17) Then Exit Function
+    If clicY < MainViewShp.Top Or clicY > MainViewShp.Top + (32 * 13) Then Exit Function
+    
+    InGameArea = True
+End Function

@@ -11,6 +11,25 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
+'**************************************************************
+' clsClan.cls
+'
+'**************************************************************
+
+'**************************************************************************
+'This program is free software; you can redistribute it and/or modify
+'it under the terms of the Affero General Public License;
+'either version 1 of the License, or any later version.
+'
+'This program is distributed in the hope that it will be useful,
+'but WITHOUT ANY WARRANTY; without even the implied warranty of
+'MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+'Affero General Public License for more details.
+'
+'You should have received a copy of the Affero General Public License
+'along with this program; if not, you can find it at http://www.affero.org/oagpl.html
+'**************************************************************************
+
 Option Explicit
 
 ''
@@ -185,30 +204,28 @@ Dim OldQ As String
     CantidadDeMiembros = IIf(IsNumeric(OldQ), CInt(OldQ), 0)
 End Property
 
-Public Sub SetLeader(ByRef Leader As String)
-    Call WriteVar(GUILDINFOFILE, "GUILD" & p_GuildNumber, "Leader", Leader)
+Public Sub SetLeader(ByRef leader As String)
+    Call WriteVar(GUILDINFOFILE, "GUILD" & p_GuildNumber, "Leader", leader)
 End Sub
 
 Public Function GetLeader() As String
     GetLeader = GetVar(GUILDINFOFILE, "GUILD" & p_GuildNumber, "Leader")
 End Function
 
-Public Function GetMemberList(ByVal Separador As String) As String
-Dim OldQ    As Integer
-Dim TempStr As String
-
+Public Function GetMemberList() As String()
+    Dim OldQ    As Integer
+    Dim list() As String
+    Dim i As Long
+    
     OldQ = Me.CantidadDeMiembros
     
-    While OldQ > 0
-        TempStr = TempStr & GetVar(MEMBERSFILE, "Members", "Member" & OldQ) & Separador
-        OldQ = OldQ - 1
-    Wend
+    ReDim list(OldQ - 1) As String
     
-    If Len(TempStr) > 0 Then
-        TempStr = Left$(TempStr, Len(TempStr) - Len(Separador))
-    End If
+    For i = 1 To OldQ
+        list(i - 1) = UCase$(GetVar(MEMBERSFILE, "Members", "Member" & i))
+    Next i
     
-    GetMemberList = TempStr
+    GetMemberList = list
 End Function
 
 Public Sub ConectarMiembro(ByVal UserIndex As Integer)
@@ -227,11 +244,9 @@ End Sub
 
 Public Sub AceptarNuevoMiembro(ByRef Nombre As String)
 Dim OldQ    As Integer
-Dim CantP   As Integer
-Dim CantPs  As String
 Dim OldQs  As String
     
-    If Dir(CharPath & Nombre & ".chr") <> vbNullString Then
+    If LenB(dir$(CharPath & Nombre & ".chr")) <> 0 Then
         Call WriteVar(CharPath & Nombre & ".chr", "GUILD", "GUILDINDEX", p_GuildNumber)
         Call WriteVar(CharPath & Nombre & ".chr", "GUILD", "AspiranteA", "0")
         'CantPs = GetVar(CharPath & Nombre & ".chr", "GUILD", "ClanesParticipo")
@@ -260,7 +275,7 @@ Dim i           As Integer
 Dim EsMiembro   As Boolean
 Dim MiembroDe   As String
 
-    If Dir(CharPath & Nombre & ".chr") <> vbNullString Then
+    If LenB(dir$(CharPath & Nombre & ".chr")) <> 0 Then
         OldQ = CInt(GetVar(MEMBERSFILE, "INIT", "NroMembers"))
         i = 1
         Nombre = UCase$(Nombre)
@@ -282,7 +297,7 @@ Dim MiembroDe   As String
             'lo echo a el
             MiembroDe = GetVar(CharPath & Nombre & ".chr", "GUILD", "Miembro")
             If Not InStr(1, MiembroDe, p_GuildName, vbTextCompare) > 0 Then
-                If MiembroDe <> vbNullString Then
+                If LenB(MiembroDe) <> 0 Then
                     MiembroDe = MiembroDe & ","
                 End If
                 MiembroDe = MiembroDe & p_GuildName
@@ -298,25 +313,25 @@ End Sub
 'ASPIRANTES
 '
 
-Public Function GetAspirantes(ByVal Separador As String) As String
-Dim OldQ    As Integer
-Dim TempStr As String
-
+Public Function GetAspirantes() As String()
+    Dim OldQ    As Integer
+    Dim list() As String
+    Dim i As Long
+    
     OldQ = Me.CantidadAspirantes()
     
-    While OldQ > 0
-        TempStr = TempStr & GetVar(SOLICITUDESFILE, "SOLICITUD" & OldQ, "Nombre") & Separador
-        OldQ = OldQ - 1
-    Wend
-    
-    If Len(TempStr) > 0 Then
-        TempStr = Left$(TempStr, Len(TempStr) - Len(Separador))
+    If OldQ > 1 Then
+        ReDim list(OldQ - 1) As String
+    Else
+        ReDim list(0) As String
     End If
     
-    GetAspirantes = TempStr
-
+    For i = 1 To OldQ
+        list(i - 1) = GetVar(SOLICITUDESFILE, "SOLICITUD" & i, "Nombre")
+    Next i
+    
+    GetAspirantes = list
 End Function
-
 
 Public Function CantidadAspirantes() As Integer
 Dim Temps As String
@@ -330,13 +345,12 @@ Dim Temps As String
 
 End Function
 
-Public Function DetallesSolicitudAspirante(ByVal NroAspirante As Integer)
+Public Function DetallesSolicitudAspirante(ByVal NroAspirante As Integer) As String
     DetallesSolicitudAspirante = GetVar(SOLICITUDESFILE, "SOLICITUD" & NroAspirante, "Detalle")
 End Function
 
 Public Function NumeroDeAspirante(ByRef Nombre As String) As Integer
 Dim i       As Integer
-Dim CantAsp As Integer
     
     NumeroDeAspirante = 0
     
@@ -387,7 +401,7 @@ Dim i       As Integer
     Call WriteVar(CharPath & Nombre & ".chr", "GUILD", "ASPIRANTEA", "0")
     Pedidos = GetVar(CharPath & Nombre & ".chr", "GUILD", "Pedidos")
     If Not InStr(1, Pedidos, p_GuildName, vbTextCompare) > 0 Then
-        If Pedidos <> vbNullString Then
+        If LenB(Pedidos) <> 0 Then
             Pedidos = Pedidos & ","
         End If
         Pedidos = Pedidos & p_GuildName
@@ -448,11 +462,11 @@ Public Function GetGuildNews() As String
     GetGuildNews = GetVar(GUILDINFOFILE, "GUILD" & p_GuildNumber, "GuildNews")
 End Function
 
-Public Sub SetDesc(ByRef Desc As String)
-    Call ReplaceInvalidChars(Desc)
-    Desc = Left$(Desc, DESCLENGTH)
+Public Sub SetDesc(ByRef desc As String)
+    Call ReplaceInvalidChars(desc)
+    desc = Left$(desc, DESCLENGTH)
     
-    Call WriteVar(GUILDINFOFILE, "GUILD" & p_GuildNumber, "Desc", Desc)
+    Call WriteVar(GUILDINFOFILE, "GUILD" & p_GuildNumber, "Desc", desc)
 End Sub
 
 Public Function GetDesc() As String
@@ -496,7 +510,7 @@ Dim Temps   As String
 End Sub
 
 Public Function YaVoto(ByRef Votante) As Boolean
-    YaVoto = (Trim$(GetVar(VOTACIONESFILE, "VOTOS", Votante)) <> vbNullString)
+    YaVoto = ((LenB(Trim$(GetVar(VOTACIONESFILE, "VOTOS", Votante)))) <> 0)
 End Function
 
 Private Function ContarVotos(ByRef CantGanadores As Integer) As String
@@ -504,8 +518,6 @@ Dim q           As Integer
 Dim i           As Integer
 Dim Temps       As String
 Dim tempV       As String
-Dim tempN       As String
-Dim tempW       As String
 Dim d           As diccionario
 
 On Error GoTo errh
@@ -525,7 +537,7 @@ On Error GoTo errh
             tempV = GetVar(VOTACIONESFILE, "VOTOS", Temps)
             
             'si voto a alguien contabilizamos el voto
-            If tempV <> vbNullString Then
+            If LenB(tempV) <> 0 Then
                 If Not IsNull(d.At(tempV)) Then  'cuantos votos tiene?
                     Call d.AtPut(tempV, CInt(d.At(tempV)) + 1)
                 Else
@@ -542,7 +554,7 @@ On Error GoTo errh
     
 Exit Function
 errh:
-    LogError ("clsClan.Contarvotos: " & Err.Description)
+    LogError ("clsClan.Contarvotos: " & Err.description)
     If Not d Is Nothing Then Set d = Nothing
     ContarVotos = vbNullString
 End Function
@@ -552,6 +564,8 @@ Dim FechaSufragio   As Date
 Dim Temps           As String
 Dim Ganador         As String
 Dim CantGanadores   As Integer
+Dim list()          As String
+Dim i               As Long
 
     RevisarElecciones = False
     Temps = Trim$(GetVar(GUILDINFOFILE, "GUILD" & p_GuildNumber, "EleccionesFinalizan"))
@@ -567,7 +581,13 @@ Dim CantGanadores   As Integer
                 'empate en la votacion
                 Call SetGuildNews("*Empate en la votación. " & Ganador & " con " & CantGanadores & " votos ganaron las elecciones del clan")
             ElseIf CantGanadores = 1 Then
-                If InStr(1, Me.GetMemberList(","), Ganador, vbTextCompare) > 0 Then
+                list = Me.GetMemberList()
+                
+                For i = 0 To UBound(list())
+                    If Ganador = list(i) Then Exit For
+                Next i
+                
+                If i <= UBound(list()) Then
                     Call SetGuildNews("*" & Ganador & " ganó la elección del clan*")
                     Call Me.SetLeader(Ganador)
                     RevisarElecciones = True
@@ -623,9 +643,9 @@ Public Function GetRelacion(ByVal OtroGuild As Integer) As RELACIONES_GUILD
     GetRelacion = p_Relaciones(OtroGuild)
 End Function
 
-Public Sub SetRelacion(ByVal GuildIndex As Integer, ByVal Relacion As RELACIONES_GUILD)
-    p_Relaciones(GuildIndex) = Relacion
-    Call WriteVar(RELACIONESFILE, "RELACIONES", GuildIndex, Relacion2String(Relacion))
+Public Sub SetRelacion(ByVal guildIndex As Integer, ByVal Relacion As RELACIONES_GUILD)
+    p_Relaciones(guildIndex) = Relacion
+    Call WriteVar(RELACIONESFILE, "RELACIONES", guildIndex, Relacion2String(Relacion))
 End Sub
 
 Public Sub SetPropuesta(ByVal Tipo As RELACIONES_GUILD, ByVal OtroGuild As Integer, ByRef Detalle As String)
@@ -788,10 +808,15 @@ End Sub
 '
 
 Private Sub ReplaceInvalidChars(ByRef S As String)
-    S = Replace(S, Chr(13), vbNullString)
-    S = Replace(S, Chr(10), vbNullString)
-    S = Replace(S, "¬", vbNullString)   'morgo usaba esto como "separador"
-    S = Replace(S, ENDC, vbNullString)
+    If InStrB(S, Chr$(13)) <> 0 Then
+        S = Replace(S, Chr$(13), vbNullString)
+    End If
+    If InStrB(S, Chr$(10)) <> 0 Then
+        S = Replace(S, Chr$(10), vbNullString)
+    End If
+    If InStrB(S, "¬") <> 0 Then
+        S = Replace(S, "¬", vbNullString)   'morgo usaba esto como "separador"
+    End If
 End Sub
 
 

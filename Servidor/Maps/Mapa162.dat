@@ -1,9 +1,12 @@
-[mapa162]
-Name=Catacumbas Pretorianas
-MusicNum=15-1
-StartPos=0-0-0
-pk=0
+[Mapa162]
+Name=Laberinto Oscuro.
+MusicNum=15
+MagiaSinefecto=0
+InviSinEfecto=0
+ResuSinEfecto=0
 Terreno=NIEVE
 Zona=DUNGEON
 Restringir=No
-BackUp=0
+BackUp= 1
+Pk=0
+NoEncriptarMP=0

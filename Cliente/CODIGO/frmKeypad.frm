@@ -398,6 +398,25 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+'**************************************************************
+' frmKepad.frm
+'
+'**************************************************************
+
+'**************************************************************************
+'This program is free software; you can redistribute it and/or modify
+'it under the terms of the Affero General Public License;
+'either version 1 of the License, or any later version.
+'
+'This program is distributed in the hope that it will be useful,
+'but WITHOUT ANY WARRANTY; without even the implied warranty of
+'MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+'Affero General Public License for more details.
+'
+'You should have received a copy of the Affero General Public License
+'along with this program; if not, you can find it at http://www.affero.org/oagpl.html
+'**************************************************************************
+
 Option Explicit
 
 Private Enum e_modo_keypad
@@ -410,17 +429,17 @@ Private Const MayIndex = "!@#$%^&*()_+|QWERTYUIOP{}ASDFGHJKL:""ZXCVBNM<>?"
 Private Modo As e_modo_keypad
 
 Private Sub Form_Activate()
-Dim I As Integer
+Dim i As Integer
 Dim j As Integer
-    I = RandomNumber(-2000, 2000)
+    i = RandomNumber(-2000, 2000)
     j = RandomNumber(-350, 350)
     Me.Top = Me.Top + j
-    Me.Left = Me.Left + I
+    Me.Left = Me.Left + i
 
 End Sub
 
 Private Sub Form_Load()
-    Me.Picture = LoadPicture(App.Path & "\graficos\KeyPadMin.bmp")
+    Me.Picture = LoadPicture(App.path & "\graficos\KeyPadMin.bmp")
     Modo = MINUSCULA
 End Sub
 
@@ -434,26 +453,26 @@ Private Sub imgEspacio_Click()
     Me.txtPassword.SetFocus
 End Sub
 
-Private Sub imgKeyPad_Click(Index As Integer)
+Private Sub imgKeyPad_Click(index As Integer)
     Call Audio.PlayWave(SND_CLICK)
     If Modo = MAYUSCULA Then
-        Me.txtPassword.Text = Me.txtPassword.Text & Mid$(MayIndex, Index + 1, 1)
+        Me.txtPassword.Text = Me.txtPassword.Text & mid$(MayIndex, index + 1, 1)
     Else
-        Me.txtPassword.Text = Me.txtPassword.Text & Mid$(MinIndex, Index + 1, 1)
+        Me.txtPassword.Text = Me.txtPassword.Text & mid$(MinIndex, index + 1, 1)
     End If
     Me.txtPassword.SetFocus
 End Sub
 
 Private Sub imgMay_Click()
     Call Audio.PlayWave(SND_CLICK)
-    Me.Picture = LoadPicture(App.Path & "\graficos\KeyPadMay.bmp")
+    Me.Picture = LoadPicture(App.path & "\graficos\KeyPadMay.bmp")
     Modo = MAYUSCULA
     Me.txtPassword.SetFocus
 End Sub
 
 Private Sub imgMin_Click()
     Call Audio.PlayWave(SND_CLICK)
-    Me.Picture = LoadPicture(App.Path & "\graficos\KeyPadMin.bmp")
+    Me.Picture = LoadPicture(App.path & "\graficos\KeyPadMin.bmp")
     Modo = MINUSCULA
     Me.txtPassword.SetFocus
 End Sub

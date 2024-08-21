@@ -260,7 +260,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-'Argentum Online 0.9.0.9
+'Argentum Online 0.11.6
 '
 'Copyright (C) 2002 Márquez Pablo Ignacio
 'Copyright (C) 2002 Otto Perez
@@ -268,18 +268,16 @@ Attribute VB_Exposed = False
 'Copyright (C) 2002 Matías Fernando Pequeño
 '
 'This program is free software; you can redistribute it and/or modify
-'it under the terms of the GNU General Public License as published by
-'the Free Software Foundation; either version 2 of the License, or
-'any later version.
+'it under the terms of the Affero General Public License;
+'either version 1 of the License, or any later version.
 '
 'This program is distributed in the hope that it will be useful,
 'but WITHOUT ANY WARRANTY; without even the implied warranty of
 'MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'GNU General Public License for more details.
+'Affero General Public License for more details.
 '
-'You should have received a copy of the GNU General Public License
-'along with this program; if not, write to the Free Software
-'Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+'You should have received a copy of the Affero General Public License
+'along with this program; if not, you can find it at http://www.affero.org/oagpl.html
 '
 'Argentum Online is based on Baronsoft's VB6 Online RPG
 'You can contact the original creator of ORE at aaron@baronsoft.com
@@ -296,107 +294,39 @@ Attribute VB_Exposed = False
 
 Option Explicit
 
-Public frmmiembros As Boolean
-Public frmsolicitudes As Boolean
+Public Enum CharInfoFrmType
+    frmMembers
+    frmMembershipRequests
+End Enum
+
+Public frmType As CharInfoFrmType
 
 Private Sub Aceptar_Click()
-frmmiembros = False
-frmsolicitudes = False
-Call SendData("ACEPTARI" & Trim$(Right(Nombre, Len(Nombre) - 8)))
-Unload frmGuildLeader
-Call SendData("GLINFO")
-Unload Me
+    Call WriteGuildAcceptNewMember(Trim$(Right$(Nombre, Len(Nombre) - 8)))
+    Unload frmGuildLeader
+    Call WriteRequestGuildLeaderInfo
+    Unload Me
 End Sub
 
 Private Sub Command1_Click()
-Unload Me
-End Sub
-
-
-Public Sub parseCharInfo(ByVal Rdata As String)
-
-If frmmiembros Then
-    Rechazar.Visible = False
-    Aceptar.Visible = False
-    Echar.Visible = True
-    desc.Visible = False
-Else
-    Rechazar.Visible = True
-    Aceptar.Visible = True
-    Echar.Visible = False
-    desc.Visible = True
-End If
-
-'    tstr = Personaje & "¬"1
-'    tstr = tstr & GetVar(UserFile, "INIT", "Raza") & "¬"2
-'    tstr = tstr & GetVar(UserFile, "INIT", "Clase") & "¬"3
-'    tstr = tstr & GetVar(UserFile, "INIT", "Genero") & "¬"4
-'    tstr = tstr & GetVar(UserFile, "STATS", "ELV") & "¬"5
-'    tstr = tstr & GetVar(UserFile, "STATS", "GLD") & "¬"6
-'    tstr = tstr & GetVar(UserFile, "STATS", "Banco") & "¬"7
-'    tstr = tstr & GetVar(UserFile, "REP", "Promedio") & "¬"8
-
-
-Nombre.Caption = "Nombre: " & ReadField(1, Rdata, Asc("¬"))
-Raza.Caption = "Raza: " & ReadField(2, Rdata, Asc("¬"))
-Clase.Caption = "Clase: " & ReadField(3, Rdata, Asc("¬"))
-Genero.Caption = "Genero: " & ReadField(4, Rdata, Asc("¬"))
-Nivel.Caption = "Nivel: " & ReadField(5, Rdata, Asc("¬"))
-Oro.Caption = "Oro: " & ReadField(6, Rdata, Asc("¬"))
-Banco.Caption = "Banco: " & ReadField(7, Rdata, Asc("¬"))
-Me.reputacion.Caption = "Reputación: " & ReadField(8, Rdata, Asc("¬"))
-
-
-'    Peticiones = GetVar(UserFile, "GUILDS", "Pedidos")9
-'    tstr = tstr & IIf(Len(Peticiones > 400), ".." & Right$(Peticiones, 400), Peticiones) & "¬"
-    
-'    Miembro = GetVar(UserFile, "GUILDS", "Miembro")10
-'    tstr = tstr & IIf(Len(Miembro) > 400, ".." & Right$(Miembro, 400), Miembro) & "¬"
-
-Me.txtPeticiones.Text = ReadField(9, Rdata, Asc("¬"))
-Me.txtMiembro.Text = ReadField(10, Rdata, Asc("¬"))
-
-
-'GuildActual = val(GetVar(UserFile, "GUILD", "GuildIndex"))11
-Me.guildactual.Caption = "Clan: " & ReadField(11, Rdata, Asc("¬"))
-
-
-'    tstr = tstr & GetVar(UserFile, "FACCIONES", "EjercitoReal") & "¬"12
-'    tstr = tstr & GetVar(UserFile, "FACCIONES", "EjercitoCaos") & "¬"13
-'    tstr = tstr & GetVar(UserFile, "FACCIONES", "CiudMatados") & "¬"14
-'    tstr = tstr & GetVar(UserFile, "FACCIONES", "CrimMatados") & "¬"15
-
-Me.ejercito.Caption = "Ejército: " & IIf(Val(ReadField(12, Rdata, Asc("¬"))) <> 0, "Armada Real", IIf(Val(ReadField(13, Rdata, Asc("¬"))) <> 0, "Legión Oscura", "-"))
-
-Ciudadanos.Caption = "Ciudadanos asesinados: " & ReadField(14, Rdata, Asc("¬"))
-criminales.Caption = "Criminales asesinados: " & ReadField(15, Rdata, Asc("¬"))
-
-
-status.Caption = IIf(Val(ReadField(8, Rdata, Asc("¬"))) > 0, " (Ciudadano)", " (Criminal)")
-status.ForeColor = IIf(Val(ReadField(8, Rdata, Asc("¬"))) > 0, vbBlue, vbRed)
-Me.Show vbModeless, frmMain
-
-
+    Unload Me
 End Sub
 
 Private Sub desc_Click()
-Call SendData("ENVCOMEN" & Right(Nombre, Len(Nombre) - 7))
+    Call WriteGuildRequestJoinerInfo(Right$(Nombre, Len(Nombre) - 8))
 End Sub
 
 Private Sub Echar_Click()
-Call SendData("ECHARCLA" & Right(Nombre, Len(Nombre) - 7))
-frmmiembros = False
-frmsolicitudes = False
-Unload frmGuildLeader
-Call SendData("GLINFO")
-Unload Me
+    Call WriteGuildKickMember(Right$(Nombre, Len(Nombre) - 8))
+    Unload frmGuildLeader
+    Call WriteRequestGuildLeaderInfo
+    Unload Me
 End Sub
 
 Private Sub Rechazar_Click()
-Load frmCommet
-frmCommet.T = RECHAZOPJ
-frmCommet.Nombre = Right$(Nombre, Len(Nombre) - 7)
-frmCommet.Caption = "Ingrese motivo para rechazo"
-frmCommet.Show vbModeless, frmCharInfo
-
+    Load frmCommet
+    frmCommet.T = RECHAZOPJ
+    frmCommet.Nombre = Right$(Nombre, Len(Nombre) - 8)
+    frmCommet.Caption = "Ingrese motivo para rechazo"
+    frmCommet.Show vbModeless, frmCharInfo
 End Sub

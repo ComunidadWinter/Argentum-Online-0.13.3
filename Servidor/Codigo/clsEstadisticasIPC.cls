@@ -11,14 +11,29 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
+'**************************************************************
+' clsEstadisticasIPC.cls
+'
+'**************************************************************
+
+'**************************************************************************
+'This program is free software; you can redistribute it and/or modify
+'it under the terms of the Affero General Public License;
+'either version 1 of the License, or any later version.
+'
+'This program is distributed in the hope that it will be useful,
+'but WITHOUT ANY WARRANTY; without even the implied warranty of
+'MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+'Affero General Public License for more details.
+'
+'You should have received a copy of the Affero General Public License
+'along with this program; if not, you can find it at http://www.affero.org/oagpl.html
+'**************************************************************************
+
 Option Explicit
 
 Private Declare Function RegisterWindowMessage Lib "user32" Alias "RegisterWindowMessageA" (ByVal lpString As String) As Long
-Private Declare Function SendNotifyMessage Lib "user32" Alias "SendNotifyMessageA" (ByVal hWnd As Long, ByVal msg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
-Private Declare Function SendMessage Lib "user32" Alias "SendMessageA" (ByVal hWnd As Long, ByVal wMsg As Long, ByVal wParam As Long, lParam As Any) As Long
 Private Declare Function SendMessageLong Lib "user32" Alias "SendMessageA" (ByVal hWnd As Long, ByVal wMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
-
-Private Const WM_USER = &H400
 
 Private sMensaje As Long, hVentana As Long, hVentanaMia As Long
 
@@ -57,7 +72,7 @@ While W <> 0
       T = Space(L + 1)
       L = GetWindowText(W, T, L + 1)
 
-      If Left(T, Len(str)) = str Then
+      If Left$(T, Len(str)) = str Then
          BuscaVentana = W
          Exit Function
       End If
@@ -79,7 +94,6 @@ End If
 End Function
 
 Public Function EstadisticasAndando() As Boolean
-Dim Ret As Long
 
 Call BuscaWndEstadisticas
 'Ret = SendNotifyMessage(hVentana, sMensaje, 0, 0)

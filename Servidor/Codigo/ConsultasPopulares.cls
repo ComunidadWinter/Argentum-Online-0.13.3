@@ -11,6 +11,25 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
+'**************************************************************
+' ConsultasPopulares.cls
+'
+'**************************************************************
+
+'**************************************************************************
+'This program is free software; you can redistribute it and/or modify
+'it under the terms of the Affero General Public License;
+'either version 1 of the License, or any later version.
+'
+'This program is distributed in the hope that it will be useful,
+'but WITHOUT ANY WARRANTY; without even the implied warranty of
+'MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+'Affero General Public License for more details.
+'
+'You should have received a copy of the Affero General Public License
+'along with this program; if not, you can find it at http://www.affero.org/oagpl.html
+'**************************************************************************
+
 Option Explicit
 'Modulo de consultas popluares
 'En realidad el modulo inicial guardaba los datos de las votaciones
@@ -67,7 +86,7 @@ Dim i As Integer
     End If
 End Sub
 
-Public Function doVotar(ByVal UserIndex As Integer, opcion As Integer) As String
+Public Function doVotar(ByVal UserIndex As Integer, ByVal opcion As Integer) As String
 On Error GoTo errorh
 Dim YaVoto As Boolean
 Dim CharFile As String
@@ -114,20 +133,20 @@ Dim sufragio As Integer
 
 Exit Function
 errorh:
-Call LogError("Error en ConsultasPopularse.doVotar: " & Err.Description)
+Call LogError("Error en ConsultasPopularse.doVotar: " & Err.description)
 
 End Function
 
 
 Public Function SendInfoEncuesta(ByVal UserIndex As Integer) As String
 Dim i As Integer
-    Call SendData(SendTarget.ToIndex, UserIndex, 0, "||CONSULTA POPULAR NUMERO " & pEncuestaActualNum & FONTTYPE_GUILD)
-    Call SendData(SendTarget.ToIndex, UserIndex, 0, "||" & pEncuestaActualTex & FONTTYPE_GUILD)
-    Call SendData(SendTarget.ToIndex, UserIndex, 0, "|| Opciones de voto: " & FONTTYPE_GUILDMSG)
+    Call WriteConsoleMsg(UserIndex, "CONSULTA POPULAR NUMERO " & pEncuestaActualNum, FontTypeNames.FONTTYPE_GUILD)
+    Call WriteConsoleMsg(UserIndex, pEncuestaActualTex, FontTypeNames.FONTTYPE_GUILD)
+    Call WriteConsoleMsg(UserIndex, " Opciones de voto: ", FontTypeNames.FONTTYPE_GUILDMSG)
     For i = 1 To UBound(pOpciones)
-        Call SendData(SendTarget.ToIndex, UserIndex, 0, "||(Opcion " & i & "): " & GetVar(App.Path & ARCHIVOCONFIG, "ENCUESTA" & pEncuestaActualNum, "OPCION" & i) & FONTTYPE_GUILDMSG)
+        Call WriteConsoleMsg(UserIndex, "(Opcion " & i & "): " & GetVar(App.Path & ARCHIVOCONFIG, "ENCUESTA" & pEncuestaActualNum, "OPCION" & i), FontTypeNames.FONTTYPE_GUILDMSG)
     Next i
-    Call SendData(SendTarget.ToIndex, UserIndex, 0, "|| Para votar una opcion, escribe /encuesta NUMERODEOPCION, por ejemplo para votar la opcion 1, escribe /encuesta 1. Tu voto no podra ser cambiado." & FONTTYPE_VENENO)
+    Call WriteConsoleMsg(UserIndex, " Para votar una opcion, escribe /encuesta NUMERODEOPCION, por ejemplo para votar la opcion 1, escribe /encuesta 1. Tu voto no podra ser cambiado.", FontTypeNames.FONTTYPE_VENENO)
 End Function
 
 
@@ -177,10 +196,3 @@ Private Function OpcionValida(ByVal opcion As Integer) As Boolean
     OpcionValida = opcion > 0 And opcion <= UBound(pOpciones)
 End Function
 
-Private Function DameOpcion(ByVal opcion As Integer) As String
-    If OpcionValida(opcion) Then
-        DameOpcion = GetVar(App.Path & ARCHIVOCONFIG, "ENCUESTA" & pEncuestaActualNum, "OPCION" & opcion)
-    Else
-        DameOpcion = "ERROR"
-    End If
-End Function

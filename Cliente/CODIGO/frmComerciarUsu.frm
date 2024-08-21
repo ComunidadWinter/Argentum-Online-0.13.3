@@ -259,10 +259,29 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+'**************************************************************
+' frmComerciarUsu.frm
+'
+'**************************************************************
+
+'**************************************************************************
+'This program is free software; you can redistribute it and/or modify
+'it under the terms of the Affero General Public License;
+'either version 1 of the License, or any later version.
+'
+'This program is distributed in the hope that it will be useful,
+'but WITHOUT ANY WARRANTY; without even the implied warranty of
+'MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+'Affero General Public License for more details.
+'
+'You should have received a copy of the Affero General Public License
+'along with this program; if not, you can find it at http://www.affero.org/oagpl.html
+'**************************************************************************
+
 Option Explicit
 
 Private Sub cmdAceptar_Click()
-Call SendData("COMUSUOK")
+    Call WriteUserCommerceOk
 End Sub
 
 Private Sub cmdOfrecer_Click()
@@ -280,24 +299,22 @@ ElseIf optQue(1).value = True Then
 End If
 
 If optQue(0).value = True Then
-    Call SendData("OFRECER" & List1.listIndex + 1 & "," & Trim(Val(txtCant.Text)))
+    Call WriteUserCommerceOffer(List1.listIndex + 1, Val(txtCant.Text))
 ElseIf optQue(1).value = True Then
-    Call SendData("OFRECER" & FLAGORO & "," & Trim(Val(txtCant.Text)))
+    Call WriteUserCommerceOffer(FLAGORO, Val(txtCant.Text))
 Else
     Exit Sub
 End If
 
 lblEstadoResp.Visible = True
-
 End Sub
 
 Private Sub cmdRechazar_Click()
-Call SendData("COMUSUNO")
+    Call WriteUserCommerceReject
 End Sub
 
 Private Sub Command2_Click()
-Call SendData("FINCOMUSU")
-
+    Call WriteUserCommerceEnd
 End Sub
 
 Private Sub Form_Deactivate()
@@ -337,7 +354,7 @@ DR.Top = 0
 DR.Right = 32
 DR.Bottom = 32
 
-Call DrawGrhtoHdc(Picture1.hWnd, Picture1.Hdc, Grh, SR, DR)
+Call DrawGrhtoHdc(Picture1.hDC, Grh, SR, DR)
 
 End Sub
 
@@ -366,6 +383,8 @@ End Sub
 
 Private Sub txtCant_Change()
     If Val(txtCant.Text) < 1 Then txtCant.Text = "1"
+    
+    If Val(txtCant.Text) > 2147483647 Then txtCant.Text = "2147483647"
 End Sub
 
 Private Sub txtCant_KeyDown(KeyCode As Integer, Shift As Integer)

@@ -1,20 +1,18 @@
 Attribute VB_Name = "Admin"
-'Argentum Online 0.9.0.2
+'Argentum Online 0.11.6
 'Copyright (C) 2002 Márquez Pablo Ignacio
 '
 'This program is free software; you can redistribute it and/or modify
-'it under the terms of the GNU General Public License as published by
-'the Free Software Foundation; either version 2 of the License, or
-'any later version.
+'it under the terms of the Affero General Public License;
+'either version 1 of the License, or any later version.
 '
 'This program is distributed in the hope that it will be useful,
 'but WITHOUT ANY WARRANTY; without even the implied warranty of
 'MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'GNU General Public License for more details.
+'Affero General Public License for more details.
 '
-'You should have received a copy of the GNU General Public License
-'along with this program; if not, write to the Free Software
-'Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+'You should have received a copy of the Affero General Public License
+'along with this program; if not, you can find it at http://www.affero.org/oagpl.html
 '
 'Argentum Online is based on Baronsoft's VB6 Online RPG
 'You can contact the original creator of ORE at aaron@baronsoft.com
@@ -58,6 +56,7 @@ Public ReiniciarServer As Long
 Public tInicioServer As Long
 Public EstadisticasWeb As New clsEstadisticasIPC
 
+'INTERVALOS
 Public SanaIntervaloSinDescansar As Integer
 Public StaminaIntervaloSinDescansar As Integer
 Public SanaIntervaloDescansar As Integer
@@ -73,14 +72,20 @@ Public IntervaloLanzaHechizo As Integer
 Public IntervaloNPCPuedeAtacar As Integer
 Public IntervaloNPCAI As Integer
 Public IntervaloInvocacion As Integer
+Public IntervaloOculto As Integer '[Nacho]
 Public IntervaloUserPuedeAtacar As Long
+Public IntervaloMagiaGolpe As Long
+Public IntervaloGolpeMagia As Long
 Public IntervaloUserPuedeCastear As Long
 Public IntervaloUserPuedeTrabajar As Long
 Public IntervaloParaConexion As Long
 Public IntervaloCerrarConexion As Long '[Gonzalo]
 Public IntervaloUserPuedeUsar As Long
 Public IntervaloFlechasCazadores As Long
-Public IntervaloAutoReiniciar As Long   'segundos
+
+'BALANCE
+
+Public PorcentajeRecuperoMana As Integer
 
 Public MinutosWs As Long
 Public Puerto As Integer
@@ -115,8 +120,6 @@ End Function
 
 Public Function VersionesActuales(ByVal v1 As Integer, ByVal v2 As Integer, ByVal v3 As Integer, ByVal v4 As Integer, ByVal v5 As Integer, ByVal v6 As Integer, ByVal v7 As Integer) As Boolean
 Dim rv As Boolean
-Dim i As Integer
-Dim f As String
 
 rv = val(GetVar(App.Path & "\AUTOUPDATER\VERSIONES.INI", "ACTUALES", "GRAFICOS")) = v1
 rv = rv And val(GetVar(App.Path & "\AUTOUPDATER\VERSIONES.INI", "ACTUALES", "WAVS")) = v2
@@ -129,17 +132,6 @@ VersionesActuales = rv
 
 End Function
 
-
-Public Function ValidarLoginMSG(ByVal N As Integer) As Integer
-On Error Resume Next
-Dim AuxInteger As Integer
-Dim AuxInteger2 As Integer
-AuxInteger = SD(N)
-AuxInteger2 = SDM(N)
-ValidarLoginMSG = Complex(AuxInteger + AuxInteger2)
-End Function
-
-
 Sub ReSpawnOrigPosNpcs()
 On Error Resume Next
 
@@ -150,7 +142,7 @@ For i = 1 To LastNPC
    'OJO
    If Npclist(i).flags.NPCActive Then
         
-        If InMapBounds(Npclist(i).Orig.Map, Npclist(i).Orig.X, Npclist(i).Orig.Y) And Npclist(i).Numero = Guardias Then
+        If InMapBounds(Npclist(i).Orig.map, Npclist(i).Orig.X, Npclist(i).Orig.Y) And Npclist(i).Numero = Guardias Then
                 MiNPC = Npclist(i)
                 Call QuitarNPC(i)
                 Call ReSpawnNpc(MiNPC)
@@ -173,7 +165,7 @@ On Error Resume Next
 Dim loopX As Integer
 Dim Porc As Long
 
-Call SendData(SendTarget.ToAll, 0, 0, "||Servidor> Iniciando WorldSave" & FONTTYPE_SERVER)
+Call SendData(SendTarget.ToAll, 0, PrepareMessageConsoleMsg("Servidor> Iniciando WorldSave", FontTypeNames.FONTTYPE_SERVER))
 
 #If SeguridadAlkon Then
     Encriptacion.StringValidacion = Encriptacion.ArmarStringValidacion
@@ -187,7 +179,7 @@ For j = 1 To NumMaps
     If MapInfo(j).BackUp = 1 Then k = k + 1
 Next j
 
-FrmStat.ProgressBar1.Min = 0
+FrmStat.ProgressBar1.min = 0
 FrmStat.ProgressBar1.max = k
 FrmStat.ProgressBar1.value = 0
 
@@ -205,7 +197,7 @@ Next loopX
 FrmStat.Visible = False
 
 If FileExist(DatPath & "\bkNpc.dat", vbNormal) Then Kill (DatPath & "bkNpc.dat")
-If FileExist(DatPath & "\bkNPCs-HOSTILES.dat", vbNormal) Then Kill (DatPath & "bkNPCs-HOSTILES.dat")
+'If FileExist(DatPath & "\bkNPCs-HOSTILES.dat", vbNormal) Then Kill (DatPath & "bkNPCs-HOSTILES.dat")
 
 For loopX = 1 To LastNPC
     If Npclist(loopX).flags.BackUp = 1 Then
@@ -213,43 +205,42 @@ For loopX = 1 To LastNPC
     End If
 Next
 
-Call SendData(SendTarget.ToAll, 0, 0, "||Servidor> WorldSave ha concluído" & FONTTYPE_SERVER)
+Call SendData(SendTarget.ToAll, 0, PrepareMessageConsoleMsg("Servidor> WorldSave ha concluído", FontTypeNames.FONTTYPE_SERVER))
 
 End Sub
 
 Public Sub PurgarPenas()
-Dim i As Integer
-For i = 1 To LastUser
-    If UserList(i).flags.UserLogged Then
+    Dim i As Long
     
-        If UserList(i).Counters.Pena > 0 Then
-                
+    For i = 1 To LastUser
+        If UserList(i).flags.UserLogged Then
+            If UserList(i).Counters.Pena > 0 Then
                 UserList(i).Counters.Pena = UserList(i).Counters.Pena - 1
                 
                 If UserList(i).Counters.Pena < 1 Then
                     UserList(i).Counters.Pena = 0
-                    Call WarpUserChar(i, Libertad.Map, Libertad.X, Libertad.Y, True)
-                    Call SendData(SendTarget.ToIndex, i, 0, "||Has sido liberado!" & FONTTYPE_INFO)
+                    Call WarpUserChar(i, Libertad.map, Libertad.X, Libertad.Y, True)
+                    Call WriteConsoleMsg(i, "Has sido liberado!", FontTypeNames.FONTTYPE_INFO)
+                    
+                    Call FlushBuffer(i)
                 End If
-                
+            End If
         End If
-        
-    End If
-Next i
+    Next i
 End Sub
 
 
-Public Sub Encarcelar(ByVal UserIndex As Integer, ByVal Minutos As Long, Optional ByVal GmName As String = "")
+Public Sub Encarcelar(ByVal UserIndex As Integer, ByVal Minutos As Long, Optional ByVal GmName As String = vbNullString)
         
         UserList(UserIndex).Counters.Pena = Minutos
        
         
-        Call WarpUserChar(UserIndex, Prision.Map, Prision.X, Prision.Y, True)
+        Call WarpUserChar(UserIndex, Prision.map, Prision.X, Prision.Y, True)
         
-        If GmName = "" Then
-            Call SendData(SendTarget.ToIndex, UserIndex, 0, "||Has sido encarcelado, deberas permanecer en la carcel " & Minutos & " minutos." & FONTTYPE_INFO)
+        If LenB(GmName) = 0 Then
+            Call WriteConsoleMsg(UserIndex, "Has sido encarcelado, deberas permanecer en la carcel " & Minutos & " minutos.", FontTypeNames.FONTTYPE_INFO)
         Else
-            Call SendData(SendTarget.ToIndex, UserIndex, 0, "||" & GmName & " te ha encarcelado, deberas permanecer en la carcel " & Minutos & " minutos." & FONTTYPE_INFO)
+            Call WriteConsoleMsg(UserIndex, GmName & " te ha encarcelado, deberas permanecer en la carcel " & Minutos & " minutos.", FontTypeNames.FONTTYPE_INFO)
         End If
         
 End Sub
@@ -316,9 +307,9 @@ End If
 End Sub
 
 Public Sub BanIpAgrega(ByVal ip As String)
-BanIps.Add ip
-
-Call BanIpGuardar
+    BanIps.Add ip
+    
+    Call BanIpGuardar
 End Sub
 
 Public Function BanIpBuscar(ByVal ip As String) As Long
@@ -451,16 +442,107 @@ End If
 
 End Sub
 
-
-Public Function UserDarPrivilegioLevel(ByVal name As String) As Long
-If EsDios(name) Then
-    UserDarPrivilegioLevel = 3
-ElseIf EsSemiDios(name) Then
-    UserDarPrivilegioLevel = 2
-ElseIf EsConsejero(name) Then
-    UserDarPrivilegioLevel = 1
-Else
-    UserDarPrivilegioLevel = 0
-End If
+Public Function UserDarPrivilegioLevel(ByVal name As String) As PlayerType
+'***************************************************
+'Author: Unknown
+'Last Modification: 03/02/07
+'Last Modified By: Juan Martín Sotuyo Dodero (Maraxus)
+'***************************************************
+    If EsAdmin(name) Then
+        UserDarPrivilegioLevel = PlayerType.Admin
+    ElseIf EsDios(name) Then
+        UserDarPrivilegioLevel = PlayerType.Dios
+    ElseIf EsSemiDios(name) Then
+        UserDarPrivilegioLevel = PlayerType.SemiDios
+    ElseIf EsConsejero(name) Then
+        UserDarPrivilegioLevel = PlayerType.Consejero
+    Else
+        UserDarPrivilegioLevel = PlayerType.User
+    End If
 End Function
+
+Public Sub BanCharacter(ByVal bannerUserIndex As Integer, ByVal UserName As String, ByVal reason As String)
+'***************************************************
+'Author: Juan Martín Sotuyo Dodero (Maraxus)
+'Last Modification: 03/02/07
+'
+'***************************************************
+    Dim tUser As Integer
+    Dim userPriv As Byte
+    Dim cantPenas As Byte
+    Dim rank As Integer
+    
+    If InStrB(UserName, "+") Then
+        UserName = Replace(UserName, "+", " ")
+    End If
+    
+    tUser = NameIndex(UserName)
+    
+    rank = PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios Or PlayerType.Consejero
+    
+    With UserList(bannerUserIndex)
+        If tUser <= 0 Then
+            Call WriteConsoleMsg(bannerUserIndex, "El usuario no esta online.", FontTypeNames.FONTTYPE_TALK)
+            
+            If FileExist(CharPath & UserName & ".chr", vbNormal) Then
+                userPriv = UserDarPrivilegioLevel(UserName)
+                
+                If (userPriv And rank) > (.flags.Privilegios And rank) Then
+                    Call WriteConsoleMsg(bannerUserIndex, "No podes banear a al alguien de mayor jerarquia.", FontTypeNames.FONTTYPE_INFO)
+                Else
+                    If GetVar(CharPath & UserName & ".chr", "FLAGS", "Ban") <> "0" Then
+                        Call WriteConsoleMsg(bannerUserIndex, "El personaje ya se encuentra baneado.", FontTypeNames.FONTTYPE_INFO)
+                    Else
+                        Call LogBanFromName(UserName, bannerUserIndex, reason)
+                        Call SendData(SendTarget.ToAdmins, 0, PrepareMessageConsoleMsg("Servidor> " & .name & " ha baneado a " & UserName & ".", FontTypeNames.FONTTYPE_SERVER))
+                        
+                        'ponemos el flag de ban a 1
+                        Call WriteVar(CharPath & UserName & ".chr", "FLAGS", "Ban", "1")
+                        'ponemos la pena
+                        cantPenas = val(GetVar(CharPath & UserName & ".chr", "PENAS", "Cant"))
+                        Call WriteVar(CharPath & UserName & ".chr", "PENAS", "Cant", cantPenas + 1)
+                        Call WriteVar(CharPath & UserName & ".chr", "PENAS", "P" & cantPenas + 1, LCase$(.name) & ": BAN POR " & LCase$(reason) & " " & Date & " " & time)
+                        
+                        If (userPriv And rank) = (.flags.Privilegios And rank) Then
+                            .flags.Ban = 1
+                            Call SendData(SendTarget.ToAdmins, 0, PrepareMessageConsoleMsg(.name & " banned by the server por bannear un Administrador.", FontTypeNames.FONTTYPE_FIGHT))
+                            Call CloseSocket(bannerUserIndex)
+                        End If
+                        
+                        Call LogGM(.name, "BAN a " & UserName)
+                    End If
+                End If
+            Else
+                Call WriteConsoleMsg(bannerUserIndex, "El pj " & UserName & " no existe.", FontTypeNames.FONTTYPE_INFO)
+            End If
+        Else
+            If (UserList(tUser).flags.Privilegios And rank) > (.flags.Privilegios And rank) Then
+                Call WriteConsoleMsg(bannerUserIndex, "No podes banear a al alguien de mayor jerarquia.", FontTypeNames.FONTTYPE_INFO)
+            End If
+            
+            Call LogBan(tUser, bannerUserIndex, reason)
+            Call SendData(SendTarget.ToAdmins, 0, PrepareMessageConsoleMsg("Servidor> " & .name & " ha baneado a " & UserList(tUser).name & ".", FontTypeNames.FONTTYPE_SERVER))
+            
+            'Ponemos el flag de ban a 1
+            UserList(tUser).flags.Ban = 1
+            
+            If (UserList(tUser).flags.Privilegios And rank) = (.flags.Privilegios And rank) Then
+                .flags.Ban = 1
+                Call SendData(SendTarget.ToAdmins, 0, PrepareMessageConsoleMsg(.name & " banned by the server por bannear un Administrador.", FontTypeNames.FONTTYPE_FIGHT))
+                Call CloseSocket(bannerUserIndex)
+            End If
+            
+            Call LogGM(.name, "BAN a " & UserName)
+            
+            'ponemos el flag de ban a 1
+            Call WriteVar(CharPath & UserName & ".chr", "FLAGS", "Ban", "1")
+            'ponemos la pena
+            cantPenas = val(GetVar(CharPath & UserName & ".chr", "PENAS", "Cant"))
+            Call WriteVar(CharPath & UserName & ".chr", "PENAS", "Cant", cantPenas + 1)
+            Call WriteVar(CharPath & UserName & ".chr", "PENAS", "P" & cantPenas + 1, LCase$(.name) & ": BAN POR " & LCase$(reason) & " " & Date & " " & time)
+            
+            Call CloseSocket(tUser)
+        End If
+    End With
+End Sub
 

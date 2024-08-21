@@ -26,7 +26,7 @@ Attribute VB_Exposed = False
 'This program is distributed in the hope that it will be useful,
 'but WITHOUT ANY WARRANTY; without even the implied warranty of
 'MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'GNU General Public License for more details.
+'Affero General Public License for more details.
 '
 'You should have received a copy of the GNU General Public License
 'along with this program; if not, write to the Free Software
@@ -149,7 +149,7 @@ Public Property Get GrhIndex(ByVal slot As Byte) As Integer
     GrhIndex = UserInventory(slot).GrhIndex
 End Property
 
-Public Property Get Valor(ByVal slot As Byte) As Long
+Public Property Get Valor(ByVal slot As Byte) As Single
 '***************************************************
 'Author: Juan Martín Sotuyo Dodero (Maraxus)
 'Last Modify Date: 27/07/04
@@ -164,7 +164,11 @@ Public Property Get Amount(ByVal slot As Byte) As Long
 'Last Modify Date: 27/07/04
 'Retrieves the selected item's amount
 '***************************************************
-    Amount = UserInventory(slot).Amount
+    If slot = FLAGORO Then
+        Amount = UserGLD
+    ElseIf slot >= LBound(UserInventory) And slot <= UBound(UserInventory) Then
+        Amount = UserInventory(slot).Amount
+    End If
 End Property
 
 Public Property Get OBJIndex(ByVal slot As Byte) As Integer
@@ -205,7 +209,7 @@ End Property
 
 Public Sub SetItem(ByVal slot As Byte, ByVal eOBJIndex As Integer, ByVal eAmount As Integer, ByVal eEquipped As Byte, _
                         ByVal eGrhIndex As Integer, ByVal eObjType As Integer, ByVal eMaxHit As Integer, ByVal eMinHit As Integer, _
-                        ByVal eDef As Integer, ByVal eValor As Long, ByVal eName As String)
+                        ByVal eDef As Integer, ByVal eValor As Single, ByVal eName As String)
 '***************************************************
 'Author: Juan Martín Sotuyo Dodero (Maraxus)
 'Last Modify Date: 12/04/06
@@ -230,7 +234,7 @@ Public Sub SetItem(ByVal slot As Byte, ByVal eOBJIndex As Integer, ByVal eAmount
     Call DrawInventorySlot(slot)
 End Sub
 
-Private Function ClickItem(ByVal X As Long, ByVal Y As Long) As Long
+Private Function ClickItem(ByVal x As Long, ByVal y As Long) As Long
 '***************************************************
 'Author: Juan Martín Sotuyo Dodero (Maraxus)
 'Last Modify Date: 27/07/04
@@ -240,8 +244,8 @@ Private Function ClickItem(ByVal X As Long, ByVal Y As Long) As Long
     Dim temp_x As Long
     Dim temp_y As Long
     
-    temp_x = X \ TilePixelWidth
-    temp_y = Y \ TilePixelHeight
+    temp_x = x \ TilePixelWidth
+    temp_y = y \ TilePixelHeight
     
     TempItem = temp_x + (temp_y + InventoryOffset) * (InventoryWindow.ScaleWidth \ TilePixelWidth) + 1
     
@@ -310,7 +314,7 @@ Private Sub DrawInventory()
         End If
         
         'Render the item to the Inventory Window
-        Call InvSurface.BltToDC(InventoryWindow.Hdc, TempRect, destRect)
+        Call InvSurface.BltToDC(InventoryWindow.hdc, TempRect, destRect)
         
         Call InventoryWindow.Refresh
         
@@ -335,7 +339,6 @@ Private Sub DrawInventorySlot(ByVal slot As Integer)
 'Last Modify Date: 12/04/06
 'Renders a inventory slot to the given PictureBox
 '***************************************************
-    Dim loopc As Long
     Dim SrcRect As RECT
     Dim TempRect As RECT
     Dim destRect As RECT
@@ -390,7 +393,7 @@ Private Sub DrawInventorySlot(ByVal slot As Integer)
     End If
     
     'Render the item to the Inventory Window
-    InvSurface.BltToDC InventoryWindow.Hdc, TempRect, destRect
+    InvSurface.BltToDC InventoryWindow.hdc, TempRect, destRect
     
     Call InventoryWindow.Refresh
 End Sub
@@ -437,9 +440,9 @@ End Sub
     Dim Ifnt As IFont
     
     font.Name = "Verdana"
-    font.Bold = True
-    font.Italic = False
-    font.Size = 7
+    font.bold = True
+    font.italic = False
+    font.size = 7
     font.Underline = False
     font.Strikethrough = False
     
@@ -455,7 +458,7 @@ End Sub
 #End If
 End Sub
 
-Private Sub InventoryWindow_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub InventoryWindow_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
 '***************************************************
 'Author: Juan Martín Sotuyo Dodero (Maraxus)
 'Last Modify Date: 27/07/04
@@ -466,8 +469,12 @@ Private Sub InventoryWindow_MouseMove(Button As Integer, Shift As Integer, X As 
     Dim temp_y As Integer
     Dim TempItem As Integer
     
-    temp_x = X \ TilePixelWidth
-    temp_y = Y \ TilePixelHeight
+    'Exit if it got outside the control's area
+    If x < 0 Or y < 0 Or x > InventoryWindow.Width Or y > InventoryWindow.Height Then _
+        Exit Sub
+    
+    temp_x = x \ TilePixelWidth
+    temp_y = y \ TilePixelHeight
     
     TempItem = temp_x + (temp_y + InventoryOffset) * (InventoryWindow.ScaleWidth \ TilePixelWidth) + 1
     
@@ -476,7 +483,7 @@ Private Sub InventoryWindow_MouseMove(Button As Integer, Shift As Integer, X As 
     End If
 End Sub
 
-Private Sub InventoryWindow_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub InventoryWindow_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
 '***************************************************
 'Author: Juan Martín Sotuyo Dodero (Maraxus)
 'Last Modify Date: 27/07/04
@@ -486,10 +493,14 @@ Private Sub InventoryWindow_MouseUp(Button As Integer, Shift As Integer, X As Si
     'Store previously selected item
     Dim prevSelItem As Long
     
+    'Exit if it got outside the control's area
+    If x < 0 Or y < 0 Or x > InventoryWindow.Width Or y > InventoryWindow.Height Then _
+        Exit Sub
+    
     prevSelItem = InvSelectedItem
 
     'Get the currently clickced item
-    InvSelectedItem = ClickItem(CInt(X), CInt(Y))
+    InvSelectedItem = ClickItem(CInt(x), CInt(y))
     
     'Update needed inventory slots
     If prevSelItem <> InvSelectedItem Then
@@ -501,7 +512,7 @@ Private Sub InventoryWindow_MouseUp(Button As Integer, Shift As Integer, X As Si
     'If it was a right click on the same item we had selected before, show popup menu
     If Button = vbRightButton And prevSelItem = InvSelectedItem Then
         'Show the provided menu as a popup
-        Call InventoryWindow.Parent.PopUpMenu(ItemMenu, , X, Y)
+        Call InventoryWindow.Parent.PopUpMenu(ItemMenu, , x, y)
     End If
 #End If
 End Sub

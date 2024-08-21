@@ -1,0 +1,13 @@
+[InternetShortcut]
+URL=http://ao.alkon.com.ar/reglamento.php
+IconFile=C:\WINDOWS\system32\SHELL32.dll
+IconIndex=220
+IDList=
+HotKey=0
+[{000214A0-0000-0000-C000-000000000046}]
+Prop3=19,2
+[DEFAULT]
+BASEURL=http://ao.alkon.com.ar/reglamento.php
+[DOC#7]
+BASEURL=http://www.alkon.com.ar/dinamic/network.php?loginfo=1
+ORIGURL=http://www.alkon.com.ar/dinamic/network.php?loginfo=1

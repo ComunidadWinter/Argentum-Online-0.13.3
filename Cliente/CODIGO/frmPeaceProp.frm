@@ -96,7 +96,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-'Argentum Online 0.9.0.9
+'Argentum Online 0.11.6
 '
 'Copyright (C) 2002 Márquez Pablo Ignacio
 'Copyright (C) 2002 Otto Perez
@@ -104,18 +104,16 @@ Attribute VB_Exposed = False
 'Copyright (C) 2002 Matías Fernando Pequeño
 '
 'This program is free software; you can redistribute it and/or modify
-'it under the terms of the GNU General Public License as published by
-'the Free Software Foundation; either version 2 of the License, or
-'any later version.
+'it under the terms of the Affero General Public License;
+'either version 1 of the License, or any later version.
 '
 'This program is distributed in the hope that it will be useful,
 'but WITHOUT ANY WARRANTY; without even the implied warranty of
 'MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'GNU General Public License for more details.
+'Affero General Public License for more details.
 '
-'You should have received a copy of the GNU General Public License
-'along with this program; if not, write to the Free Software
-'Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+'You should have received a copy of the Affero General Public License
+'along with this program; if not, you can find it at http://www.affero.org/oagpl.html
 '
 'Argentum Online is based on Baronsoft's VB6 Online RPG
 'You can contact the original creator of ORE at aaron@baronsoft.com
@@ -133,75 +131,46 @@ Attribute VB_Exposed = False
 Option Explicit
 
 Private tipoprop As TIPO_PROPUESTA
-Private Enum TIPO_PROPUESTA
+
+Public Enum TIPO_PROPUESTA
     ALIANZA = 1
     PAZ = 2
 End Enum
 
-
+Public Property Let ProposalType(ByVal nValue As TIPO_PROPUESTA)
+    tipoprop = nValue
+End Property
 
 Private Sub Command1_Click()
-Unload Me
-End Sub
-
-Public Sub ParsePeaceOffers(ByVal s As String)
-
-Dim T%, r%
-
-T% = Val(ReadField(1, s, 44))
-
-For r% = 1 To T%
-    Call lista.AddItem(ReadField(r% + 1, s, 44))
-Next r%
-
-
-tipoprop = PAZ
-
-Me.Show vbModeless, frmMain
-
-End Sub
-
-Public Sub ParseAllieOffers(ByVal s As String)
-
-Dim T%, r%
-
-T% = Val(ReadField(1, s, 44))
-
-For r% = 1 To T%
-    Call lista.AddItem(ReadField(r% + 1, s, 44))
-Next r%
-
-tipoprop = ALIANZA
-Me.Show vbModeless, frmMain
-
+    Unload Me
 End Sub
 
 Private Sub Command2_Click()
 'Me.Visible = False
 If tipoprop = PAZ Then
-    Call SendData("PEACEDET" & lista.List(lista.ListIndex))
+    Call WriteGuildPeaceDetails(lista.List(lista.listIndex))
 Else
-    Call SendData("ALLIEDET" & lista.List(lista.ListIndex))
+    Call WriteGuildAllianceDetails(lista.List(lista.listIndex))
 End If
 End Sub
 
 Private Sub Command3_Click()
-'Me.Visible = False
-If tipoprop = PAZ Then
-    Call SendData("ACEPPEAT" & lista.List(lista.ListIndex))
-Else
-    Call SendData("ACEPALIA" & lista.List(lista.ListIndex))
-End If
-Me.Hide
-Unload Me
+    'Me.Visible = False
+    If tipoprop = PAZ Then
+        Call WriteGuildAcceptPeace(lista.List(lista.listIndex))
+    Else
+        Call WriteGuildAcceptAlliance(lista.List(lista.listIndex))
+    End If
+    Me.Hide
+    Unload Me
 End Sub
 
 Private Sub Command4_Click()
-If tipoprop = PAZ Then
-    Call SendData("RECPPEAT" & lista.List(lista.ListIndex))
-Else
-    Call SendData("RECPALIA" & lista.List(lista.ListIndex))
-End If
-Me.Hide
-Unload Me
+    If tipoprop = PAZ Then
+        Call WriteGuildRejectPeace(lista.List(lista.listIndex))
+    Else
+        Call WriteGuildRejectAlliance(lista.List(lista.listIndex))
+    End If
+    Me.Hide
+    Unload Me
 End Sub

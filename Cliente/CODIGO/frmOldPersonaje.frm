@@ -109,7 +109,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-'Argentum Online 0.9.0.9
+'Argentum Online 0.11.6
 '
 'Copyright (C) 2002 Márquez Pablo Ignacio
 'Copyright (C) 2002 Otto Perez
@@ -117,18 +117,16 @@ Attribute VB_Exposed = False
 'Copyright (C) 2002 Matías Fernando Pequeño
 '
 'This program is free software; you can redistribute it and/or modify
-'it under the terms of the GNU General Public License as published by
-'the Free Software Foundation; either version 2 of the License, or
-'any later version.
+'it under the terms of the Affero General Public License;
+'either version 1 of the License, or any later version.
 '
 'This program is distributed in the hope that it will be useful,
 'but WITHOUT ANY WARRANTY; without even the implied warranty of
 'MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'GNU General Public License for more details.
+'Affero General Public License for more details.
 '
-'You should have received a copy of the GNU General Public License
-'along with this program; if not, write to the Free Software
-'Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+'You should have received a copy of the Affero General Public License
+'along with this program; if not, you can find it at http://www.affero.org/oagpl.html
 '
 'Argentum Online is based on Baronsoft's VB6 Online RPG
 'You can contact the original creator of ORE at aaron@baronsoft.com
@@ -159,33 +157,33 @@ Next
 
 NameTxt.Text = ""
 PasswordTxt.Text = ""
-Me.Picture = LoadPicture(App.Path & "\Graficos\oldcaracter.jpg")
-Image1(1).Picture = LoadPicture(App.Path & "\Graficos\bvolver.jpg")
-Image1(0).Picture = LoadPicture(App.Path & "\Graficos\bsiguiente.jpg")
-Image1(2).Picture = LoadPicture(App.Path & "\Graficos\bteclas.jpg")
+Me.Picture = LoadPicture(App.path & "\Graficos\oldcaracter.jpg")
+Image1(1).Picture = LoadPicture(App.path & "\Graficos\bvolver.jpg")
+Image1(0).Picture = LoadPicture(App.path & "\Graficos\bsiguiente.jpg")
+Image1(2).Picture = LoadPicture(App.path & "\Graficos\bteclas.jpg")
 
 
 
 End Sub
 
-Private Sub Form_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub Form_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
 If Image1(0).Tag = "1" Then
             Me.lblInfo.Visible = False
             Me.lblInfo.Caption = vbNullString
             Image1(0).Tag = "0"
-            Image1(0).Picture = LoadPicture(App.Path & "\Graficos\bsiguiente.jpg")
+            Image1(0).Picture = LoadPicture(App.path & "\Graficos\bsiguiente.jpg")
 End If
 If Image1(1).Tag = "1" Then
             Me.lblInfo.Visible = False
             Me.lblInfo.Caption = vbNullString
             Image1(1).Tag = "0"
-            Image1(1).Picture = LoadPicture(App.Path & "\Graficos\bvolver.jpg")
+            Image1(1).Picture = LoadPicture(App.path & "\Graficos\bvolver.jpg")
 End If
 If Image1(2).Tag = "1" Then
             Me.lblInfo.Visible = False
             Me.lblInfo.Caption = vbNullString
             Image1(2).Tag = "0"
-            Image1(2).Picture = LoadPicture(App.Path & "\Graficos\bteclas.jpg")
+            Image1(2).Picture = LoadPicture(App.path & "\Graficos\bteclas.jpg")
 End If
 
 End Sub
@@ -194,43 +192,40 @@ Private Sub Image1_Click(index As Integer)
 
 Call Audio.PlayWave(SND_CLICK)
 
-
-
 Select Case index
     Case 0
        
 #If UsarWrench = 1 Then
-        If frmMain.Socket1.Connected Then frmMain.Socket1.Disconnect
-#Else
-        If frmMain.Winsock1.State <> sckClosed Then _
-            frmMain.Winsock1.Close
-#End If
-        If frmConnect.MousePointer = 11 Then
-            Exit Sub
+        If frmMain.Socket1.Connected Then
+            frmMain.Socket1.Disconnect
+            frmMain.Socket1.Cleanup
+            DoEvents
         End If
-        
+#Else
+        If frmMain.Winsock1.State <> sckClosed Then
+            frmMain.Winsock1.Close
+            DoEvents
+        End If
+#End If
         
         'update user info
         UserName = NameTxt.Text
         Dim aux As String
         aux = PasswordTxt.Text
 #If SeguridadAlkon Then
-        UserPassword = md5.GetMD5String(aux)
-        Call md5.MD5Reset
+        UserPassword = MD5.GetMD5String(aux)
+        Call MD5.MD5Reset
 #Else
         UserPassword = aux
 #End If
         If CheckUserData(False) = True Then
-            'SendNewChar = False
             EstadoLogin = Normal
-            Me.MousePointer = 11
+            
 #If UsarWrench = 1 Then
-            frmMain.Socket1.HostAddress = CurServerIp
+            frmMain.Socket1.HostName = CurServerIp
             frmMain.Socket1.RemotePort = CurServerPort
             frmMain.Socket1.Connect
 #Else
-            If frmMain.Winsock1.State <> sckClosed Then _
-                frmMain.Winsock1.Close
             frmMain.Winsock1.Connect CurServerIp, CurServerPort
 #End If
         End If
@@ -246,7 +241,7 @@ Select Case index
 End Select
 End Sub
 
-Private Sub Image1_MouseMove(index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub Image1_MouseMove(index As Integer, Button As Integer, Shift As Integer, x As Single, y As Single)
 Select Case index
     Case 0
         If Image1(0).Tag = "0" Then
@@ -254,7 +249,7 @@ Select Case index
             Me.lblInfo.Caption = textoSeguir
             Image1(0).Tag = "1"
             Call Audio.PlayWave(SND_OVER)
-            Image1(0).Picture = LoadPicture(App.Path & "\Graficos\bsiguientea.jpg")
+            Image1(0).Picture = LoadPicture(App.path & "\Graficos\bsiguientea.jpg")
         End If
     Case 1
         If Image1(1).Tag = "0" Then
@@ -262,7 +257,7 @@ Select Case index
             Me.lblInfo.Caption = textoSalir
             Image1(1).Tag = "1"
             Call Audio.PlayWave(SND_OVER)
-            Image1(1).Picture = LoadPicture(App.Path & "\Graficos\bvolvera.jpg")
+            Image1(1).Picture = LoadPicture(App.path & "\Graficos\bvolvera.jpg")
         End If
     Case 2
         If Image1(2).Tag = "0" Then
@@ -270,7 +265,7 @@ Select Case index
             Me.lblInfo.Caption = textoKeypad
             Image1(2).Tag = "1"
             Call Audio.PlayWave(SND_OVER)
-            Image1(2).Picture = LoadPicture(App.Path & "\Graficos\bteclasa.jpg")
+            Image1(2).Picture = LoadPicture(App.path & "\Graficos\bteclasa.jpg")
         End If
         
 End Select

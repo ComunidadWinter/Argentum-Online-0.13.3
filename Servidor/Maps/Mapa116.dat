@@ -1,9 +1,13 @@
-[mapa116]
-Name=Marabel
-MusicNum=15-1
-StartPos=0-0-0
-pk=0
-Terreno=NIEVE
+[Mapa116]
+Name=Dungeon Marabel.
+MusicNum=15
+MagiaSinefecto=0
+InviSinEfecto=0
+ResuSinEfecto=1
+Terreno=BOSQUE
 Zona=DUNGEON
 Restringir=No
-BackUp=0
+BackUp= 1
+Pk=0
+
+NoEncriptarMP=0

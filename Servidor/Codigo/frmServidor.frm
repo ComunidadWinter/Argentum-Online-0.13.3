@@ -53,9 +53,9 @@ Begin VB.Form frmServidor
       Begin VB.PictureBox picCont 
          BackColor       =   &H00C0C0C0&
          BorderStyle     =   0  'None
-         Height          =   5055
+         Height          =   5295
          Left            =   0
-         ScaleHeight     =   337
+         ScaleHeight     =   353
          ScaleMode       =   3  'Pixel
          ScaleWidth      =   289
          TabIndex        =   7
@@ -75,7 +75,7 @@ Begin VB.Form frmServidor
             Height          =   255
             Left            =   120
             TabIndex        =   29
-            Top             =   4680
+            Top             =   4920
             Width           =   4095
          End
          Begin VB.CommandButton Command24 
@@ -92,7 +92,7 @@ Begin VB.Form frmServidor
             Height          =   255
             Left            =   120
             TabIndex        =   25
-            Top             =   4440
+            Top             =   4680
             Width           =   4095
          End
          Begin VB.CommandButton Command22 
@@ -109,7 +109,7 @@ Begin VB.Form frmServidor
             Height          =   255
             Left            =   120
             TabIndex        =   8
-            Top             =   4200
+            Top             =   4440
             Width           =   4095
          End
          Begin VB.CommandButton Command21 
@@ -126,7 +126,7 @@ Begin VB.Form frmServidor
             Height          =   255
             Left            =   120
             TabIndex        =   9
-            Top             =   3960
+            Top             =   4200
             Width           =   4095
          End
          Begin VB.CommandButton Command17 
@@ -143,7 +143,7 @@ Begin VB.Form frmServidor
             Height          =   255
             Left            =   120
             TabIndex        =   10
-            Top             =   3720
+            Top             =   3960
             Width           =   4095
          End
          Begin VB.CommandButton Command25 
@@ -160,7 +160,7 @@ Begin VB.Form frmServidor
             Height          =   255
             Left            =   120
             TabIndex        =   27
-            Top             =   3480
+            Top             =   3720
             Width           =   4095
          End
          Begin VB.CommandButton Command16 
@@ -177,6 +177,23 @@ Begin VB.Form frmServidor
             Height          =   255
             Left            =   120
             TabIndex        =   11
+            Top             =   3480
+            Width           =   4095
+         End
+         Begin VB.CommandButton Command28 
+            Caption         =   "Reload Balance.dat"
+            BeginProperty Font 
+               Name            =   "Tahoma"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   255
+            Left            =   120
+            TabIndex        =   30
             Top             =   3240
             Width           =   4095
          End
@@ -510,22 +527,20 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-'Argentum Online 0.9.0.2
+'Argentum Online 0.11.6
 'Copyright (C) 2002 Márquez Pablo Ignacio
 '
 'This program is free software; you can redistribute it and/or modify
-'it under the terms of the GNU General Public License as published by
-'the Free Software Foundation; either version 2 of the License, or
-'any later version.
+'it under the terms of the Affero General Public License;
+'either version 1 of the License, or any later version.
 '
 'This program is distributed in the hope that it will be useful,
 'but WITHOUT ANY WARRANTY; without even the implied warranty of
 'MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'GNU General Public License for more details.
+'Affero General Public License for more details.
 '
-'You should have received a copy of the GNU General Public License
-'along with this program; if not, write to the Free Software
-'Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+'You should have received a copy of the Affero General Public License
+'along with this program; if not, you can find it at http://www.affero.org/oagpl.html
 '
 'Argentum Online is based on Baronsoft's VB6 Online RPG
 'You can contact the original creator of ORE at aaron@baronsoft.com
@@ -603,9 +618,7 @@ Call LoadSini
 End Sub
 
 Private Sub Command17_Click()
-Call DescargaNpcsDat
-Call CargaNpcsDat
-
+    Call CargaNpcsDat
 End Sub
 
 Private Sub Command18_Click()
@@ -668,11 +681,11 @@ Private Sub Command21_Click()
 
 If EnPausa = False Then
     EnPausa = True
-    Call SendData(SendTarget.ToAll, 0, 0, "BKW")
+    Call SendData(SendTarget.ToAll, 0, PrepareMessagePauseToggle())
     Command21.Caption = "Reanudar el servidor"
 Else
     EnPausa = False
-    Call SendData(SendTarget.ToAll, 0, 0, "BKW")
+    Call SendData(SendTarget.ToAll, 0, PrepareMessagePauseToggle())
     Command21.Caption = "Pausar el servidor"
 End If
 
@@ -726,6 +739,10 @@ End Sub
 Private Sub Command27_Click()
 frmUserList.Show
 
+End Sub
+
+Private Sub Command28_Click()
+    Call LoadBalance
 End Sub
 
 Private Sub Command3_Click()
@@ -783,8 +800,8 @@ Next
 LastUser = 0
 NumUsers = 0
 
-ReDim Npclist(1 To MAXNPCS) As npc 'NPCS
-ReDim CharList(1 To MAXCHARS) As Integer
+Call FreeNPCs
+Call FreeCharIndexes
 
 Call LoadSini
 Call CargarBackUp
@@ -848,20 +865,20 @@ Command20.Visible = True
 Command26.Visible = False
 #End If
 
-VS1.Min = 0
+VS1.min = 0
 If picCont.Height > picFuera.ScaleHeight Then
     VS1.max = picCont.Height - picFuera.ScaleHeight
 Else
     VS1.max = 0
 End If
-picCont.Top = -VS1.Value
+picCont.Top = -VS1.value
 
 End Sub
 
 Private Sub VS1_Change()
-picCont.Top = -VS1.Value
+picCont.Top = -VS1.value
 End Sub
 
 Private Sub VS1_Scroll()
-picCont.Top = -VS1.Value
+picCont.Top = -VS1.value
 End Sub

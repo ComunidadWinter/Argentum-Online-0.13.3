@@ -4,10 +4,10 @@ Begin VB.Form FrmInterv
    ClientHeight    =   4710
    ClientLeft      =   60
    ClientTop       =   345
-   ClientWidth     =   7695
+   ClientWidth     =   7650
    LinkTopic       =   "Form1"
    ScaleHeight     =   4710
-   ScaleWidth      =   7695
+   ScaleWidth      =   7650
    StartUpPosition =   3  'Windows Default
    Begin VB.CommandButton Command2 
       Caption         =   "Guardar Intervalos"
@@ -139,10 +139,10 @@ Begin VB.Form FrmInterv
             Strikethrough   =   0   'False
          EndProperty
          Height          =   1650
-         Left            =   165
+         Left            =   120
          TabIndex        =   40
-         Top             =   300
-         Width           =   2580
+         Top             =   240
+         Width           =   2625
          Begin VB.TextBox txtCmdExec 
             Height          =   285
             Left            =   1320
@@ -610,22 +610,20 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-'Argentum Online 0.9.0.2
+'Argentum Online 0.11.6
 'Copyright (C) 2002 Márquez Pablo Ignacio
 '
 'This program is free software; you can redistribute it and/or modify
-'it under the terms of the GNU General Public License as published by
-'the Free Software Foundation; either version 2 of the License, or
-'any later version.
+'it under the terms of the Affero General Public License;
+'either version 1 of the License, or any later version.
 '
 'This program is distributed in the hope that it will be useful,
 'but WITHOUT ANY WARRANTY; without even the implied warranty of
 'MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'GNU General Public License for more details.
+'Affero General Public License for more details.
 '
-'You should have received a copy of the GNU General Public License
-'along with this program; if not, write to the Free Software
-'Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+'You should have received a copy of the Affero General Public License
+'along with this program; if not, you can find it at http://www.affero.org/oagpl.html
 '
 'Argentum Online is based on Baronsoft's VB6 Online RPG
 'You can contact the original creator of ORE at aaron@baronsoft.com
@@ -667,7 +665,7 @@ frmMain.TIMER_AI.Interval = val(txtAI.Text)
 IntervaloUserPuedeTrabajar = val(txtTrabajo.Text)
 IntervaloUserPuedeAtacar = val(txtPuedeAtacar.Text)
 frmMain.tLluvia.Interval = val(txtIntervaloPerdidaStaminaLluvia.Text)
-frmMain.CmdExec.Interval = val(txtCmdExec.Text)
+
 
 
 End Sub
@@ -705,7 +703,7 @@ Call WriteVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloNpcPuedeAtacar", f
 Call WriteVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloTrabajo", str(IntervaloUserPuedeTrabajar))
 Call WriteVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloUserPuedeAtacar", str(IntervaloUserPuedeAtacar))
 Call WriteVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloPerdidaStaminaLluvia", frmMain.tLluvia.Interval)
-Call WriteVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloTimerExec", frmMain.CmdExec.Interval)
+
 
 MsgBox "Los intervalos se han guardado sin problemas"
 

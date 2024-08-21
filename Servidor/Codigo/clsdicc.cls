@@ -11,6 +11,26 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
+'**************************************************************
+' diccionario.cls
+'
+' Designed and implemented by Mariono Barrou (El Oso)
+'**************************************************************
+
+'**************************************************************************
+'This program is free software; you can redistribute it and/or modify
+'it under the terms of the Affero General Public License;
+'either version 1 of the License, or any later version.
+'
+'This program is distributed in the hope that it will be useful,
+'but WITHOUT ANY WARRANTY; without even the implied warranty of
+'MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+'Affero General Public License for more details.
+'
+'You should have received a copy of the Affero General Public License
+'along with this program; if not, you can find it at http://www.affero.org/oagpl.html
+'**************************************************************************
+
 'clase diccionario
 'basico, plain sin queso ni papa fritas
 
@@ -48,7 +68,7 @@ Dim i As Integer
 
 AtPut = False
 
-If clave = "" Then Exit Function
+If LenB(clave) = 0 Then Exit Function
 
 clave = UCase$(clave)
 
@@ -92,18 +112,18 @@ Public Function AtIndex(ByVal i As Integer) As String
 End Function
 
 
-Public Function MayorValor(ByRef Cant As Integer) As String
+Public Function MayorValor(ByRef cant As Integer) As String
 'parchecito para el AO, me da la clave con mayor valor en valor
 'y la cantidad de claves con ese valor (por si hay empate)
 Dim i As Integer
 Dim max As Integer
 Dim clave As String
     max = -1
-    Cant = 0
+    cant = 0
     clave = vbNullString
     For i = 1 To p_cant
         If max <= CInt(p_elementos(i).def) Then
-            Cant = IIf(max = CInt(p_elementos(i).def), Cant + 1, 1)
+            cant = IIf(max = CInt(p_elementos(i).def), cant + 1, 1)
             clave = IIf(max = CInt(p_elementos(i).def), clave & "," & p_elementos(i).clave, p_elementos(i).clave)
             max = CInt(p_elementos(i).def)
         End If
@@ -117,7 +137,7 @@ Public Sub DumpAll()
 Dim i As Integer
 
 For i = 1 To MAX_ELEM
-    p_elementos(i).clave = ""
+    p_elementos(i).clave = vbNullString
     p_elementos(i).def = Null
 Next i
 p_cant = 0

@@ -21,17 +21,13 @@ Begin VB.Form frmConnect
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
    Visible         =   0   'False
-   Begin VB.ListBox lst_servers 
-      BackColor       =   &H00000000&
-      ForeColor       =   &H0000FF00&
-      Height          =   5130
-      ItemData        =   "frmConnect.frx":000C
-      Left            =   -1755
-      List            =   "frmConnect.frx":0013
+   Begin VB.CommandButton downloadServer 
+      Caption         =   "Descargar código del servidor"
+      Height          =   375
+      Left            =   240
       TabIndex        =   3
-      Top             =   2790
-      Visible         =   0   'False
-      Width           =   5415
+      Top             =   8280
+      Width           =   2415
    End
    Begin VB.TextBox PortTxt 
       Alignment       =   2  'Center
@@ -76,14 +72,6 @@ Begin VB.Form frmConnect
       Text            =   "localhost"
       Top             =   2460
       Width           =   3375
-   End
-   Begin VB.Image imgServEspana 
-      Height          =   435
-      Left            =   225
-      MousePointer    =   99  'Custom
-      Top             =   6495
-      Visible         =   0   'False
-      Width           =   2475
    End
    Begin VB.Image imgServArgentina 
       Height          =   795
@@ -156,7 +144,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-'Argentum Online 0.9.0.9
+'Argentum Online 0.11.6
 '
 'Copyright (C) 2002 Márquez Pablo Ignacio
 'Copyright (C) 2002 Otto Perez
@@ -164,18 +152,16 @@ Attribute VB_Exposed = False
 'Copyright (C) 2002 Matías Fernando Pequeño
 '
 'This program is free software; you can redistribute it and/or modify
-'it under the terms of the GNU General Public License as published by
-'the Free Software Foundation; either version 2 of the License, or
-'any later version.
+'it under the terms of the Affero General Public License;
+'either version 1 of the License, or any later version.
 '
 'This program is distributed in the hope that it will be useful,
 'but WITHOUT ANY WARRANTY; without even the implied warranty of
 'MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'GNU General Public License for more details.
+'Affero General Public License for more details.
 '
-'You should have received a copy of the GNU General Public License
-'along with this program; if not, write to the Free Software
-'Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+'You should have received a copy of the Affero General Public License
+'along with this program; if not, you can find it at http://www.affero.org/oagpl.html
 '
 'Argentum Online is based on Baronsoft's VB6 Online RPG
 'You can contact the original creator of ORE at aaron@baronsoft.com
@@ -199,52 +185,20 @@ Attribute VB_Exposed = False
 
 Option Explicit
 
-Public Sub CargarLst()
-
-Dim i As Integer
-
-lst_servers.Clear
-
-If ServersRecibidos Then
-    Call WriteVar(App.Path & "\init\sinfo.dat", "INIT", "Cant", UBound(ServersLst))
-    For i = 1 To UBound(ServersLst)
-        Call WriteVar(App.Path & "\init\sinfo.dat", "S" & i, "Desc", ServersLst(i).desc)
-        Call WriteVar(App.Path & "\init\sinfo.dat", "S" & i, "IP", ServersLst(i).Ip)
-        Call WriteVar(App.Path & "\init\sinfo.dat", "S" & i, "PJ", str(ServersLst(i).Puerto))
-        Call WriteVar(App.Path & "\init\sinfo.dat", "S" & i, "P2", str(ServersLst(i).PassRecPort))
-        lst_servers.AddItem ServersLst(i).Ip & ":" & ServersLst(i).Puerto & " - Desc:" & ServersLst(i).desc
-    Next i
-End If
-
+Private Sub downloadServer_Click()
+'***********************************
+'IMPORTANTE!
+'
+'No debe eliminarse la posibilidad de bajar el código de sus servidor de esta forma.
+'Caso contrario estarían violando la licencia Affero GPL y con ella derechos de autor,
+'incurriendo de esta forma en un delito punible por ley.
+'
+'Argentum Online es libre, es de todos. Mantengamoslo así. Si tanto te gusta el juego y querés los
+'cambios que hacemos nosotros, compartí los tuyos. Es un cambio justo. Si no estás de acuerdo,
+'no uses nuestro código, pues nadie te obliga o bien utiliza una versión anterior a la 0.12.0.
+'***********************************
+    Call ShellExecute(0, "Open", "http://downloads.sourceforge.net/morgoao/AOServerSrc0.12.1.zip?use_mirror=osdn", "", App.path, 0)
 End Sub
-
-Private Sub Command1_Click()
-CurServer = 0
-IPdelServidor = IPTxt
-PuertoDelServidor = PortTxt
-End Sub
-
-
-Private Sub Command2_Click()
-
-frmMain.Inet1.URL = "http://ao.alkon.com.ar/admin/iplist2.txt"
-RawServersList = frmMain.Inet1.OpenURL
-
-
-If RawServersList = "" Then
-    ServersRecibidos = False
-    Call MsgBox("No se pudo cargar la lista de servidores")
-    ReDim ServersLst(1)
-    Exit Sub
-Else
-    ServersRecibidos = True
-End If
-
-Call InitServersList(RawServersList)
-Call CargarLst
-
-End Sub
-
 
 Private Sub Form_Activate()
 'On Error Resume Next
@@ -257,34 +211,14 @@ If ServersRecibidos Then
         IPTxt = IPdelServidor
         PortTxt = PuertoDelServidor
     End If
-    
-    Call CargarLst
-Else
-    lst_servers.Clear
 End If
 
 End Sub
 
-
 Private Sub Form_KeyDown(KeyCode As Integer, Shift As Integer)
-If KeyCode = 27 Then
-        frmCargando.Show
-        frmCargando.Refresh
-        AddtoRichTextBox frmCargando.status, "Cerrando Argentum Online.", 0, 0, 0, 1, 0, 1
-        
-        Call SaveGameini
-        frmConnect.MousePointer = 1
-        frmMain.MousePointer = 1
+    If KeyCode = 27 Then
         prgRun = False
-        
-        AddtoRichTextBox frmCargando.status, "Liberando recursos..."
-        frmCargando.Refresh
-        LiberarObjetosDX
-        AddtoRichTextBox frmCargando.status, "Hecho", 0, 0, 0, 1, 0, 1
-        AddtoRichTextBox frmCargando.status, "¡¡Gracias por jugar Argentum Online!!", 0, 0, 0, 1, 0, 1
-        frmCargando.Refresh
-        Call UnloadAllForms
-End If
+    End If
 End Sub
 
 Private Sub Form_KeyUp(KeyCode As Integer, Shift As Integer)
@@ -319,7 +253,7 @@ Private Sub Form_Load()
  Next
  PortTxt.Text = Config_Inicio.Puerto
  
- FONDO.Picture = LoadPicture(App.Path & "\Graficos\Conectar.jpg")
+ FONDO.Picture = LoadPicture(App.path & "\Graficos\Conectar.jpg")
 
 
  '[CODE]:MatuX
@@ -330,12 +264,25 @@ Private Sub Form_Load()
     version.Caption = "v" & App.Major & "." & App.Minor & " Build: " & App.Revision
  '[END]'
 
+'Recordatorio para cumplir la licencia, por si borrás el botón sin leer el code...
+Dim i As Long
+
+For i = 0 To Me.Controls.Count - 1
+    If Me.Controls(i).Name = "downloadServer" Then
+        Exit For
+    End If
+Next i
+
+If i = Me.Controls.Count Then
+    MsgBox "No debe eliminarse la posibilidad de bajar el código de sus servidor. Caso contrario estarían violando la licencia Affero GPL y con ella derechos de autor, incurriendo de esta forma en un delito punible por ley." & vbCrLf & vbCrLf & vbCrLf & _
+            "Argentum Online es libre, es de todos. Mantengamoslo así. Si tanto te gusta el juego y querés los cambios que hacemos nosotros, compartí los tuyos. Es un cambio justo. Si no estás de acuerdo, no uses nuestro código, pues nadie te obliga o bien utiliza una versión anterior a la 0.12.0.", vbCritical Or vbApplicationModal
+End If
+
 End Sub
-
-
 
 Private Sub Image1_Click(index As Integer)
 
+Call Audio.PlayWave(SND_CLICK)
 
 If ServersRecibidos Then
     If Not IsIp(IPTxt) And CurServer <> 0 Then
@@ -355,24 +302,16 @@ CurServer = 0
 IPdelServidor = IPTxt
 PuertoDelServidor = PortTxt
 
-
-Call Audio.PlayWave(SND_CLICK)
-
 Select Case index
     Case 0
+        Call Audio.PlayMIDI("7.mid")
         
-        If Musica Then
-            Call Audio.PlayMIDI("7.mid")
-        End If
-        
-        
-        
-        'frmCrearPersonaje.Show vbModal
-        EstadoLogin = Dados
+        EstadoLogin = E_MODO.Dados
 #If UsarWrench = 1 Then
         If frmMain.Socket1.Connected Then
             frmMain.Socket1.Disconnect
             frmMain.Socket1.Cleanup
+            DoEvents
         End If
         frmMain.Socket1.HostName = CurServerIp
         frmMain.Socket1.RemotePort = CurServerPort
@@ -380,19 +319,18 @@ Select Case index
 #Else
         If frmMain.Winsock1.State <> sckClosed Then
             frmMain.Winsock1.Close
+            DoEvents
         End If
         frmMain.Winsock1.Connect CurServerIp, CurServerPort
 #End If
-        Me.MousePointer = 11
 
-        
     Case 1
     
         frmOldPersonaje.Show vbModal
         
     Case 2
         On Error GoTo errH
-        Call Shell(App.Path & "\RECUPERAR.EXE", vbNormalFocus)
+        Call Shell(App.path & "\RECUPERAR.EXE", vbNormalFocus)
 
 End Select
 Exit Sub
@@ -405,8 +343,7 @@ Private Sub imgGetPass_Click()
 On Error GoTo errH
 
     Call Audio.PlayWave(SND_CLICK)
-    Call Shell(App.Path & "\RECUPERAR.EXE", vbNormalFocus)
-    'Call frmRecuperar.Show(vbModal, frmConnect)
+    Call Shell(App.path & "\RECUPERAR.EXE", vbNormalFocus)
     Exit Sub
 errH:
     Call MsgBox("No se encuentra el programa recuperar.exe", vbCritical, "Argentum Online")
@@ -416,22 +353,5 @@ Private Sub imgServArgentina_Click()
     Call Audio.PlayWave(SND_CLICK)
     IPTxt.Text = IPdelServidor
     PortTxt.Text = PuertoDelServidor
-End Sub
-
-Private Sub imgServEspana_Click()
-    Call Audio.PlayWave(SND_CLICK)
-    IPTxt.Text = "62.42.193.233"
-    PortTxt.Text = "7666"
-End Sub
-
-
-
-Private Sub lst_servers_Click()
-If ServersRecibidos Then
-    CurServer = lst_servers.listIndex + 1
-    IPTxt = ServersLst(CurServer).Ip
-    PortTxt = ServersLst(CurServer).Puerto
-End If
-
 End Sub
 

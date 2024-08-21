@@ -134,6 +134,25 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+'**************************************************************
+' frmEstadisticas.frm
+'
+'**************************************************************
+
+'**************************************************************************
+'This program is free software; you can redistribute it and/or modify
+'it under the terms of the Affero General Public License;
+'either version 1 of the License, or any later version.
+'
+'This program is distributed in the hope that it will be useful,
+'but WITHOUT ANY WARRANTY; without even the implied warranty of
+'MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+'Affero General Public License for more details.
+'
+'You should have received a copy of the Affero General Public License
+'along with this program; if not, you can find it at http://www.affero.org/oagpl.html
+'**************************************************************************
+
 Option Explicit
 
 Private Sub Command1_Click()
@@ -146,10 +165,10 @@ If cboUsusColas.ListCount > 0 Then _
 
 For LoopC = 1 To LastUser
     If UserList(LoopC).flags.UserLogged And UserList(LoopC).ConnID >= 0 And UserList(LoopC).ConnIDValida Then
-        If UserList(LoopC).ColaSalida.Count > 0 Then
+        If UserList(LoopC).outgoingData.length > 0 Then
             N = N + 1
-            M = M + UserList(LoopC).ColaSalida.Count
-            cboUsusColas.AddItem UserList(LoopC).Name
+            M = M + UserList(LoopC).outgoingData.length
+            cboUsusColas.AddItem UserList(LoopC).name
         End If
     End If
 Next LoopC
@@ -190,7 +209,7 @@ Call ActualizaStats
 
 End Sub
 
-Private Sub lblStat_Click(Index As Integer)
+Private Sub lblStat_Click(index As Integer)
 Call ActualizaStats
 
 End Sub

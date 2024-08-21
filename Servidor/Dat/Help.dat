@@ -1,8 +1,0 @@
-[INIT]
-NumLines=4
-
-[Help]
-Line1=Reglamento del juego: http://ao.alkon.com.ar/reglamento.php
-Line2=Manual del juego: http://ao.alkon.com.ar/aomanual/index.htm
-Line3=Recordamos que es obligatorio leerlos.
-Line4=Para cualquier consulta que no figure en los dos apartados anteriores puedes llamar a un GM con este comando: /gm tumensaje

@@ -176,7 +176,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-'Argentum Online 0.9.0.9
+'Argentum Online 0.11.6
 '
 'Copyright (C) 2002 Márquez Pablo Ignacio
 'Copyright (C) 2002 Otto Perez
@@ -184,18 +184,16 @@ Attribute VB_Exposed = False
 'Copyright (C) 2002 Matías Fernando Pequeño
 '
 'This program is free software; you can redistribute it and/or modify
-'it under the terms of the GNU General Public License as published by
-'the Free Software Foundation; either version 2 of the License, or
-'any later version.
+'it under the terms of the Affero General Public License;
+'either version 1 of the License, or any later version.
 '
 'This program is distributed in the hope that it will be useful,
 'but WITHOUT ANY WARRANTY; without even the implied warranty of
 'MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'GNU General Public License for more details.
+'Affero General Public License for more details.
 '
-'You should have received a copy of the GNU General Public License
-'along with this program; if not, write to the Free Software
-'Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+'You should have received a copy of the Affero General Public License
+'along with this program; if not, you can find it at http://www.affero.org/oagpl.html
 '
 'Argentum Online is based on Baronsoft's VB6 Online RPG
 'You can contact the original creator of ORE at aaron@baronsoft.com
@@ -212,71 +210,63 @@ Attribute VB_Exposed = False
 
 Option Explicit
 
+Private Const MAX_DESC_LENGTH As Integer = 520
+Private Const MAX_CODEX_LENGTH As Integer = 100
 
 Private Sub Command1_Click(Index As Integer)
-Select Case Index
+    Select Case Index
+        Case 0
+            Unload Me
+        
+        Case 1
+            Dim fdesc As String
+            Dim Codex() As String
+            Dim k As Byte
+            Dim Cont As Byte
+    
+            fdesc = Replace(txtDesc, vbCrLf, "º", , , vbBinaryCompare)
+    
+            '    If Not AsciiValidos(fdesc) Then
+            '        MsgBox "La descripcion contiene caracteres invalidos"
+            '        Exit Sub
+            '    End If
 
-Case 0
-    Unload Me
-Case 1
-    Dim fdesc$
-    fdesc$ = Replace(txtDesc, vbCrLf, "º", , , vbBinaryCompare)
+            Cont = 0
+            For k = 0 To txtCodex1.UBound
+            '    If Not AsciiValidos(txtCodex1(k)) Then
+            '        MsgBox "El codex tiene invalidos"
+            '        Exit Sub
+            '    End If
+                If LenB(txtCodex1(k).Text) <> 0 Then Cont = Cont + 1
+            Next k
+            If Cont < 4 Then
+                MsgBox "Debes definir al menos cuatro mandamientos."
+                Exit Sub
+            End If
+                        
+            ReDim Codex(txtCodex1.UBound) As String
+            For k = 0 To txtCodex1.UBound
+                Codex(k) = txtCodex1(k)
+            Next k
     
-'    If Not AsciiValidos(fdesc$) Then
-'        MsgBox "La descripcion contiene caracteres invalidos"
-'        Exit Sub
-'    End If
-    
-    Dim k As Integer
-    Dim Cont As Integer
-    Cont = 0
-    For k = 0 To txtCodex1.UBound
-'        If Not AsciiValidos(txtCodex1(k)) Then
-'            MsgBox "El codex tiene invalidos"
-'            Exit Sub
-'        End If
-        If Len(txtCodex1(k).Text) > 0 Then Cont = Cont + 1
-    Next k
-    If Cont < 4 Then
-            MsgBox "Debes definir al menos cuatro mandamientos."
-            Exit Sub
-    End If
-    
-    Dim chunk$
-    
-    If CreandoClan Then
-        chunk$ = "CIG" & fdesc$
-        chunk$ = chunk$ & "¬" & ClanName & "¬" & Site & "¬" & Cont
-    Else
-        chunk$ = "DESCOD" & fdesc$ & "¬" & Cont
-    End If
-    
-    
-    
-    For k = 0 To txtCodex1.UBound
-        chunk$ = chunk$ & "¬" & txtCodex1(k)
-    Next k
-    
-    
-    Call SendData(chunk$)
-    
-    CreandoClan = False
-    
-    Unload Me
-    
-End Select
+            If CreandoClan Then
+                Call WriteCreateNewGuild(fdesc, ClanName, Site, Codex)
+            Else
+                Call WriteClanCodexUpdate(fdesc, Codex)
+            End If
 
-
-
+            CreandoClan = False
+            Unload Me
+            
+    End Select
 End Sub
 
-Private Sub Form_Deactivate()
-
-'If Not frmGuildLeader.Visible Then
-'    Me.SetFocus
-'Else
-'    'Unload Me
-'End If
-'
+Private Sub txtCodex1_Change(Index As Integer)
+    If Len(txtCodex1.Item(Index).Text) > MAX_CODEX_LENGTH Then _
+        txtCodex1.Item(Index).Text = Left$(txtCodex1.Item(Index).Text, MAX_CODEX_LENGTH)
 End Sub
 
+Private Sub txtDesc_Change()
+    If Len(txtDesc.Text) > MAX_DESC_LENGTH Then _
+        txtDesc.Text = Left$(txtDesc.Text, MAX_DESC_LENGTH)
+End Sub

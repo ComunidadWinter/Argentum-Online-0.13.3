@@ -57,7 +57,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-'Argentum Online 0.9.0.9
+'Argentum Online 0.11.6
 '
 'Copyright (C) 2002 Márquez Pablo Ignacio
 'Copyright (C) 2002 Otto Perez
@@ -65,18 +65,16 @@ Attribute VB_Exposed = False
 'Copyright (C) 2002 Matías Fernando Pequeño
 '
 'This program is free software; you can redistribute it and/or modify
-'it under the terms of the GNU General Public License as published by
-'the Free Software Foundation; either version 2 of the License, or
-'any later version.
+'it under the terms of the Affero General Public License;
+'either version 1 of the License, or any later version.
 '
 'This program is distributed in the hope that it will be useful,
 'but WITHOUT ANY WARRANTY; without even the implied warranty of
 'MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'GNU General Public License for more details.
+'Affero General Public License for more details.
 '
-'You should have received a copy of the GNU General Public License
-'along with this program; if not, write to the Free Software
-'Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+'You should have received a copy of the Affero General Public License
+'along with this program; if not, you can find it at http://www.affero.org/oagpl.html
 '
 'Argentum Online is based on Baronsoft's VB6 Online RPG
 'You can contact the original creator of ORE at aaron@baronsoft.com
@@ -92,6 +90,8 @@ Attribute VB_Exposed = False
 'Pablo Ignacio Márquez
 
 Option Explicit
+
+Private Const MAX_PROPOSAL_LENGTH As Integer = 520
 
 Public Nombre As String
 Public T As TIPO
@@ -129,11 +129,11 @@ If Text1 = "" Then
 End If
 
 If T = PAZ Then
-    Call SendData("PEACEOFF" & Nombre & "," & Replace(Text1, vbCrLf, "º"))
+    Call WriteGuildOfferPeace(Nombre, Replace(Text1, vbCrLf, "º"))
 ElseIf T = ALIANZA Then
-    Call SendData("ALLIEOFF" & Nombre & "," & Replace(Text1, vbCrLf, "º"))
+    Call WriteGuildOfferAlliance(Nombre, Replace(Text1, vbCrLf, "º"))
 ElseIf T = RECHAZOPJ Then
-    Call SendData("RECHAZAR" & Nombre & "," & Replace(Replace(Text1.Text, ",", " "), vbCrLf, " "))
+    Call WriteGuildRejectNewMember(Nombre, Replace(Replace(Text1.Text, ",", " "), vbCrLf, " "))
     'Sacamos el char de la lista de aspirantes
     Dim i As Long
     For i = 0 To frmGuildLeader.solicitudes.ListCount - 1
@@ -155,3 +155,7 @@ Private Sub Command2_Click()
 Unload Me
 End Sub
 
+Private Sub Text1_Change()
+    If Len(Text1.Text) > MAX_PROPOSAL_LENGTH Then _
+        Text1.Text = Left$(Text1.Text, MAX_PROPOSAL_LENGTH)
+End Sub

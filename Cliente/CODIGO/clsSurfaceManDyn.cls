@@ -30,7 +30,7 @@ Attribute VB_Exposed = False
 'This program is distributed in the hope that it will be useful,
 'but WITHOUT ANY WARRANTY; without even the implied warranty of
 'MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'GNU General Public License for more details.
+'Affero General Public License for more details.
 '
 'You should have received a copy of the GNU General Public License
 'along with this program; if not, write to the Free Software
@@ -158,18 +158,18 @@ Private Function BinarySearch(ByVal fileIndex As Long) As Long
 'Returns the index of the surface in the list, or the negation
 'of the position were it should be if not found (for binary insertion)
 '**************************************************************
-    Dim Min As Long
+    Dim min As Long
     Dim max As Long
     Dim mid As Long
     
-    Min = 0
+    min = 0
     max = surfaceIndexCount - 1
     
-    Do While Min <= max
-        mid = (Min + max) \ 2
+    Do While min <= max
+        mid = (min + max) \ 2
         
         If surfaceList(surfaceIndexes(mid)).fileIndex < fileIndex Then
-            Min = mid + 1
+            min = mid + 1
         ElseIf surfaceList(surfaceIndexes(mid)).fileIndex > fileIndex Then
             max = mid - 1
         Else
@@ -181,7 +181,7 @@ Private Function BinarySearch(ByVal fileIndex As Long) As Long
     
     'Not found, return the negation of the position where it should be
     '(all higher values are to the right of the list and lower values are to the left)
-    BinarySearch = Not mid
+    BinarySearch = Not min
 End Function
 
 Private Function LoadSurface(ByVal fileIndex As Long, ByVal listIndex As Long) As Long
@@ -191,7 +191,7 @@ Private Function LoadSurface(ByVal fileIndex As Long, ByVal listIndex As Long) A
 'Loads the surface named fileIndex + ".bmp" and inserts it to the
 'surface list in the listIndex position
 '**************************************************************
-On Error GoTo errHandler
+On Error GoTo ErrHandler
 
     Dim newSurface As SURFACE_ENTRY_DYN
     Dim ddsd As DDSURFACEDESC2
@@ -254,7 +254,7 @@ On Error GoTo errHandler
     LoadSurface = listIndex
 Exit Function
 
-errHandler:
+ErrHandler:
     If Err.Number = DDERR_OUTOFMEMORY Or Err.Number = DDERR_OUTOFVIDEOMEMORY Then
         If surfaceCount Then
             'Remove a surface and try again
@@ -266,7 +266,7 @@ errHandler:
         End If
     Else
         MsgBox "Un error inesperado ocurrió al intentar cargar el gráfico " & filePath & ". " & vbCrLf & _
-                "El código de error es " & CStr(Err.Number) & vbCrLf & "Copia este mensaje y notifica a los administradores.", _
+                "El código de error es " & CStr(Err.Number) & " - " & Err.Description & vbCrLf & "Copia este mensaje y notifica a los administradores.", _
                 vbOKOnly Or vbCritical Or vbExclamation, "Error"
         End
     End If
@@ -298,7 +298,7 @@ Private Sub InsertSurface(ByRef Surface As SURFACE_ENTRY_DYN, ByVal listIndex As
 'Last Modify Date: 3/06/2006
 'Inserts the given surface in the requested position of the surface list
 '**************************************************************
-On Error GoTo errHandler
+On Error GoTo ErrHandler
     Dim i As Long
     
     'Search for an empty spot in the list
@@ -337,7 +337,7 @@ On Error GoTo errHandler
     surfaceIndexCount = surfaceIndexCount + 1
 Exit Sub
 
-errHandler:
+ErrHandler:
     MsgBox "Un error irreparable ocurrió al insertar un nuevo gráfico en la lista." & vbCrLf _
             & "El cliente se cerrará" & vbCrLf _
             & "Intente usar el cliente no dinámico"

@@ -1,5 +1,5 @@
 [INIT]
-NumArmas=15
+NumArmas=20
 
 [Arma1]
 Dir1=4719 'norte
@@ -97,5 +97,41 @@ Dir3=13383
 Dir1=13384
 Dir4=13385
 Dir2=13386
+
+'Alforja
+[Arma16]
+Dir3=3607
+Dir1=3608
+Dir4=3609
+Dir2=3610
+
+'Mochila
+[Arma17]
+Dir3=3633
+Dir1=3634
+Dir4=3635
+Dir2=3636
+
+'Katana
+[Arma18]
+Dir3=3659
+Dir1=3660
+Dir4=3661
+Dir2=3662
+
+'Espada de Tancredo
+[Arma19]
+Dir3=19469
+Dir1=19470
+Dir4=19471
+Dir2=19472
+
+'Espada de los cielos
+[Arma20]
+Dir3=19710
+Dir1=19711
+Dir4=19712
+Dir2=19713
+
 
 

@@ -66,7 +66,8 @@ Begin VB.Form frmCantidad
       EndProperty
       Height          =   375
       Left            =   330
-      TabIndex        =   1
+      MaxLength       =   5
+      TabIndex        =   0
       Top             =   525
       Width           =   2625
    End
@@ -85,7 +86,7 @@ Begin VB.Form frmCantidad
       ForeColor       =   &H000000FF&
       Height          =   375
       Left            =   585
-      TabIndex        =   0
+      TabIndex        =   1
       Top             =   165
       Width           =   2415
    End
@@ -95,7 +96,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-'Argentum Online 0.9.0.9
+'Argentum Online 0.11.6
 '
 'Copyright (C) 2002 Márquez Pablo Ignacio
 'Copyright (C) 2002 Otto Perez
@@ -103,18 +104,16 @@ Attribute VB_Exposed = False
 'Copyright (C) 2002 Matías Fernando Pequeño
 '
 'This program is free software; you can redistribute it and/or modify
-'it under the terms of the GNU General Public License as published by
-'the Free Software Foundation; either version 2 of the License, or
-'any later version.
+'it under the terms of the Affero General Public License;
+'either version 1 of the License, or any later version.
 '
 'This program is distributed in the hope that it will be useful,
 'but WITHOUT ANY WARRANTY; without even the implied warranty of
 'MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'GNU General Public License for more details.
+'Affero General Public License for more details.
 '
-'You should have received a copy of the GNU General Public License
-'along with this program; if not, write to the Free Software
-'Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+'You should have received a copy of the Affero General Public License
+'along with this program; if not, you can find it at http://www.affero.org/oagpl.html
 '
 'Argentum Online is based on Baronsoft's VB6 Online RPG
 'You can contact the original creator of ORE at aaron@baronsoft.com
@@ -132,54 +131,56 @@ Attribute VB_Exposed = False
 Option Explicit
 
 Private Sub Command1_Click()
-frmCantidad.Visible = False
-SendData "TI" & Inventario.SelectedItem & "," & frmCantidad.Text1.Text
-frmCantidad.Text1.Text = "0"
+    If LenB(frmCantidad.Text1.Text) > 0 Then
+        If Not IsNumeric(frmCantidad.Text1.Text) Then Exit Sub  'Should never happen
+        Call WriteDrop(Inventario.SelectedItem, frmCantidad.Text1.Text)
+        frmCantidad.Text1.Text = ""
+    End If
+    
+    Unload Me
 End Sub
 
 
 Private Sub Command2_Click()
+    If Inventario.SelectedItem = 0 Then Exit Sub
+    
+    If Inventario.SelectedItem <> FLAGORO Then
+        Call WriteDrop(Inventario.SelectedItem, Inventario.Amount(Inventario.SelectedItem))
+        Unload Me
+    Else
+        If UserGLD > 10000 Then
+            Call WriteDrop(Inventario.SelectedItem, 10000)
+            Unload Me
+        Else
+            Call WriteDrop(Inventario.SelectedItem, UserGLD)
+            Unload Me
+        End If
+    End If
 
-
-frmCantidad.Visible = False
-If Inventario.SelectedItem <> FLAGORO Then
-    SendData "TI" & Inventario.SelectedItem & "," & Inventario.Amount(Inventario.SelectedItem)
-Else
-    SendData "TI" & Inventario.SelectedItem & "," & UserGLD
-End If
-
-frmCantidad.Text1.Text = "0"
-
-End Sub
-
-Private Sub Form_Deactivate()
-'Unload Me
+    frmCantidad.Text1.Text = ""
 End Sub
 
 Private Sub text1_Change()
-On Error GoTo errHandler
+On Error GoTo ErrHandler
     If Val(Text1.Text) < 0 Then
-        Text1.Text = MAX_INVENTORY_OBJS
+        Text1.Text = "1"
     End If
     
     If Val(Text1.Text) > MAX_INVENTORY_OBJS Then
-        If Inventario.SelectedItem <> FLAGORO Or Val(Text1.Text) > UserGLD Then
-            Text1.Text = "1"
-        End If
+        Text1.Text = "10000"
     End If
     
     Exit Sub
     
-errHandler:
+ErrHandler:
     'If we got here the user may have pasted (Shift + Insert) a REALLY large number, causing an overflow, so we set amount back to 1
     Text1.Text = "1"
 End Sub
 
-
 Private Sub Text1_KeyPress(KeyAscii As Integer)
-If (KeyAscii <> 8) Then
-    If (KeyAscii < 48 Or KeyAscii > 57) Then
-        KeyAscii = 0
+    If (KeyAscii <> 8) Then
+        If (KeyAscii < 48 Or KeyAscii > 57) Then
+            KeyAscii = 0
+        End If
     End If
-End If
 End Sub

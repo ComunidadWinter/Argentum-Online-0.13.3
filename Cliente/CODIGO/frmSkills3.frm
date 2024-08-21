@@ -1210,7 +1210,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-'Argentum Online 0.9.0.9
+'Argentum Online 0.11.6
 '
 'Copyright (C) 2002 Márquez Pablo Ignacio
 'Copyright (C) 2002 Otto Perez
@@ -1218,18 +1218,16 @@ Attribute VB_Exposed = False
 'Copyright (C) 2002 Matías Fernando Pequeño
 '
 'This program is free software; you can redistribute it and/or modify
-'it under the terms of the GNU General Public License as published by
-'the Free Software Foundation; either version 2 of the License, or
-'any later version.
+'it under the terms of the Affero General Public License;
+'either version 1 of the License, or any later version.
 '
 'This program is distributed in the hope that it will be useful,
 'but WITHOUT ANY WARRANTY; without even the implied warranty of
 'MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'GNU General Public License for more details.
+'Affero General Public License for more details.
 '
-'You should have received a copy of the GNU General Public License
-'along with this program; if not, write to the Free Software
-'Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+'You should have received a copy of the Affero General Public License
+'along with this program; if not, you can find it at http://www.affero.org/oagpl.html
 '
 'Argentum Online is based on Baronsoft's VB6 Online RPG
 'You can contact the original creator of ORE at aaron@baronsoft.com
@@ -1251,12 +1249,12 @@ Private Sub Command1_Click(index As Integer)
 Call Audio.PlayWave(SND_CLICK)
 
 Dim indice
-If index Mod 2 = 0 Then
+If (index And &H1) = 0 Then
     If Alocados > 0 Then
         indice = index \ 2 + 1
         If indice > NUMSKILLS Then indice = NUMSKILLS
-        If Val(text1(indice).Caption) < MAXSKILLPOINTS Then
-            text1(indice).Caption = Val(text1(indice).Caption) + 1
+        If Val(Text1(indice).Caption) < MAXSKILLPOINTS Then
+            Text1(indice).Caption = Val(Text1(indice).Caption) + 1
             flags(indice) = flags(indice) + 1
             Alocados = Alocados - 1
         End If
@@ -1266,34 +1264,30 @@ Else
     If Alocados < SkillPoints Then
         
         indice = index \ 2 + 1
-        If Val(text1(indice).Caption) > 0 And flags(indice) > 0 Then
-            text1(indice).Caption = Val(text1(indice).Caption) - 1
+        If Val(Text1(indice).Caption) > 0 And flags(indice) > 0 Then
+            Text1(indice).Caption = Val(Text1(indice).Caption) - 1
             flags(indice) = flags(indice) - 1
             Alocados = Alocados + 1
         End If
     End If
 End If
 
-puntos.Caption = "Puntos:" & Alocados
-End Sub
-
-Private Sub Form_Deactivate()
-'Me.Visible = False
+Puntos.Caption = "Puntos:" & Alocados
 End Sub
 
 Private Sub Form_Load()
 
-Image1.Picture = LoadPicture(App.Path & "\Graficos\Botónok.jpg")
+Image1.Picture = LoadPicture(App.path & "\Graficos\Botónok.jpg")
 
 
 'Nombres de los skills
 
-Dim l
+Dim L
 Dim i As Integer
 i = 1
-For Each l In Label2
-    l.Caption = SkillsNames(i)
-    l.AutoSize = True
+For Each L In Label2
+    L.Caption = SkillsNames(i)
+    L.AutoSize = True
     i = i + 1
 Next
 i = 0
@@ -1304,10 +1298,10 @@ ReDim flags(1 To NUMSKILLS)
 
 'Cargamos el jpg correspondiente
 For i = 0 To NUMSKILLS * 2 - 1
-    If i Mod 2 = 0 Then
-        command1(i).Picture = LoadPicture(App.Path & "\Graficos\BotónMás.jpg")
+    If (i And &H1) = 0 Then
+        Command1(i).Picture = LoadPicture(App.path & "\Graficos\BotónMás.jpg")
     Else
-        command1(i).Picture = LoadPicture(App.Path & "\Graficos\BotónMenos.jpg")
+        Command1(i).Picture = LoadPicture(App.path & "\Graficos\BotónMenos.jpg")
     End If
 Next
 
@@ -1315,18 +1309,18 @@ Next
 End Sub
 
 Private Sub Image1_Click()
-    Dim i As Integer
-    Dim cad As String
-    
+    Dim skillChanges(NUMSKILLS) As Byte
+    Dim i As Long
+
     For i = 1 To NUMSKILLS
-        cad = cad & flags(i) & ","
+        skillChanges(i) = CByte(Text1(i).Caption) - UserSkills(i)
         'Actualizamos nuestros datos locales
-        UserSkills(i) = Val(text1(i).Caption)
+        UserSkills(i) = Val(Text1(i).Caption)
     Next i
     
-    SendData "SKSE" & cad
+    Call WriteModifySkills(skillChanges())
+    
     If Alocados = 0 Then frmMain.Label1.Visible = False
     SkillPoints = Alocados
     Unload Me
 End Sub
-

@@ -166,7 +166,7 @@ Begin VB.Form frmGuildBrief
       Begin VB.Label Codex 
          Height          =   255
          Index           =   1
-         Left            =   210
+         Left            =   240
          TabIndex        =   11
          Top             =   600
          Width           =   6735
@@ -291,7 +291,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-'Argentum Online 0.9.0.9
+'Argentum Online 0.11.6
 '
 'Copyright (C) 2002 Márquez Pablo Ignacio
 'Copyright (C) 2002 Otto Perez
@@ -299,18 +299,16 @@ Attribute VB_Exposed = False
 'Copyright (C) 2002 Matías Fernando Pequeño
 '
 'This program is free software; you can redistribute it and/or modify
-'it under the terms of the GNU General Public License as published by
-'the Free Software Foundation; either version 2 of the License, or
-'any later version.
+'it under the terms of the Affero General Public License;
+'either version 1 of the License, or any later version.
 '
 'This program is distributed in the hope that it will be useful,
 'but WITHOUT ANY WARRANTY; without even the implied warranty of
 'MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'GNU General Public License for more details.
+'Affero General Public License for more details.
 '
-'You should have received a copy of the GNU General Public License
-'along with this program; if not, write to the Free Software
-'Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+'You should have received a copy of the Affero General Public License
+'along with this program; if not, you can find it at http://www.affero.org/oagpl.html
 '
 'Argentum Online is based on Baronsoft's VB6 Online RPG
 'You can contact the original creator of ORE at aaron@baronsoft.com
@@ -329,79 +327,30 @@ Option Explicit
 
 Public EsLeader As Boolean
 
-
-Public Sub ParseGuildInfo(ByVal Buffer As String)
-
-If Not EsLeader Then
-    guerra.Visible = False
-    aliado.Visible = False
-    Command3.Visible = False
-Else
-    guerra.Visible = True
-    aliado.Visible = True
-    Command3.Visible = True
-End If
-
-Nombre.Caption = "Nombre:" & ReadField(1, Buffer, Asc("¬"))
-fundador.Caption = "Fundador:" & ReadField(2, Buffer, Asc("¬"))
-creacion.Caption = "Fecha de creacion:" & ReadField(3, Buffer, Asc("¬"))
-lider.Caption = "Lider:" & ReadField(4, Buffer, Asc("¬"))
-web.Caption = "Web site:" & ReadField(5, Buffer, Asc("¬"))
-Miembros.Caption = "Miembros:" & ReadField(6, Buffer, Asc("¬"))
-eleccion.Caption = "Dias para proxima eleccion de lider:" & ReadField(7, Buffer, Asc("¬"))
-'Oro.Caption = "Oro:" & ReadField(8, Buffer, Asc("¬"))
-lblAlineacion.Caption = "Alineación: " & ReadField(8, Buffer, Asc("¬"))
-Enemigos.Caption = "Clanes enemigos:" & ReadField(9, Buffer, Asc("¬"))
-aliados.Caption = "Clanes aliados:" & ReadField(10, Buffer, Asc("¬"))
-antifaccion.Caption = "Puntos Antifaccion: " & ReadField(11, Buffer, Asc("¬"))
-
-Dim T As Long
-
-For T = 1 To 8
-    Codex(T - 1).Caption = ReadField(11 + T, Buffer, Asc("¬"))
-Next T
-
-Dim des As String
-
-des = ReadField(20, Buffer, Asc("¬"))
-desc.Text = Replace(des, "º", vbCrLf)
-
-Me.Show vbModal, frmMain
-
-End Sub
-
 Private Sub aliado_Click()
-frmCommet.Nombre = Right(Nombre.Caption, Len(Nombre.Caption) - 7)
-frmCommet.T = ALIANZA
-frmCommet.Caption = "Ingrese propuesta de alianza"
-Call frmCommet.Show(vbModal, frmGuildBrief)
-
-'Call SendData("OFRECALI" & Right(Nombre, Len(Nombre) - 7))
-'Unload Me
+    frmCommet.nombre = Right(nombre.Caption, Len(nombre.Caption) - 7)
+    frmCommet.T = TIPO.ALIANZA
+    frmCommet.Caption = "Ingrese propuesta de alianza"
+    Call frmCommet.Show(vbModal, frmGuildBrief)
 End Sub
 
 Private Sub Command1_Click()
-Unload Me
+    Unload Me
 End Sub
 
 Private Sub Command2_Click()
-
-Call frmGuildSol.RecieveSolicitud(Right$(Nombre, Len(Nombre) - 7))
-Call frmGuildSol.Show(vbModal, frmGuildBrief)
-'Unload Me
-
+    Call frmGuildSol.RecieveSolicitud(Right$(nombre, Len(nombre) - 7))
+    Call frmGuildSol.Show(vbModal, frmGuildBrief)
 End Sub
 
 Private Sub Command3_Click()
-frmCommet.Nombre = Right(Nombre.Caption, Len(Nombre.Caption) - 7)
-frmCommet.T = PAZ
-frmCommet.Caption = "Ingrese propuesta de paz"
-Call frmCommet.Show(vbModal, frmGuildBrief)
-'Unload Me
+    frmCommet.nombre = Right(nombre.Caption, Len(nombre.Caption) - 7)
+    frmCommet.T = TIPO.PAZ
+    frmCommet.Caption = "Ingrese propuesta de paz"
+    Call frmCommet.Show(vbModal, frmGuildBrief)
 End Sub
 
-
 Private Sub Guerra_Click()
-Call SendData("DECGUERR" & Right(Nombre.Caption, Len(Nombre.Caption) - 7))
-Unload Me
+    Call WriteGuildDeclareWar(Right(nombre.Caption, Len(nombre.Caption) - 7))
+    Unload Me
 End Sub

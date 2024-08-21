@@ -1,4 +1,23 @@
 Attribute VB_Name = "WSKSOCK"
+'**************************************************************
+' WSKSOCK.bas
+'
+'**************************************************************
+
+'**************************************************************************
+'This program is free software; you can redistribute it and/or modify
+'it under the terms of the Affero General Public License;
+'either version 1 of the License, or any later version.
+'
+'This program is distributed in the hope that it will be useful,
+'but WITHOUT ANY WARRANTY; without even the implied warranty of
+'MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+'Affero General Public License for more details.
+'
+'You should have received a copy of the Affero General Public License
+'along with this program; if not, you can find it at http://www.affero.org/oagpl.html
+'**************************************************************************
+
 #If UsarQueSocket = 1 Then
 
 'date stamp: sept 1, 1996 (for version control, please don't remove)
@@ -132,6 +151,11 @@ Public Const WSA_FLAG_OVERLAPPED = &H1
 Public Const CF_ACCEPT = &H0
 Public Const CF_REJECT = &H1
 
+'Agregado por Maraxus
+Public Const SD_RECEIVE As Long = &H0&
+Public Const SD_SEND As Long = &H1&
+Public Const SD_BOTH As Long = &H2&
+
 Public Const INVALID_SOCKET = -1
 Public Const SOCKET_ERROR = -1
 
@@ -224,28 +248,28 @@ Global Const WSANO_ADDRESS = 11004
     Public Const FD_CONNECT = &H10
     Public Const FD_CLOSE = &H20
 '---SOCKET FUNCTIONS
-    Public Declare Function accept Lib "ws2_32.DLL" (ByVal s As Integer, addr As sockaddr, AddrLen As Integer) As Integer
-    Public Declare Function bind Lib "ws2_32.DLL" (ByVal s As Integer, addr As sockaddr, ByVal namelen As Integer) As Integer
-    Public Declare Function apiclosesocket Lib "ws2_32.DLL" Alias "closesocket" (ByVal s As Integer) As Integer
-    Public Declare Function connect Lib "ws2_32.DLL" (ByVal s As Integer, addr As sockaddr, ByVal namelen As Integer) As Integer
-    Public Declare Function ioctlsocket Lib "ws2_32.DLL" (ByVal s As Integer, ByVal Cmd As Long, argp As Long) As Integer
-    Public Declare Function getpeername Lib "ws2_32.DLL" (ByVal s As Integer, sName As sockaddr, namelen As Integer) As Integer
-    Public Declare Function getsockname Lib "ws2_32.DLL" (ByVal s As Integer, sName As sockaddr, namelen As Integer) As Integer
-    Public Declare Function getsockopt Lib "ws2_32.DLL" (ByVal s As Integer, ByVal level As Integer, ByVal optname As Integer, optval As Any, optlen As Integer) As Integer
+    Public Declare Function accept Lib "ws2_32.DLL" (ByVal S As Integer, addr As sockaddr, AddrLen As Integer) As Integer
+    Public Declare Function bind Lib "ws2_32.DLL" (ByVal S As Integer, addr As sockaddr, ByVal namelen As Integer) As Integer
+    Public Declare Function apiclosesocket Lib "ws2_32.DLL" Alias "closesocket" (ByVal S As Integer) As Integer
+    Public Declare Function connect Lib "ws2_32.DLL" (ByVal S As Integer, addr As sockaddr, ByVal namelen As Integer) As Integer
+    Public Declare Function ioctlsocket Lib "ws2_32.DLL" (ByVal S As Integer, ByVal Cmd As Long, argp As Long) As Integer
+    Public Declare Function getpeername Lib "ws2_32.DLL" (ByVal S As Integer, sName As sockaddr, namelen As Integer) As Integer
+    Public Declare Function getsockname Lib "ws2_32.DLL" (ByVal S As Integer, sName As sockaddr, namelen As Integer) As Integer
+    Public Declare Function getsockopt Lib "ws2_32.DLL" (ByVal S As Integer, ByVal level As Integer, ByVal optname As Integer, optval As Any, optlen As Integer) As Integer
     Public Declare Function htonl Lib "ws2_32.DLL" (ByVal hostlong As Long) As Long
     Public Declare Function htons Lib "ws2_32.DLL" (ByVal hostshort As Integer) As Integer
     Public Declare Function inet_addr Lib "ws2_32.DLL" (ByVal cp As String) As Long
     Public Declare Function inet_ntoa Lib "ws2_32.DLL" (ByVal inn As Long) As Long
-    Public Declare Function listen Lib "ws2_32.DLL" (ByVal s As Integer, ByVal backlog As Integer) As Integer
+    Public Declare Function listen Lib "ws2_32.DLL" (ByVal S As Integer, ByVal backlog As Integer) As Integer
     Public Declare Function ntohl Lib "ws2_32.DLL" (ByVal netlong As Long) As Long
     Public Declare Function ntohs Lib "ws2_32.DLL" (ByVal netshort As Integer) As Integer
-    Public Declare Function recv Lib "ws2_32.DLL" (ByVal s As Integer, ByVal buf As Any, ByVal buflen As Integer, ByVal flags As Integer) As Integer
-    Public Declare Function recvfrom Lib "ws2_32.DLL" (ByVal s As Integer, buf As Any, ByVal buflen As Integer, ByVal flags As Integer, from As sockaddr, fromlen As Integer) As Integer
+    Public Declare Function recv Lib "ws2_32.DLL" (ByVal S As Integer, ByRef buf As Any, ByVal buflen As Integer, ByVal flags As Integer) As Integer
+    Public Declare Function recvfrom Lib "ws2_32.DLL" (ByVal S As Integer, buf As Any, ByVal buflen As Integer, ByVal flags As Integer, from As sockaddr, fromlen As Integer) As Integer
     Public Declare Function ws_select Lib "ws2_32.DLL" Alias "select" (ByVal nfds As Integer, readfds As Any, writefds As Any, exceptfds As Any, timeout As timeval) As Integer
-    Public Declare Function send Lib "ws2_32.DLL" (ByVal s As Integer, buf As Any, ByVal buflen As Integer, ByVal flags As Integer) As Integer
-    Public Declare Function sendto Lib "ws2_32.DLL" (ByVal s As Integer, buf As Any, ByVal buflen As Integer, ByVal flags As Integer, to_addr As sockaddr, ByVal tolen As Integer) As Integer
-    Public Declare Function setsockopt Lib "ws2_32.DLL" (ByVal s As Integer, ByVal level As Integer, ByVal optname As Integer, optval As Any, ByVal optlen As Integer) As Integer
-    Public Declare Function ShutDown Lib "ws2_32.DLL" Alias "shutdown" (ByVal s As Integer, ByVal how As Integer) As Integer
+    Public Declare Function send Lib "ws2_32.DLL" (ByVal S As Integer, buf As Any, ByVal buflen As Integer, ByVal flags As Integer) As Integer
+    Public Declare Function sendto Lib "ws2_32.DLL" (ByVal S As Integer, buf As Any, ByVal buflen As Integer, ByVal flags As Integer, to_addr As sockaddr, ByVal tolen As Integer) As Integer
+    Public Declare Function setsockopt Lib "ws2_32.DLL" (ByVal S As Integer, ByVal level As Integer, ByVal optname As Integer, optval As Any, ByVal optlen As Integer) As Integer
+    Public Declare Function ShutDown Lib "ws2_32.DLL" Alias "shutdown" (ByVal S As Integer, ByVal how As Integer) As Integer
     Public Declare Function Socket Lib "ws2_32.DLL" Alias "socket" (ByVal af As Integer, ByVal s_type As Integer, ByVal Protocol As Integer) As Integer
 '---DATABASE FUNCTIONS
     Public Declare Function gethostbyaddr Lib "ws2_32.DLL" (addr As Long, ByVal addr_len As Integer, ByVal addr_type As Integer) As Long
@@ -271,10 +295,10 @@ Global Const WSANO_ADDRESS = 11004
     Public Declare Function WSAAsyncGetHostByName Lib "ws2_32.DLL" (ByVal hWnd As Integer, ByVal wMsg As Integer, ByVal host_name As String, buf As Any, ByVal buflen As Integer) As Integer
     Public Declare Function WSAAsyncGetHostByAddr Lib "ws2_32.DLL" (ByVal hWnd As Integer, ByVal wMsg As Integer, addr As Long, ByVal addr_len As Integer, ByVal addr_type As Integer, buf As Any, ByVal buflen As Integer) As Integer
     Public Declare Function WSACancelAsyncRequest Lib "ws2_32.DLL" (ByVal hAsyncTaskHandle As Integer) As Integer
-    Public Declare Function WSAAsyncSelect Lib "ws2_32.DLL" (ByVal s As Integer, ByVal hWnd As Integer, ByVal wMsg As Integer, ByVal lEvent As Long) As Integer
-    Public Declare Function WSARecvEx Lib "ws2_32.DLL" (ByVal s As Integer, buf As Any, ByVal buflen As Integer, ByVal flags As Integer) As Integer
+    Public Declare Function WSAAsyncSelect Lib "ws2_32.DLL" (ByVal S As Integer, ByVal hWnd As Integer, ByVal wMsg As Integer, ByVal lEvent As Long) As Integer
+    Public Declare Function WSARecvEx Lib "ws2_32.DLL" (ByVal S As Integer, buf As Any, ByVal buflen As Integer, ByVal flags As Integer) As Integer
 'Agregado por Maraxus
-    Declare Function WSAAccept Lib "ws2_32.DLL" (ByVal s As Integer, pSockAddr As sockaddr, AddrLen As Integer, ByVal lpfnCondition As Long, ByVal dwCallbackData As Long) As Integer
+    Declare Function WSAAccept Lib "ws2_32.DLL" (ByVal S As Integer, pSockAddr As sockaddr, AddrLen As Integer, ByVal lpfnCondition As Long, ByVal dwCallbackData As Long) As Integer
     
     Public Const SOMAXCONN As Integer = &H7FFF            ' Agregado por Maraxus
 
@@ -296,28 +320,28 @@ Global Const WSANO_ADDRESS = 11004
     Public Const FD_CONNECT = &H10&
     Public Const FD_CLOSE = &H20&
 '---SOCKET FUNCTIONS
-    Public Declare Function accept Lib "wsock32.dll" (ByVal s As Long, addr As sockaddr, AddrLen As Long) As Long
-    Public Declare Function bind Lib "wsock32.dll" (ByVal s As Long, addr As sockaddr, ByVal namelen As Long) As Long
-    Public Declare Function apiclosesocket Lib "wsock32.dll" Alias "closesocket" (ByVal s As Long) As Long
-    Public Declare Function connect Lib "wsock32.dll" (ByVal s As Long, addr As sockaddr, ByVal namelen As Long) As Long
-    Public Declare Function ioctlsocket Lib "wsock32.dll" (ByVal s As Long, ByVal Cmd As Long, argp As Long) As Long
-    Public Declare Function getpeername Lib "wsock32.dll" (ByVal s As Long, sName As sockaddr, namelen As Long) As Long
-    Public Declare Function getsockname Lib "wsock32.dll" (ByVal s As Long, sName As sockaddr, namelen As Long) As Long
-    Public Declare Function getsockopt Lib "wsock32.dll" (ByVal s As Long, ByVal level As Long, ByVal optname As Long, optval As Any, optlen As Long) As Long
+    Public Declare Function accept Lib "wsock32.dll" (ByVal S As Long, addr As sockaddr, AddrLen As Long) As Long
+    Public Declare Function bind Lib "wsock32.dll" (ByVal S As Long, addr As sockaddr, ByVal namelen As Long) As Long
+    Public Declare Function apiclosesocket Lib "wsock32.dll" Alias "closesocket" (ByVal S As Long) As Long
+    Public Declare Function connect Lib "wsock32.dll" (ByVal S As Long, addr As sockaddr, ByVal namelen As Long) As Long
+    Public Declare Function ioctlsocket Lib "wsock32.dll" (ByVal S As Long, ByVal Cmd As Long, argp As Long) As Long
+    Public Declare Function getpeername Lib "wsock32.dll" (ByVal S As Long, sName As sockaddr, namelen As Long) As Long
+    Public Declare Function getsockname Lib "wsock32.dll" (ByVal S As Long, sName As sockaddr, namelen As Long) As Long
+    Public Declare Function getsockopt Lib "wsock32.dll" (ByVal S As Long, ByVal level As Long, ByVal optname As Long, optval As Any, optlen As Long) As Long
     Public Declare Function htonl Lib "wsock32.dll" (ByVal hostlong As Long) As Long
     Public Declare Function htons Lib "wsock32.dll" (ByVal hostshort As Long) As Integer
     Public Declare Function inet_addr Lib "wsock32.dll" (ByVal cp As String) As Long
     Public Declare Function inet_ntoa Lib "wsock32.dll" (ByVal inn As Long) As Long
-    Public Declare Function listen Lib "wsock32.dll" (ByVal s As Long, ByVal backlog As Long) As Long
+    Public Declare Function listen Lib "wsock32.dll" (ByVal S As Long, ByVal backlog As Long) As Long
     Public Declare Function ntohl Lib "wsock32.dll" (ByVal netlong As Long) As Long
     Public Declare Function ntohs Lib "wsock32.dll" (ByVal netshort As Long) As Integer
-    Public Declare Function recv Lib "wsock32.dll" (ByVal s As Long, ByVal buf As Any, ByVal buflen As Long, ByVal flags As Long) As Long
-    Public Declare Function recvfrom Lib "wsock32.dll" (ByVal s As Long, buf As Any, ByVal buflen As Long, ByVal flags As Long, from As sockaddr, fromlen As Long) As Long
+    Public Declare Function recv Lib "wsock32.dll" (ByVal S As Long, ByRef buf As Any, ByVal buflen As Long, ByVal flags As Long) As Long
+    Public Declare Function recvfrom Lib "wsock32.dll" (ByVal S As Long, buf As Any, ByVal buflen As Long, ByVal flags As Long, from As sockaddr, fromlen As Long) As Long
     Public Declare Function ws_select Lib "wsock32.dll" Alias "select" (ByVal nfds As Long, readfds As fd_set, writefds As fd_set, exceptfds As fd_set, timeout As timeval) As Long
-    Public Declare Function send Lib "wsock32.dll" (ByVal s As Long, buf As Any, ByVal buflen As Long, ByVal flags As Long) As Long
-    Public Declare Function sendto Lib "wsock32.dll" (ByVal s As Long, buf As Any, ByVal buflen As Long, ByVal flags As Long, to_addr As sockaddr, ByVal tolen As Long) As Long
-    Public Declare Function setsockopt Lib "wsock32.dll" (ByVal s As Long, ByVal level As Long, ByVal optname As Long, optval As Any, ByVal optlen As Long) As Long
-    Public Declare Function ShutDown Lib "wsock32.dll" Alias "shutdown" (ByVal s As Long, ByVal how As Long) As Long
+    Public Declare Function send Lib "wsock32.dll" (ByVal S As Long, buf As Any, ByVal buflen As Long, ByVal flags As Long) As Long
+    Public Declare Function sendto Lib "wsock32.dll" (ByVal S As Long, buf As Any, ByVal buflen As Long, ByVal flags As Long, to_addr As sockaddr, ByVal tolen As Long) As Long
+    Public Declare Function setsockopt Lib "wsock32.dll" (ByVal S As Long, ByVal level As Long, ByVal optname As Long, optval As Any, ByVal optlen As Long) As Long
+    Public Declare Function ShutDown Lib "wsock32.dll" Alias "shutdown" (ByVal S As Long, ByVal how As Long) As Long
     Public Declare Function Socket Lib "wsock32.dll" Alias "socket" (ByVal af As Long, ByVal s_type As Long, ByVal Protocol As Long) As Long
 '---DATABASE FUNCTIONS
     Public Declare Function gethostbyaddr Lib "wsock32.dll" (addr As Long, ByVal addr_len As Long, ByVal addr_type As Long) As Long
@@ -343,10 +367,10 @@ Global Const WSANO_ADDRESS = 11004
     Public Declare Function WSAAsyncGetHostByName Lib "wsock32.dll" (ByVal hWnd As Long, ByVal wMsg As Long, ByVal host_name As String, buf As Any, ByVal buflen As Long) As Long
     Public Declare Function WSAAsyncGetHostByAddr Lib "wsock32.dll" (ByVal hWnd As Long, ByVal wMsg As Long, addr As Long, ByVal addr_len As Long, ByVal addr_type As Long, buf As Any, ByVal buflen As Long) As Long
     Public Declare Function WSACancelAsyncRequest Lib "wsock32.dll" (ByVal hAsyncTaskHandle As Long) As Long
-    Public Declare Function WSAAsyncSelect Lib "wsock32.dll" (ByVal s As Long, ByVal hWnd As Long, ByVal wMsg As Long, ByVal lEvent As Long) As Long
-    Public Declare Function WSARecvEx Lib "wsock32.dll" (ByVal s As Long, buf As Any, ByVal buflen As Long, ByVal flags As Long) As Long
+    Public Declare Function WSAAsyncSelect Lib "wsock32.dll" (ByVal S As Long, ByVal hWnd As Long, ByVal wMsg As Long, ByVal lEvent As Long) As Long
+    Public Declare Function WSARecvEx Lib "wsock32.dll" (ByVal S As Long, buf As Any, ByVal buflen As Long, ByVal flags As Long) As Long
 'Agregado por Maraxus
-    Declare Function WSAAccept Lib "ws2_32.DLL" (ByVal s As Long, pSockAddr As sockaddr, AddrLen As Long, ByVal lpfnCondition As Long, ByVal dwCallbackData As Long) As Long
+    Declare Function WSAAccept Lib "ws2_32.DLL" (ByVal S As Long, pSockAddr As sockaddr, AddrLen As Long, ByVal lpfnCondition As Long, ByVal dwCallbackData As Long) As Long
     Public Const SOMAXCONN As Long = &H7FFFFFFF            ' Agregado por Maraxus
 
 
@@ -385,25 +409,25 @@ End Function
 
 
 Public Function AddrToIP(ByVal AddrOrIP$) As String
-Dim t() As String
+Dim T() As String
 Dim Tmp As String
 
 Tmp = GetAscIP(GetHostByNameAlias(AddrOrIP$))
-t = Split(Tmp, ".")
-AddrToIP = t(3) & "." & t(2) & "." & t(1) & "." & t(0)
+T = Split(Tmp, ".")
+AddrToIP = T(3) & "." & T(2) & "." & T(1) & "." & T(0)
 
 End Function
 
 'this function should work on 16 and 32 bit systems
 #If Win16 Then
     Function ConnectSock(ByVal Host$, ByVal Port%, retIpPort$, ByVal HWndToMsg%, ByVal Async%) As Integer
-    Dim s%, SelectOps%, dummy%
+    Dim S%, SelectOps%, dummy%
 #ElseIf Win32 Then
     Function ConnectSock(ByVal Host$, ByVal Port&, retIpPort$, ByVal HWndToMsg&, ByVal Async%) As Long
-    Dim s&, SelectOps&, dummy&
+    Dim S&, SelectOps&, dummy&
 #End If
     Dim sockin As sockaddr
-    SockReadBuffer$ = ""
+    SockReadBuffer$ = vbNullString
     sockin = saZero
     sockin.sin_family = AF_INET
     sockin.sin_port = htons(Port)
@@ -419,31 +443,31 @@ End Function
     End If
     retIpPort$ = GetAscIP$(sockin.sin_addr) & ":" & ntohs(sockin.sin_port)
 
-    s = Socket(PF_INET, SOCK_STREAM, IPPROTO_TCP)
-    If s < 0 Then
+    S = Socket(PF_INET, SOCK_STREAM, IPPROTO_TCP)
+    If S < 0 Then
         ConnectSock = INVALID_SOCKET
         Exit Function
     End If
-    If SetSockLinger(s, 1, 0) = SOCKET_ERROR Then
-        If s > 0 Then
-            dummy = apiclosesocket(s)
+    If SetSockLinger(S, 1, 0) = SOCKET_ERROR Then
+        If S > 0 Then
+            dummy = apiclosesocket(S)
         End If
         ConnectSock = INVALID_SOCKET
         Exit Function
     End If
     If Not Async Then
-        If Not connect(s, sockin, sockaddr_size) = 0 Then
-            If s > 0 Then
-                dummy = apiclosesocket(s)
+        If Not connect(S, sockin, sockaddr_size) = 0 Then
+            If S > 0 Then
+                dummy = apiclosesocket(S)
             End If
             ConnectSock = INVALID_SOCKET
             Exit Function
         End If
         If HWndToMsg <> 0 Then
             SelectOps = FD_READ Or FD_WRITE Or FD_CONNECT Or FD_CLOSE
-            If WSAAsyncSelect(s, HWndToMsg, ByVal 1025, ByVal SelectOps) Then
-                If s > 0 Then
-                    dummy = apiclosesocket(s)
+            If WSAAsyncSelect(S, HWndToMsg, ByVal 1025, ByVal SelectOps) Then
+                If S > 0 Then
+                    dummy = apiclosesocket(S)
                 End If
                 ConnectSock = INVALID_SOCKET
                 Exit Function
@@ -451,22 +475,22 @@ End Function
         End If
     Else
         SelectOps = FD_READ Or FD_WRITE Or FD_CONNECT Or FD_CLOSE
-        If WSAAsyncSelect(s, HWndToMsg, ByVal 1025, ByVal SelectOps) Then
-            If s > 0 Then
-                dummy = apiclosesocket(s)
+        If WSAAsyncSelect(S, HWndToMsg, ByVal 1025, ByVal SelectOps) Then
+            If S > 0 Then
+                dummy = apiclosesocket(S)
             End If
             ConnectSock = INVALID_SOCKET
             Exit Function
         End If
-        If connect(s, sockin, sockaddr_size) <> -1 Then
-            If s > 0 Then
-                dummy = apiclosesocket(s)
+        If connect(S, sockin, sockaddr_size) <> -1 Then
+            If S > 0 Then
+                dummy = apiclosesocket(S)
             End If
             ConnectSock = INVALID_SOCKET
             Exit Function
         End If
     End If
-    ConnectSock = s
+    ConnectSock = S
 End Function
 
 #If Win32 Then
@@ -514,7 +538,7 @@ Public Function GetAscIP(ByVal inn As Long) As String
         nStr = lstrlen(lpStr)
         If nStr > 32 Then nStr = 32
         MemCopy ByVal retString, ByVal lpStr, nStr
-        retString = Left(retString, nStr)
+        retString = Left$(retString, nStr)
         GetAscIP = retString
     Else
         GetAscIP = "255.255.255.255"
@@ -522,7 +546,7 @@ Public Function GetAscIP(ByVal inn As Long) As String
 End Function
 
 Public Function GetHostByAddress(ByVal addr As Long) As String
-    Dim phe&, Ret&
+    Dim phe&
     Dim heDestHost As HostEnt
     Dim HostName$
     phe = gethostbyaddr(addr, 4, PF_INET)
@@ -530,7 +554,7 @@ Public Function GetHostByAddress(ByVal addr As Long) As String
         MemCopy heDestHost, ByVal phe, hostent_size
         HostName = String(256, 0)
         MemCopy ByVal HostName, ByVal heDestHost.h_name, 256
-        GetHostByAddress = Left(HostName, InStr(HostName, Chr(0)) - 1)
+        GetHostByAddress = Left$(HostName, InStr(HostName, Chr$(0)) - 1)
     Else
         GetHostByAddress = WSA_NoName
     End If
@@ -564,24 +588,24 @@ Public Function GetLocalHostName() As String
     If gethostname(sName, 256) Then
         sName = WSA_NoName
     Else
-        If InStr(sName, Chr(0)) Then
-            sName = Left(sName, InStr(sName, Chr(0)) - 1)
+        If InStr(sName, Chr$(0)) Then
+            sName = Left$(sName, InStr(sName, Chr$(0)) - 1)
         End If
     End If
     GetLocalHostName = sName
 End Function
 
 #If Win16 Then
-    Public Function GetPeerAddress(ByVal s%) As String
+    Public Function GetPeerAddress(ByVal S%) As String
     Dim AddrLen%
 #ElseIf Win32 Then
-    Public Function GetPeerAddress(ByVal s&) As String
+    Public Function GetPeerAddress(ByVal S&) As String
     Dim AddrLen&
 #End If
     Dim sa As sockaddr
     AddrLen = sockaddr_size
-    If getpeername(s, sa, AddrLen) Then
-        GetPeerAddress = ""
+    If getpeername(S, sa, AddrLen) Then
+        GetPeerAddress = vbNullString
     Else
         GetPeerAddress = SockAddressToString(sa)
     End If
@@ -652,11 +676,11 @@ End Function
 
 'this function DOES work on 16 and 32 bit systems
 #If Win16 Then
-    Function GetSockAddress(ByVal s%) As String
+    Function GetSockAddress(ByVal S%) As String
     Dim AddrLen%
     Dim Ret%
 #ElseIf Win32 Then
-    Function GetSockAddress(ByVal s&) As String
+    Function GetSockAddress(ByVal S&) As String
     Dim AddrLen&
     Dim Ret&
 #End If
@@ -664,8 +688,8 @@ End Function
     Dim szRet$
     szRet = String(32, 0)
     AddrLen = sockaddr_size
-    If getsockname(s, sa, AddrLen) Then
-        GetSockAddress = ""
+    If getsockname(S, sa, AddrLen) Then
+        GetSockAddress = vbNullString
     Else
         GetSockAddress = SockAddressToString(sa)
     End If
@@ -765,7 +789,7 @@ Function IrcGetAscIp(ByVal IPL$) As String
     nStr = lstrlen(lpStr)
     If nStr > 32 Then nStr = 32
     MemCopy ByVal retString, ByVal lpStr, nStr
-    retString = Left(retString, nStr)
+    retString = Left$(retString, nStr)
     IrcGetAscIp = retString
     Exit Function
 IrcGetAscIPError:
@@ -804,11 +828,11 @@ End Function
 'this function should work on 16 and 32 bit systems
 #If Win16 Then
 Public Function ListenForConnect(ByVal Port%, ByVal HWndToMsg%, ByVal Enlazar As String) As Integer
-    Dim s%, dummy%
+    Dim S%, dummy%
     Dim SelectOps%
 #ElseIf Win32 Then
 Public Function ListenForConnect(ByVal Port&, ByVal HWndToMsg&, ByVal Enlazar As String) As Long
-    Dim s&, dummy&
+    Dim S&, dummy&
     Dim SelectOps&
 #End If
     Dim sockin As sockaddr
@@ -819,7 +843,7 @@ Public Function ListenForConnect(ByVal Port&, ByVal HWndToMsg&, ByVal Enlazar As
         ListenForConnect = INVALID_SOCKET
         Exit Function
     End If
-    If Enlazar = "" Then
+    If LenB(Enlazar) = 0 Then
         sockin.sin_addr = htonl(INADDR_ANY)
     Else
         sockin.sin_addr = inet_addr(Enlazar)
@@ -828,8 +852,8 @@ Public Function ListenForConnect(ByVal Port&, ByVal HWndToMsg&, ByVal Enlazar As
         ListenForConnect = INVALID_SOCKET
         Exit Function
     End If
-    s = Socket(PF_INET, SOCK_STREAM, 0)
-    If s < 0 Then
+    S = Socket(PF_INET, SOCK_STREAM, 0)
+    If S < 0 Then
         ListenForConnect = INVALID_SOCKET
         Exit Function
     End If
@@ -843,42 +867,42 @@ Public Function ListenForConnect(ByVal Port&, ByVal HWndToMsg&, ByVal Enlazar As
     '    Debug.Print "Conditional accept seteado ^^"
     'End If
     
-    If bind(s, sockin, sockaddr_size) Then
-        If s > 0 Then
-            dummy = apiclosesocket(s)
+    If bind(S, sockin, sockaddr_size) Then
+        If S > 0 Then
+            dummy = apiclosesocket(S)
         End If
         ListenForConnect = INVALID_SOCKET
         Exit Function
     End If
 '    SelectOps = FD_READ Or FD_WRITE Or FD_CLOSE Or FD_ACCEPT
     SelectOps = FD_READ Or FD_CLOSE Or FD_ACCEPT
-    If WSAAsyncSelect(s, HWndToMsg, ByVal 1025, ByVal SelectOps) Then
-        If s > 0 Then
-            dummy = apiclosesocket(s)
+    If WSAAsyncSelect(S, HWndToMsg, ByVal 1025, ByVal SelectOps) Then
+        If S > 0 Then
+            dummy = apiclosesocket(S)
         End If
         ListenForConnect = SOCKET_ERROR
         Exit Function
     End If
     
     'If listen(s, 5) Then
-    If listen(s, SOMAXCONN) Then
-        If s > 0 Then
-            dummy = apiclosesocket(s)
+    If listen(S, SOMAXCONN) Then
+        If S > 0 Then
+            dummy = apiclosesocket(S)
         End If
         ListenForConnect = INVALID_SOCKET
         Exit Function
     End If
-    ListenForConnect = s
+    ListenForConnect = S
 End Function
 
 'this function should work on 16 and 32 bit systems
 #If Win16 Then
-Public Function kSendData(ByVal s%, vMessage As Variant) As Integer
+Public Function kSendData(ByVal S%, vMessage As Variant) As Integer
 #ElseIf Win32 Then
-Public Function kSendData(ByVal s&, vMessage As Variant) As Long
+Public Function kSendData(ByVal S&, vMessage As Variant) As Long
 #End If
     Dim TheMsg() As Byte, sTemp$
-    TheMsg = ""
+    TheMsg = vbNullString
     Select Case VarType(vMessage)
         Case 8209   'byte array
             sTemp = vMessage
@@ -899,7 +923,7 @@ Public Function kSendData(ByVal s&, vMessage As Variant) As Long
     End Select
     TheMsg = sTemp
     If UBound(TheMsg) > -1 Then
-        kSendData = send(s, TheMsg(0), UBound(TheMsg) + 1, 0)
+        kSendData = send(S, TheMsg(0), UBound(TheMsg) + 1, 0)
     End If
 End Function
 
